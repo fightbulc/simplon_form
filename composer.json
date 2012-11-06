@@ -1,10 +1,10 @@
 {
-    "name": "simplon/form",
+    "name": "fightbulc/esiform",
     "description": "Easy form building, validation and follow-up callbacks",
-    "homepage": "https://github.com/fightbulc/simplon_form",
+    "homepage": "https://github.com/fightbulc/esiform",
     "version": "0.5.1",
     "type": "library",
-    "keywords": ["form", "building", "validation", "callbacks"],
+    "keywords": ["form building", "validation", "callbacks"],
     "license": "MIT",
     "authors": [
         {
@@ -23,7 +23,7 @@
 
     "autoload": {
         "psr-0": {
-            "Simplon\\Form\\": "src/"
+            "Esiform\\": "src/"
         }
     }
 }
