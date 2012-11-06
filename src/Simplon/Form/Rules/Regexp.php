@@ -1,8 +1,8 @@
 <?php
 
-  namespace Esiform\Rules;
+  namespace Simplon\Form\Rules;
 
-  class OnlyNumbers extends AbstractRule
+  class Regexp extends AbstractRule
   {
     /**
      * @return bool|mixed|void
@@ -13,7 +13,9 @@
         ->getElement()
         ->getValue();
 
-      if(! preg_match('/^\d+$/', $elementValue))
+      $condition = $this->getCondition();
+
+      if(! preg_match($condition, $elementValue))
       {
         return $this->getFormattedErrorMessage();
       }
@@ -28,6 +30,6 @@
      */
     protected function _defaultErrorMessage()
     {
-      return '":label" allows only numbers.';
+      return '":label" doesn\'t match the requirements.';
     }
   }

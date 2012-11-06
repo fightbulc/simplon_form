@@ -2,14 +2,14 @@
 
   class RegisterForm
   {
-    /** @var \Esiform\Esiform */
+    /** @var \Simplon\Form\Form */
     protected $_formInstance;
 
     // ##########################################
 
     public function __construct()
     {
-      $this->_formInstance = \Esiform\Esiform::init()
+      $this->_formInstance = \Simplon\Form\Form::init()
         ->setId('myForm')
         ->setUrl('page.php')
         ->setMethod('POST')
@@ -21,7 +21,7 @@
     // ##########################################
 
     /**
-     * @return Esiform\Esiform
+     * @return Simplon\Form\Form
      */
     protected function _getFormInstance()
     {
@@ -84,27 +84,27 @@
       $elements = array();
 
       // username field
-      $elements[] = \Esiform\Elements\TextField::init()
+      $elements[] = \Simplon\Form\Elements\TextField::init()
         ->setId('username')
         ->setLabel('Username')
         ->addRule('Required');
 
       // password field
-      $elements[] = \Esiform\Elements\PasswordField::init()
+      $elements[] = \Simplon\Form\Elements\PasswordField::init()
         ->setId('password')
         ->setLabel('Password')
         ->addRule('Required')
         ->addRule('MinLength', 4);
 
       // password field
-      $elements[] = \Esiform\Elements\EmailField::init()
+      $elements[] = \Simplon\Form\Elements\EmailField::init()
         ->setId('email')
         ->setLabel('Email')
         ->addRule('required')
         ->addRule('Email');
 
       // tos field
-      $elements[] = \Esiform\Elements\CheckboxField::init()
+      $elements[] = \Simplon\Form\Elements\CheckboxField::init()
         ->setId('tos')
         ->setLabel('<span id="termstext" class="field legalline  formerror">I agree to the <a href="http://war2glory.com/enterms/" target="_blank">General Terms and Conditions</a>, the <a href="http://war2glory.com/enpp/" target="_blank">Privacy Policy</a> and the <a href="http://war2glory.com/enrules/" target="_blank">Game Rules</a>.</span>')
         ->addRule('Required', NULL, 'This field needs to be checked.');

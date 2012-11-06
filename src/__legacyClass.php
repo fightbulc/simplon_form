@@ -1,8 +1,6 @@
 <?php
 
-  namespace Simplon\Form;
-
-	class Form
+	class __Form
 	{
 		public static $conf;
 		public static $skeleton;

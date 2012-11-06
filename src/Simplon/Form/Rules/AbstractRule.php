@@ -1,13 +1,13 @@
 <?php
 
-  namespace Esiform\Rules;
+  namespace Simplon\Form\Rules;
 
   abstract class AbstractRule
   {
     /** @var array */
     protected $_data = array();
 
-    /** @var \Esiform\Elements\AbstractElement */
+    /** @var \Simplon\Form\Elements\AbstractElement */
     protected $_elementInstance;
 
     // ##########################################
@@ -49,10 +49,10 @@
     // ##########################################
 
     /**
-     * @param \Esiform\Elements\AbstractElement $element
+     * @param \Simplon\Form\Elements\AbstractElement $element
      * @return AbstractRule
      */
-    public function setElement(\Esiform\Elements\AbstractElement $element)
+    public function setElement(\Simplon\Form\Elements\AbstractElement $element)
     {
       $this->_elementInstance = $element;
 
@@ -62,7 +62,7 @@
     // ##########################################
 
     /**
-     * @return \Esiform\Elements\AbstractElement
+     * @return \Simplon\Form\Elements\AbstractElement
      */
     public function getElement()
     {

@@ -1,8 +1,8 @@
 <?php
 
-  namespace Esiform;
+  namespace Simplon\Form;
 
-  class Esiform
+  class Form
   {
     protected $_elements = array();
     protected $_followUps = array();
@@ -33,14 +33,14 @@
 
     public static function init()
     {
-      return new Esiform();
+      return new Form();
     }
 
     // ##########################################
 
     /**
      * @param $use
-     * @return Esiform
+     * @return Form
      */
     public function enableCsrf($use)
     {
@@ -63,7 +63,7 @@
 
     /**
      * @param $id
-     * @return Esiform
+     * @return Form
      */
     public function setId($id)
     {
@@ -86,7 +86,7 @@
 
     /**
      * @param $type
-     * @return Esiform
+     * @return Form
      */
     public function setSubmitType($type)
     {
@@ -116,7 +116,7 @@
 
     /**
      * @param $label
-     * @return Esiform
+     * @return Form
      */
     public function setSubmitLabel($label)
     {
@@ -139,7 +139,7 @@
 
     /**
      * @param $src
-     * @return Esiform
+     * @return Form
      */
     public function setSubmitSource($src)
     {
@@ -162,7 +162,7 @@
 
     /**
      * @param $url
-     * @return Esiform
+     * @return Form
      */
     public function setUrl($url)
     {
@@ -185,7 +185,7 @@
 
     /**
      * @param $charset
-     * @return Esiform
+     * @return Form
      */
     public function setCharset($charset)
     {
@@ -208,7 +208,7 @@
 
     /**
      * @param $method
-     * @return Esiform
+     * @return Form
      */
     public function setMethod($method)
     {
@@ -231,7 +231,7 @@
 
     /**
      * @param $elements
-     * @return Esiform
+     * @return Form
      */
     public function setElements($elements)
     {
@@ -244,9 +244,9 @@
 
     /**
      * @param Elements\AbstractElement $element
-     * @return Esiform
+     * @return Form
      */
-    public function addElement(\Esiform\Elements\AbstractElement $element)
+    public function addElement(\Simplon\Form\Elements\AbstractElement $element)
     {
       $this->_elements[] = $element;
 
@@ -267,7 +267,7 @@
 
     /**
      * @param $followUps
-     * @return Esiform
+     * @return Form
      */
     public function setFollowUps($followUps)
     {
@@ -280,7 +280,7 @@
 
     /**
      * @param $followUp
-     * @return Esiform
+     * @return Form
      */
     public function addFollowUp($followUp)
     {
@@ -338,7 +338,7 @@
 
     /**
      * @param $salt
-     * @return Esiform
+     * @return Form
      */
     public function setCsrfSalt($salt)
     {
@@ -445,7 +445,7 @@
         $csrfValue = $this->_getCsrfValue();
 
         // create element
-        $element = \Esiform\Elements\HiddenField::init()
+        $element = \Simplon\Form\Elements\HiddenField::init()
           ->setId('csrf')
           ->setValue($csrfValue);
 
@@ -620,7 +620,7 @@
 
                 if(file_exists($classFilePath))
                 {
-                  $namespace = "Esiform\\Rules\\$ruleType";
+                  $namespace = "Simplon\Form\\Rules\\$ruleType";
                   $ruleClass = new $namespace();
 
                   $ruleClass->setElement($elementClass);

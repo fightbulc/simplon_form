@@ -1,6 +1,6 @@
 <?php
 
-  namespace Esiform\Elements;
+  namespace Simplon\Form\Elements;
 
   abstract class AbstractInputField extends AbstractElement
   {

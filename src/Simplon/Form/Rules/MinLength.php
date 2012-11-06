@@ -1,8 +1,8 @@
 <?php
 
-  namespace Esiform\Rules;
+  namespace Simplon\Form\Rules;
 
-  class Required extends AbstractRule
+  class MinLength extends AbstractRule
   {
     /**
      * @return bool|mixed|void
@@ -13,7 +13,9 @@
         ->getElement()
         ->getValue();
 
-      if($elementValue === FALSE)
+      $condition = $this->getCondition();
+
+      if($elementValue === FALSE || strlen($elementValue) < $condition)
       {
         return $this->getFormattedErrorMessage();
       }
@@ -28,6 +30,6 @@
      */
     protected function _defaultErrorMessage()
     {
-      return '":label" is required.';
+      return '":label" needs to have ":condition" characters.';
     }
   }

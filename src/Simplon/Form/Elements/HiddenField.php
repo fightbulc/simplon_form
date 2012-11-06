@@ -1,6 +1,6 @@
 <?php
 
-  namespace Esiform\Elements;
+  namespace Simplon\Form\Elements;
 
   class HiddenField extends AbstractElement
   {

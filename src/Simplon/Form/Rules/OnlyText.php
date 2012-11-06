@@ -1,8 +1,8 @@
 <?php
 
-  namespace Esiform\Rules;
+  namespace Simplon\Form\Rules;
 
-  class ExactLength extends AbstractRule
+  class OnlyText extends AbstractRule
   {
     /**
      * @return bool|mixed|void
@@ -13,9 +13,7 @@
         ->getElement()
         ->getValue();
 
-      $condition = $this->getCondition();
-
-      if($elementValue === FALSE || strlen($elementValue) != $condition)
+      if(! preg_match('/^\D+$/', $elementValue))
       {
         return $this->getFormattedErrorMessage();
       }
@@ -30,6 +28,6 @@
      */
     protected function _defaultErrorMessage()
     {
-      return '":label" must have exactly ":condition" characters.';
+      return '":label" allows only text.';
     }
   }

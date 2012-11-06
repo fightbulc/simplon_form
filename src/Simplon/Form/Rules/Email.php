@@ -1,6 +1,6 @@
 <?php
 
-  namespace Esiform\Rules;
+  namespace Simplon\Form\Rules;
 
   class Email extends AbstractRule
   {
