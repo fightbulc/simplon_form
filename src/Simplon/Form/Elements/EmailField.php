@@ -6,6 +6,6 @@
   {
     public function getType()
     {
-      return 'input';
+      return 'text';
     }
   }
