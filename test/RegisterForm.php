@@ -10,7 +10,7 @@
     public function __construct()
     {
       $this->_formInstance = \Simplon\Form\Form::init()
-        ->setId('myForm')
+        ->setFormId('myForm')
         ->setUrl('page.php')
         ->setMethod('POST')
         ->setTemplate($this->_getTemplatePath())
