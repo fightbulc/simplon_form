@@ -31,6 +31,29 @@
      * @param $value
      * @return AbstractInputField
      */
+    public function setClass($value)
+    {
+      $this->_setByKey('class', $value);
+
+      return $this;
+    }
+
+    // ##########################################
+
+    /**
+     * @return bool|mixed
+     */
+    public function getClass()
+    {
+      return $this->_getByKey('class');
+    }
+
+    // ##########################################
+
+    /**
+     * @param $value
+     * @return AbstractInputField
+     */
     public function setDescription($value)
     {
       $this->_setByKey('description', $value);
@@ -86,7 +109,7 @@
         return FALSE;
       }
 
-      return '<div><label for="' . $elmId . '">' . $value . '</label></div>';
+      return '<label for="' . $elmId . '">' . $value . '</label>';
     }
 
     // ##########################################
@@ -103,7 +126,7 @@
         return FALSE;
       }
 
-      return '<div>' . $value . '</div>';
+      return $value;
     }
 
     // ##########################################
@@ -127,6 +150,7 @@
         'type'        => $this->getType(),
         'id'          => $this->getId(),
         'name'        => $this->getId(),
+        'class'       => $this->getClass(),
         'placeholder' => $this->getPlaceholder(),
         'value'       => $this->getValue(),
       );
@@ -141,7 +165,7 @@
     {
       $element = $this->_renderElement($this->_getElementTemplate(), $this->_getElementAttributes());
 
-      return '<div>' . $element . '</div>';
+      return $element;
     }
 
     // ##########################################
