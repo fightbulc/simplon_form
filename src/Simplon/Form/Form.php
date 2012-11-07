@@ -7,15 +7,15 @@
     protected $_elements = array();
     protected $_followUps = array();
     protected $_formId = 'form';
+    protected $_formClass = '';
     protected $_formUrl = '';
     protected $_formMethod = 'GET';
     protected $_formAcceptCharset = 'utf-8';
     protected $_enabledCsrf = TRUE;
     protected $_csrfSalt = 'x45%da08*(';
     protected $_invalidElements = array();
-    protected $_submitType = 'submit';
+    protected $_submitClass = 'btn';
     protected $_submitLabel = 'Submit Data';
-    protected $_submitSrc = '';
     protected $_tmpl;
 
     // ##########################################
@@ -65,7 +65,7 @@
      * @param $id
      * @return Form
      */
-    public function setId($id)
+    public function setFormId($id)
     {
       $this->_formId = $id;
 
@@ -77,7 +77,7 @@
     /**
      * @return mixed
      */
-    protected function _getId()
+    protected function _getFormId()
     {
       return $this->_formId;
     }
@@ -85,19 +85,12 @@
     // ##########################################
 
     /**
-     * @param $type
+     * @param $class
      * @return Form
      */
-    public function setSubmitType($type)
+    public function setFormClass($class)
     {
-      $validTypes = array('submit', 'image');
-
-      if(! isset($validTypes[$type]))
-      {
-        $type = 'submit';
-      }
-
-      $this->_submitType = $type;
+      $this->_formClass = $class;
 
       return $this;
     }
@@ -107,9 +100,32 @@
     /**
      * @return mixed
      */
-    protected function _getSubmitType()
+    protected function _getFormClass()
     {
-      return $this->_submitType;
+      return $this->_formClass;
+    }
+
+    // ##########################################
+
+    /**
+     * @param $class
+     * @return Form
+     */
+    public function setSubmitClass($class)
+    {
+      $this->_submitClass = $class;
+
+      return $this;
+    }
+
+    // ##########################################
+
+    /**
+     * @return mixed
+     */
+    protected function _getSubmitClass()
+    {
+      return $this->_submitClass;
     }
 
     // ##########################################
@@ -133,29 +149,6 @@
     protected function _getSubmitLabel()
     {
       return $this->_submitLabel;
-    }
-
-    // ##########################################
-
-    /**
-     * @param $src
-     * @return Form
-     */
-    public function setSubmitSource($src)
-    {
-      $this->_submitSrc = $src;
-
-      return $this;
-    }
-
-    // ##########################################
-
-    /**
-     * @return mixed
-     */
-    protected function _getSubmitSource()
-    {
-      return $this->_submitSrc;
     }
 
     // ##########################################
@@ -471,9 +464,18 @@
       $formOpen = '<form :attributes>';
       $formClose = '</form>';
 
+      $class = $this->_getFormClass();
+
+      // add warning class
+      if(!empty($this->_invalidElements))
+      {
+        $class = $class . ' control-group error';
+      }
+
       // default values
       $formAttributes = array(
-        'id'             => $this->_getId(),
+        'id'             => $this->_getFormId(),
+        'class'          => $class,
         'action'         => $this->_getUrl(),
         'method'         => $this->_getMethod(),
         'accept-charset' => $this->_getCharset(),
@@ -509,17 +511,16 @@
      */
     protected function _setFormSubmitTag()
     {
-      $formSubmit = '<input :attributes>';
+      $formSubmit = '<button :attributes>:label</button>';
 
       // default values
       $submitAttributes = array(
-        'id'    => $this->_getId(),
-        'name'  => $this->_getId(),
-        'type'  => $this->_getSubmitType(),
-        'value' => $this->_getSubmitLabel(),
+        'id'    => $this->_getFormId(),
+        'name'  => $this->_getFormId(),
+        'class' => $this->_getSubmitClass(),
       );
 
-      if($this->_getSubmitType() == 'image')
+      if($this->_getSubmitClass() == 'image')
       {
         $submitAttributes['src'] = $this->_getSubmitSource();
       }
@@ -532,6 +533,7 @@
       }
 
       $formSubmit = str_replace(':attributes', join(' ', $_renderedAttributes), $formSubmit);
+      $formSubmit = str_replace(':label', $this->_getSubmitLabel(), $formSubmit);
 
       // set form submit
       $this->_tmpl = str_replace('<form:submit>', $formSubmit, $this->_tmpl);
@@ -649,8 +651,6 @@
         // else all is cool
         return TRUE;
       }
-
-      echo 'NOT SUBMITTED';
 
       return FALSE;
     }
