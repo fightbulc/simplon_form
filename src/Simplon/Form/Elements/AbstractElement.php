@@ -146,11 +146,10 @@
     // ##########################################
 
     /**
-     * @param $fieldTemplate
      * @param $attributes
-     * @return mixed
+     * @return string
      */
-    protected function _renderElement($fieldTemplate, $attributes)
+    protected function _renderElementAttributes($attributes)
     {
       $_renderedAttributes = array();
 
@@ -162,6 +161,18 @@
         }
       }
 
-      return str_replace(':attributes', join(' ', $_renderedAttributes), $fieldTemplate);
+      return join(' ', $_renderedAttributes);
+    }
+
+    // ##########################################
+
+    /**
+     * @param $fieldTemplate
+     * @param $attributes
+     * @return mixed
+     */
+    protected function _renderElement($fieldTemplate, $attributes)
+    {
+      return str_replace(':attributes', $this->_renderElementAttributes($attributes), $fieldTemplate);
     }
   }

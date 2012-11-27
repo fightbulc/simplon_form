@@ -2,6 +2,8 @@
 
   namespace Simplon\Form\Rules;
 
+  use Simplon\Form\Elements\AbstractElement;
+
   abstract class AbstractRule
   {
     /** @var array */
@@ -49,10 +51,10 @@
     // ##########################################
 
     /**
-     * @param \Simplon\Form\Elements\AbstractElement $element
+     * @param AbstractElement $element
      * @return AbstractRule
      */
-    public function setElement(\Simplon\Form\Elements\AbstractElement $element)
+    public function setElement(AbstractElement $element)
     {
       $this->_elementInstance = $element;
 
@@ -62,7 +64,7 @@
     // ##########################################
 
     /**
-     * @return \Simplon\Form\Elements\AbstractElement
+     * @return AbstractElement
      */
     public function getElement()
     {

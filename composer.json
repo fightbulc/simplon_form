@@ -1,28 +1,29 @@
 {
-    "name": "simplon/form",
-    "description": "Easy form building, validation and follow-up callbacks",
-    "homepage": "https://github.com/fightbulc/simplon_form",
-    "version": "0.5.1",
-    "type": "library",
-    "keywords": ["form building", "validation", "callbacks"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Tino Ehrich",
-            "email": "opensource@efides.com",
-            "role": "developer"
-        }
-    ],
-
-    "minimum-stability": "dev",
-
-    "require": {
-        "php": ">=5.3.3"
-    },
-
-    "autoload": {
-        "psr-0": {
-            "Simplon\\Form\\": "src/"
-        }
+  "name": "simplon/form",
+  "description": "Easy form building, validation and follow-up callbacks",
+  "homepage": "https://github.com/fightbulc/simplon_form",
+  "version": "0.5.1",
+  "type": "library",
+  "keywords": ["form building", "validation", "callbacks"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tino Ehrich",
+      "email": "opensource@efides.com",
+      "role": "developer"
     }
+  ],
+
+  "minimum-stability": "dev",
+
+  "require": {
+    "php": ">=5.3.3",
+    "fightbulc/php_curl": "dev-master"
+  },
+
+  "autoload": {
+    "psr-0": {
+      "Simplon\\Form\\": "src/"
+    }
+  }
 }

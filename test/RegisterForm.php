@@ -87,7 +87,9 @@
       $elements[] = \Simplon\Form\Elements\TextField::init()
         ->setId('username')
         ->setLabel('Username')
-        ->addRule('Required');
+        ->addRule('Required')
+        ->addRule('Remote', array('type' => 'post', 'url' => 'http://localhost/opensource/server/simplon/simplon_form/test/remote/test-post.php'))
+        ->addRule('MaxLength', 15);
 
       // password field
       $elements[] = \Simplon\Form\Elements\PasswordField::init()
