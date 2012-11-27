@@ -77,6 +77,16 @@
             ->setPostFields($requestData)
             ->setReturnTransfer(TRUE)
             ->execute();
+
+          if($this->_getRequestType() == 'JSONRPC')
+          {
+            $requestResponse = json_decode($requestResponse, TRUE);
+
+            if(isset($requestResponse['result']))
+            {
+              $requestResponse = $requestResponse['result'];
+            }
+          }
         }
 
         // we're cool if we receive "1"
@@ -149,7 +159,7 @@
      */
     protected function _setRequestUrl($url)
     {
-      if((new Url())->validateUrl($url) === TRUE)
+      if((new Url())->validateUrl($url) !== FALSE)
       {
         $this->_requestUrl = $url;
       }
@@ -255,9 +265,9 @@
         ->getValue();
 
       return array(
-        'id'        => $id,
-        'label'     => $label,
-        'value'     => $value,
+        'id'    => $id,
+        'label' => $label,
+        'value' => $value,
       );
     }
 
