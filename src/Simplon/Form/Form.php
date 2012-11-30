@@ -22,8 +22,11 @@
 
     public function __construct()
     {
-      // start session to generate session_id
-      session_start();
+      // start session for csrf
+      if(! session_id())
+      {
+        session_start();
+      }
 
       // kick cookies
       $_REQUEST = array_merge($_GET, $_POST);
