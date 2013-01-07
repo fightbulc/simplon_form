@@ -9,7 +9,7 @@
     /** @var array */
     protected $_data = array();
 
-    /** @var \Simplon\Form\Elements\AbstractElement */
+    /** @var AbstractElement */
     protected $_elementInstance;
 
     // ##########################################
