@@ -470,7 +470,7 @@
       $class = $this->_getFormClass();
 
       // add warning class
-      if(!empty($this->_invalidElements))
+      if(! empty($this->_invalidElements))
       {
         $class = $class . ' control-group error';
       }
@@ -593,7 +593,12 @@
         {
           // fill element with submitted value
           $_requestValue = $this->_getRequestValue($elementClass->getId());
-          $elementClass->setValue($_requestValue);
+
+          // set new value
+          if($_requestValue !== FALSE)
+          {
+            $elementClass->setValue($_requestValue);
+          }
 
           // lets run through the validation
           if($elementClass->hasRules())
