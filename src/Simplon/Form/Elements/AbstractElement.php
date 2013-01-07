@@ -10,7 +10,7 @@
     // ##########################################
 
     /**
-     * @return AbstractElement
+     * @return static
      */
     public static function init()
     {
@@ -22,7 +22,7 @@
     /**
      * @param $key
      * @param $val
-     * @return AbstractElement
+     * @return $this
      */
     protected function _setByKey($key, $val)
     {
@@ -51,7 +51,7 @@
 
     /**
      * @param $value
-     * @return AbstractElement
+     * @return $this
      */
     public function setId($value)
     {
@@ -73,8 +73,18 @@
     // ##########################################
 
     /**
+     * @return bool|mixed
+     */
+    public function getType()
+    {
+      return 'text';
+    }
+
+    // ##########################################
+
+    /**
      * @param $value
-     * @return AbstractElement
+     * @return $this
      */
     public function setValue($value)
     {
@@ -99,7 +109,7 @@
      * @param $rule
      * @param null $condition
      * @param null $errorMessage
-     * @return AbstractElement
+     * @return $this
      */
     public function addRule($rule, $condition = NULL, $errorMessage = NULL)
     {

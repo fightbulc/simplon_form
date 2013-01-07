@@ -6,7 +6,7 @@
   {
     /**
      * @param $value
-     * @return AbstractInputField
+     * @return $this
      */
     public function setLabel($value)
     {
@@ -29,7 +29,7 @@
 
     /**
      * @param $value
-     * @return AbstractInputField
+     * @return $this
      */
     public function setClass($value)
     {
@@ -52,7 +52,7 @@
 
     /**
      * @param $value
-     * @return AbstractInputField
+     * @return $this
      */
     public function setDescription($value)
     {
@@ -75,7 +75,7 @@
 
     /**
      * @param $value
-     * @return AbstractInputField
+     * @return $this
      */
     public function setPlaceholder($value)
     {
@@ -97,7 +97,7 @@
     // ##########################################
 
     /**
-     * @return mixed
+     * @return bool|string
      */
     protected function _getRenderedLabel()
     {
@@ -115,7 +115,7 @@
     // ##########################################
 
     /**
-     * @return mixed
+     * @return bool|mixed
      */
     protected function _getRenderedDescription()
     {
