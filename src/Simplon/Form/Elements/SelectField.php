@@ -63,7 +63,7 @@
     /**
      * @param $key
      * @param $value
-     * @return SelectField
+     * @return $this
      */
     public function setOption($key, $value)
     {
@@ -85,7 +85,7 @@
 
     /**
      * @param $options
-     * @return SelectField
+     * @return $this
      */
     public function setOptions($options)
     {
@@ -102,6 +102,29 @@
     public function getOptions()
     {
       return $this->_getByKey('options');
+    }
+
+    // ##########################################
+
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function setSelectOption($value)
+    {
+      $this->_setByKey('selectOption', $value);
+
+      return $this;
+    }
+
+    // ##########################################
+
+    /**
+     * @return bool|mixed
+     */
+    public function getSelectOption()
+    {
+      return $this->_getByKey('selectOption');
     }
 
     // ##########################################
@@ -220,7 +243,39 @@
      */
     protected function _renderElement($fieldTemplate, $attributes)
     {
-      return str_replace(':attributes', $this->_renderElementAttributes($attributes), $fieldTemplate);
+      $fieldTemplate = str_replace(':attributes', $this->_renderElementAttributes($attributes), $fieldTemplate);
+      $fieldTemplate = str_replace(':options', $this->_renderOptions($this->getOptions()), $fieldTemplate);
+
+      return $fieldTemplate;
+    }
+
+    // ##########################################
+
+    /**
+     * @param $options
+     * @return string
+     */
+    protected function _renderOptions($options)
+    {
+      $rendered = [];
+
+      $tmpl = '<option value="{{value}}"{{selected}}>{{label}}</options>';
+      $selectedOption = $this->getSelectOption();
+
+      foreach($options as $value => $label)
+      {
+        $option = str_replace('{{value}}', $value, str_replace('{{label}}', $label, $tmpl));
+
+        if($selectedOption !== FALSE && $selectedOption == $value)
+        {
+          $option = str_replace('{{selected}}', ' selected', $option);
+          $tmpl = str_replace('{{selected}}', '', $tmpl);
+        }
+
+        $rendered[] = $option;
+      }
+
+      return join("\n", $rendered);
     }
 
     // ##########################################

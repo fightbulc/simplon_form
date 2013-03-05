@@ -2,6 +2,8 @@
 
   namespace Simplon\Form;
 
+  use Simplon\Border\Response;
+
   class Form
   {
     protected $_elements = array();
@@ -724,6 +726,9 @@
       {
         $followupClosure($allElementsValues);
       }
+
+      // redirect
+      (new Response())->redirect('/passwordreset/sent/');
 
       return TRUE;
     }
