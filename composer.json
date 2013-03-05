@@ -2,7 +2,7 @@
   "name": "simplon/form",
   "description": "Easy form building, validation and follow-up callbacks",
   "homepage": "https://github.com/fightbulc/simplon_form",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "type": "library",
   "keywords": ["form building", "validation", "callbacks"],
   "license": "MIT",
@@ -18,7 +18,7 @@
 
   "require": {
     "php": ">=5.3.3",
-    "fightbulc/php_curl": "dev-master"
+    "fightbulc/php_curl": "1.0.0"
   },
 
   "autoload": {
