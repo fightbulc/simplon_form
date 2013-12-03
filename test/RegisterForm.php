@@ -37,7 +37,7 @@
     {
       return $this
         ->_getFormInstance()
-        ->validate();
+        ->isValid();
     }
 
     // ##########################################

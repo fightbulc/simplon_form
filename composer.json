@@ -18,7 +18,7 @@
 
   "require": {
     "php": ">=5.4",
-    "fightbulc/php_curl": "1.0.0"
+    "fightbulc/php_curl": "1.0.*"
   },
 
   "autoload": {

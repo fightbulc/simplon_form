@@ -1,0 +1,49 @@
+.remote-complete
+{
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    overflow: auto;
+    margin: 4px 0 0;
+    background: #FFF;
+    z-index: 1000;
+}
+
+.remote-complete .result-container
+{
+    width: 100%;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+}
+
+.remote-complete .result-container .result
+{
+    clear: both;
+    background: #FAFAFA;
+    padding: 15px 10px;
+    border-bottom: 1px solid #CCC;
+    cursor: default;
+}
+
+.remote-complete .result-container .result:hover
+{
+    background: #CFE;
+}
+
+.remote-complete .result-container .result:last-child
+{
+    border-bottom: 0;
+}
+
+.remote-complete-single-selection
+{
+    display: none;
+    width: 100%;
+    background: #FE0;
+    padding: 15px 10px;
+    border-radius: 4px;
+    border: 1px solid #CCC;
+    z-index: 1001;
+}
