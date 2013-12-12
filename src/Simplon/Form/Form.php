@@ -289,6 +289,24 @@
         // ##########################################
 
         /**
+         * @return array
+         */
+        public function getElementValues()
+        {
+            $values = [];
+            $elements = $this->_getElements();
+
+            foreach ($elements as $elm)
+            {
+                $values[$elm->getId()] = $this->_getRequestValue($elm->getId());
+            }
+
+            return $values;
+        }
+
+        // ##########################################
+
+        /**
          * @param array $jsCode
          *
          * @return $this
@@ -696,7 +714,7 @@
         // ##########################################
 
         /**
-         * @return mixed
+         * @return string
          */
         public function render()
         {
@@ -723,7 +741,21 @@
             $this->_cleanTemplate();
 
             // return finished template
-            return $this->_getTemplate();
+            return (string)$this->_getTemplate();
+        }
+
+        // ##########################################
+
+        /**
+         * @param callable $closure
+         *
+         * @return $this
+         */
+        public function addFollowUp(\Closure $closure)
+        {
+            $this->_followUps[] = $closure;
+
+            return $this;
         }
 
         // ##########################################
@@ -733,5 +765,14 @@
          */
         public function runFollowUps()
         {
+            $followUps = $this->_getFollowUps();
+
+            if (!empty($followUps))
+            {
+                foreach ($followUps as $closure)
+                {
+                    $closure($this->getElementValues());
+                }
+            }
         }
     }

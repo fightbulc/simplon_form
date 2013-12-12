@@ -7,12 +7,13 @@
 
     class ElementCore implements ElementInterface
     {
-        protected $_elementHtml = '<input type="text" id=":id" name=":id" value=":value">';
+        protected $_elementHtml = '<input type="text" class=":class" id=":id" name=":id" value=":value">';
 
         protected $_id;
         protected $_label;
         protected $_description;
         protected $_value;
+        protected $_class = [];
         protected $_js = [];
 
         /** @var RuleInterface[] */
@@ -237,6 +238,30 @@
         // ######################################
 
         /**
+         * @param mixed $value
+         *
+         * @return static
+         */
+        public function addClass($value)
+        {
+            $this->_class[] = $value;
+
+            return $this;
+        }
+
+        // ######################################
+
+        /**
+         * @return string
+         */
+        public function getClassString()
+        {
+            return join(' ', $this->_class);
+        }
+
+        // ######################################
+
+        /**
          * @param array $rules
          *
          * @return static
@@ -359,6 +384,7 @@
                 'id'          => $this->getId(),
                 'label'       => $this->getLabel(),
                 'value'       => $this->getValue(),
+                'class'       => $this->getClassString(),
                 'description' => $this->getDescription(),
             ];
         }

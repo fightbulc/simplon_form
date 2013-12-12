@@ -6,7 +6,8 @@
 
     class ElementSingleTextField extends ElementCore
     {
-        protected $_elementHtml = '<div class=":hasError"><input type="text" class="form-control" name=":id" id=":id" value=":value" placeholder=":placeholder"></div>';
+        protected $_elementHtml = '<div class=":hasError"><input type="text" class=":class" name=":id" id=":id" value=":value" placeholder=":placeholder"></div>';
+        protected $_class = ['form-control'];
         protected $_placeholder;
 
         // ######################################

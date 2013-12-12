@@ -5,10 +5,10 @@
     use Simplon\Form\Elements\Core\ElementInterface;
     use Simplon\Form\Rules\Core\RuleCore;
 
-    class RuleExactMatch extends RuleCore
+    class RuleRegExp extends RuleCore
     {
-        protected $_errorMessage = '":label" does not match ":match" (case-insensitive)';
-        protected $_keyMatch = 'match';
+        protected $_errorMessage = '":label" does not match ":regexp"';
+        protected $_keyMatch = 'regexp';
 
         // ######################################
 
@@ -21,7 +21,7 @@
         {
             $value = $elementInstance->getValue();
 
-            if (strcasecmp($value, $this->_getMatchValue()) !== 0)
+            if (preg_match($this->_getRegExpValue(), $value) === 0)
             {
                 return FALSE;
             }
@@ -36,7 +36,7 @@
          *
          * @return RuleExactMatch
          */
-        public function setMatchValue($matchValue)
+        public function setRegExpValue($matchValue)
         {
             $this->_setConditions($this->_keyMatch, $matchValue);
 
@@ -48,7 +48,7 @@
         /**
          * @return mixed
          */
-        protected function _getMatchValue()
+        protected function _getRegExpValue()
         {
             return $this->_getConditionsByKey($this->_keyMatch);
         }
