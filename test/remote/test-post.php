@@ -1,6 +1,6 @@
 <?php
 
-  if($_POST['elementValue'] == 'username')
+  if($POST['elementValue'] == 'username')
   {
     echo '1';
   }

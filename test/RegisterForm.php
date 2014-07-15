@@ -3,19 +3,19 @@
   class RegisterForm
   {
     /** @var \Simplon\Form\Form */
-    protected $_formInstance;
+    protected $formInstance;
 
     // ##########################################
 
-    public function __construct()
+    public function _construct()
     {
-      $this->_formInstance = \Simplon\Form\Form::init()
+      $this->formInstance = \Simplon\Form\Form::init()
         ->setFormId('myForm')
         ->setUrl('page.php')
         ->setMethod('POST')
-        ->setTemplate($this->_getTemplatePath())
-        ->setElements($this->_getElements())
-        ->setFollowUps($this->_getFollowUps());
+        ->setTemplate($this->getTemplatePath())
+        ->setElements($this->getElements())
+        ->setFollowUps($this->getFollowUps());
     }
 
     // ##########################################
@@ -23,9 +23,9 @@
     /**
      * @return Simplon\Form\Form
      */
-    protected function _getFormInstance()
+    protected function getFormInstance()
     {
-      return $this->_formInstance;
+      return $this->formInstance;
     }
 
     // ##########################################
@@ -69,7 +69,7 @@
     /**
      * @return string
      */
-    protected function _getTemplatePath()
+    protected function getTemplatePath()
     {
       return './RegisterFormTemplate.html';
     }
@@ -79,7 +79,7 @@
     /**
      * @return array
      */
-    protected function _getElements()
+    protected function getElements()
     {
       $elements = array();
 
@@ -119,7 +119,7 @@
     /**
      * @return array
      */
-    protected function _getFollowUps()
+    protected function getFollowUps()
     {
       $followUps = array();
 

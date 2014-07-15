@@ -1,0 +1,138 @@
+*** Flat UI Pro (PSD+HTML) Changelog ***
+
+2014.02.07 - version 1.2.5
+    Bootstrap upgraded to stable 3.1.0;
+    Respond.js upgraded to v1.4.2;
+    Optimized file indentations, 2 spaces are now used instead of tabs, .editorconfig file added;
+    Fixed file input issue, which resulted in the select dialog appearing twice when clicked on inline file input (https://github.com/designmodo/Flat-UI-Pro-Support/issues/327);
+    Added variables font-path, font-name and font-id (https://github.com/twbs/bootstrap/issues/12164) for local fonts and glyphicons;
+    Added the ability to change the navbar height through the variables @navbar-height-base and @navbar-height-large;
+    Added @grid-float-breakpoint-max to better link navbar behavior across viewports and improve customization when setting @grid-float-breakpoint (https://github.com/twbs/bootstrap/issues/11610);
+    Added .small support to blockquote citations (https://github.com/twbs/bootstrap/pull/11414);
+    Reordered the headings with body text and text emphasis classes (https://github.com/twbs/bootstrap/issues/11515);
+    Removed color from outline reset for improved outlines on focus (https://github.com/twbs/bootstrap/pull/11551);
+    Removed the unnecessary prefixes for gradient mixins given our stated browser support (https://github.com/twbs/bootstrap/pull/11694);
+    Added line-height to progress bar for proper text alignment within (https://github.com/twbs/bootstrap/issues/10407);
+    Used @screen-xx-xx variables instead of hardcoded pixel values in modules;
+    Enabled the use of form validation class on .radio, .checkbox, .radio-inline, and .checkbox-inline (https://github.com/twbs/bootstrap/issues/10522);
+    Added new sizes, .modal-lg and .modal-sm, to modals for quicker settings on modals. Only applies to modals above the small breakpoint (https://github.com/twbs/bootstrap/issues/11162);
+    Added <kbd> element styles to indicate user input via keyboard (https://github.com/twbs/bootstrap/issues/11193);
+    Added .animation() mixins (https://github.com/twbs/bootstrap/issues/11244);
+    Added @modal-backdrop-opacity variable for customizable modal backdrop (https://github.com/twbs/bootstrap/issues/11107);
+    Prevented the double borders between multiple buttons in an input group (https://github.com/twbs/bootstrap/issues/11435);
+    Updated .scale() mixin so that it accepts optional vertical scale as the second parameter (https://github.com/twbs/bootstrap/issues/11748);
+    Removed the setting of @headings-font-family to the same font stack as the <body>; instead, used inherit for same default CSS (https://github.com/twbs/bootstrap/issues/11741);
+    Added .make-xs-column mixins to complement the recently added extra small predefined grid classes (https://github.com/twbs/bootstrap/issues/11829);
+    Added and used .text-emphasis-variant() mixin for emphasis classes (https://github.com/twbs/bootstrap/issues/12247);
+    Added and used .bg-variant() mixin to generate background classes (https://github.com/twbs/bootstrap/issues/12248);
+    Reset height on select[multiple] in .input-size() mixin (https://github.com/twbs/bootstrap/issues/12422);
+    Account for badges within buttons by matching background to text color and text color to background (https://github.com/twbs/bootstrap/issues/11268);
+    Dropped the abbr element from the .initialism selector (https://github.com/twbs/bootstrap/issues/11277);
+    Added .small support to blockquote citations (https://github.com/twbs/bootstrap/issues/11414);
+    Various small bugfixes and improvements.
+
+2014.01.24 - version 1.2.4
+    Bootstrap upgraded to stable 3.0.3;    Bootstrap icons updated;    Slider: vertical slider orientation support added (https://github.com/designmodo/Flat-UI-Pro-Support/issues/224);    Spinner: additional sizes added: huge, large and small;    Typeahead: now, the original Twitter Typehead version (https://github.com/twitter/typeahead.js) is supported, the previous version is no longer supported;    Other modifications and improvements.
+2013.12.20 - version 1.2.3
+    Background and border color improved for .alert-success;
+    Transition for buttons improved;
+    Various small changes to the dropdown module.
+
+Forms:
+    Form elements added: legend, .help-block;
+    New “File input” module, developed on the basis of jasny’s fileinput.js, added;
+    input-groups.less module substantially modified and supplemented by new elements for better compatibility with Bootstrap 3;
+    Other minor changes.
+
+Navbar:
+    navbar.less module completely remade;
+    Possibility to set navbar size added, and now indents and font size in default and inverted navbars are the same;
+    support of basic navbar elements added: navbar-form, navbar-btn, navbar-text, navbar-link;
+    fixed-top, fixed-bottom, static-top support added.
+
+2013.10.14 - version 1.2.2
+Improved typography:
+    New global variables added for a more flexible configuration;
+    Padding and margins changed for basic elements;
+    Global default font-size now is 18px, with a line-height of 1.722;
+    <abbr>, <address>, <code>, <pre>, right-aligned <blockquote> support added;
+
+Buttons updated:
+    Module completely rewritten;
+    New global variables added for a more flexible configuration;
+    btn-default class should be chosen for default button;
+    Buttons now require a .btn-default for the standard version;
+    .btn-link support added;
+    Button groups put into a separate module;
+
+Others:
+    Certain errors fixed in .navbar module, layout updated;
+    Mixins updated, standard mixins added from Bootstrap 3;
+    Layout updated for stylized select and dropdown menu;
+    and other modifications and improvements.
+
+2013.09.18 - version 1.2.1
+    Border for navbar removed;
+    Out-of-date links removed from template.html file;
+    Padding removed for .modal-dialog;
+    Opacity mixin now accepts decimal numbers instead of integers;
+    Several bugs fixed in IE8;
+    Other minor corrections and improvements.
+
+2013.09.05 - version 1.2
+    Bootstrap 3.0 support
+    New 50 colorful icons
+    New icon format: SVG
+    Text-based form controls are now 100% wide
+    Search forms have been removed (".search-form")
+    A more flexible Bootstrap grid is used for assigning sizes of form elements using classes
+    Append/prepend elements have been updated, the code has been moved to a separate file
+    Appearance of tables on mobile devices has been modified, we have decided to stop using stacktable plug-in
+    Lato font is now placed locally, which will resolve the issue with content uploads via various http/https protocols, and will make it possible to work locally with Flat UI
+    .badge no longer has contextual (-success,-primary,etc..) classes
+    Modal markup has changed significantly
+    Alignment for tabs (.tabs-left .tabs-right) has been removed
+    Main file with styles (flat-ui.css) has thinned from 147 kb to 114 kb
+    box-sizing: border-box by default for all elements
+    Documentation has been updated
+
+2013.07.18 - version 1.1.3
+Added:
+    Added component documentation (components.html)
+    Autocomplete (Typeahead)
+    Modals
+    Carousel
+    Optimized PNG (Less 120 kB)
+    Added a link on how to add/change glyphs in Flat UI Icons font to documentation.html
+    Added cross-link to components.html on documentation.html
+
+Fixed:
+    Fixed bug where .dropdown was broken in .pagination-minimal
+    Fix Adding small tag to .brand in top nav breaks the menu
+    Fix Remove dependency of jQuery datepicker
+    Fix Datepicker .error border
+    Fix Navbar on Chrome 28 (Linux)
+    Fix Pager broken in Safari
+    Fix navbar-inverse menu links padding bug
+    Fix Header not vertically centering an icon
+    Minor bug fixes - PSD version
+
+2013.05.22 - version 1.1
+HTML/Bootstrap
+    Fixed Less compiler bugs
+    Resolved Photoshop Glyphs issue
+    Fixed small typography issues
+    Checkbox/radio JS refactoring and styling bugfixes (new change event added)
+    Resolved Slider JS issue
+    Added .row-fluid support
+    Added Photoshop Swatches
+    Added documentation on how to start using Flat UI
+    Typehead bugfix
+    Added template.html for those who want to start blazin' fast
+    Bootstrap updated to 2.3.2
+
+PSD
+    Added Auto-complete element
+    Added Modal Popup element
+    Added Carousel Photo Slider element
+    Various small bug fixes.

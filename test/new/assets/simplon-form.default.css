@@ -15,7 +15,13 @@ fieldset.group-separator ul
     margin: 0;
 }
 
-ul
+ul.rule-error-messages
 {
-    padding-top: 5px;
+    padding-top: 15px;
+    font-size: 17px;
+}
+
+ul.rule-error-messages-select
+{
+    padding-top: 7px;
 }

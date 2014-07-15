@@ -1,6 +1,6 @@
 <?php
 
-  if($_GET['elementValue'] == 'username')
+  if($GET['elementValue'] == 'username')
   {
     echo '1';
   }

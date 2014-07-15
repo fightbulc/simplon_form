@@ -22,8 +22,8 @@
   },
 
   "autoload": {
-    "psr-0": {
-      "Simplon\\Form": "src/"
+    "psr-4": {
+      "Simplon\\Form\\": "src/"
     }
   }
 }

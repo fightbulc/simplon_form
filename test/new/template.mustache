@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="assets/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="assets/flat-ui.css" rel="stylesheet" media="screen">
+    <link href="assets/jquery.remote-complete/jquery.remote-complete.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="assets/simplon-form.default.css">
+    <script src="assets/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-sm-12">
+            {{#form:hasError}}
+                {{value}}
+            {{/form:hasError}}
+
+            {{#form:open}}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        <fieldset class="group-separator">
+                            <div class="form-group row">
+                                <div class="col-md-6 col-sm-6">
+                                    {{#fullname:description}}
+                                        {{value}}
+                                    {{/fullname:description}}
+
+                                    {{#fullname:element}}
+                                        {{value}}
+                                    {{/fullname:element}}
+
+                                    {{#fullname:error}}
+                                        {{value}}
+                                    {{/fullname:error}}
+                                </div>
+
+                                <div class="col-md-6 col-sm-6">
+                                    {{#city:description}}
+                                        {{value}}
+                                    {{/city:description}}
+
+                                    {{#city:element}}
+                                        {{value}}
+                                    {{/city:element}}
+
+                                    {{#city:error}}
+                                        {{value}}
+                                    {{/city:error}}
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="group-separator">
+                            <div class="form-group row">
+                                <div class="col-sm-12 col-xs-12">
+                                    {{#food:description}}
+                                        {{value}}
+                                    {{/food:description}}
+
+                                    {{#food:element}}
+                                        {{value}}
+                                    {{/food:element}}
+
+                                    {{#food:error}}
+                                        {{value}}
+                                    {{/food:error}}
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="group-separator">
+                            <div class="form-group row">
+                                <div class="col-sm-12 col-xs-12">
+                                    {{#cars:description}}
+                                        {{value}}
+                                    {{/cars:description}}
+
+                                    {{#cars:element}}
+                                        {{value}}
+                                    {{/cars:element}}
+
+                                    {{#cars:error}}
+                                        {{value}}
+                                    {{/cars:error}}
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="form-group row">
+                            <div class="col-md-6 col-sm-6">
+                                {{#country:description}}
+                                    {{value}}
+                                {{/country:description}}
+
+                                {{#country:element}}
+                                    {{value}}
+                                {{/country:element}}
+
+                                {{#country:error}}
+                                    {{value}}
+                                {{/country:error}}
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                {{#sendEmail:description}}
+                                    {{value}}
+                                {{/sendEmail:description}}
+
+                                {{#sendEmail:element}}
+                                    {{value}}
+                                {{/sendEmail:element}}
+
+                                {{#sendEmail:error}}
+                                    {{value}}
+                                {{/sendEmail:error}}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="panel-footer">
+                        {{#form:submit}}
+                            {{value}}
+                        {{/form:submit}}
+
+                        &nbsp;&nbsp;
+
+                        {{#form:cancel}}
+                            {{value}}
+                        {{/form:cancel}}
+                    </div>
+                </div>
+
+                {{#form:js}}
+                    {{value}}
+                {{/form:js}}
+            {{/form:open}}
+        </div>
+    </div>
+
+</div>
+
+<script src="assets/bootstrap-3.1.1/js/bootstrap.min.js"></script>
+
+<script src="assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="assets/js/bootstrap-select.js"></script>
+<script src="assets/js/bootstrap-switch.js"></script>
+<script src="assets/js/flatui-checkbox.js"></script>
+<script src="assets/js/flatui-radio.js"></script>
+<script src="assets/js/jquery.tagsinput.js"></script>
+<script src="assets/js/jquery.placeholder.js"></script>
+
+<script src="assets/jquery.remote-complete/jquery.remote-complete.js"></script>
+<script src="assets/jquery.remote-complete/hogan-2.0.0.min.js"></script>
+
+</body>
+</html>

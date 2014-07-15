@@ -1,6 +1,6 @@
 <?php
 
-    $searchQuery = preg_replace('/ +/u', ' ', preg_replace('/[^\@\w+ ]/u', '', $_POST['query'])) . "*";
+    $searchQuery = preg_replace('/ +/u', ' ', preg_replace('/[^\@\w+ ]/u', '', $POST['query'])) . "*";
 
     $dbh = mysql_connect('localhost', 'rootuser', 'rootuser');
     mysql_query('use beatguide_devel_service', $dbh);
@@ -23,7 +23,7 @@
         ];
     }
 
-    echo json_encode(['results' => $results, 'query' => $_POST['query']]);
+    echo json_encode(['results' => $results, 'query' => $POST['query']]);
 
     // ##########################################
 

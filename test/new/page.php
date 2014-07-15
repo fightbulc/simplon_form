@@ -1,67 +1,91 @@
 <?php
 
-    require __DIR__ . '/../../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 
-    // ##########################################
+// ----------------------------------------------
 
-    $validCharacters = '0-9A-Za-z!@#$%^&*+=-_?:;|';
+$cancelAnchor = (new \Simplon\Form\Elements\Anchor\AnchorElement())
+    ->setId('cancel')
+    ->setLabel('Cancel')
+    ->setUrl('page.php');
 
-    $ruleRegExp = (new \Simplon\Form\Rules\RuleRegExp())
-        ->setRegExpValue('/[' . $validCharacters . ']+/')
-        ->setErrorMessage('Only the following characters are allowed: ' . $validCharacters);
+$submitButton = (new \Simplon\Form\Elements\SubmitButton\SubmitButtonElement())
+    ->setId('submit')
+    ->setLabel('Submit Data');
 
-    $password = (new \Simplon\Form\Elements\ElementPasswordField())
-        ->setId('password')
-        ->setLabel('New password')
-        ->setPlaceholder('Set your password')
-        ->addClass('input-lg')
-        ->addRule(new \Simplon\Form\Rules\RuleRequired())
-        ->addRule((new \Simplon\Form\Rules\RuleLengthMin())->setLength(6))
-        ->addRule((new \Simplon\Form\Rules\RuleLengthMax())->setLength(30))
-        ->addRule($ruleRegExp);
+// ----------------------------------------------
 
-    // ------------------------------------------
+$fullname = (new \Simplon\Form\Elements\TextSingleLine\TextSingleLineElement())
+    ->setId('fullname')
+    ->setLabel('Full name')
+    ->setDescription('Enter your full name')
+    ->setPlaceholder('Full name')
+    ->addRule(new \Simplon\Form\Rules\RequiredRule());
 
-    $passwordControl = (new \Simplon\Form\Elements\ElementPasswordField())
-        ->setId('password_control')
-        ->setLabel('Confirm your password')
-        ->setPlaceholder('Retype your password')
-        ->addClass('input-lg')
-        ->addRule(new \Simplon\Form\Rules\RuleRequired())
-        ->addRule((new \Simplon\Form\Rules\RuleMatchElementValue())->setMatchElement($password)->setErrorMessage('Your confirmed password does not match'));
+$city = (new \Simplon\Form\Elements\TextSingleLine\TextSingleLineElement())
+    ->setId('city')
+    ->setLabel('City')
+    ->setDescription('Enter your city')
+    ->setPlaceholder('City')
+    ->addRule(new \Simplon\Form\Rules\RequiredRule());
 
-    // ------------------------------------------
+$food = (new \Simplon\Form\Elements\Checkbox\CheckboxButtonGroupElement())
+    ->setId('food')
+    ->setLabel('Foods')
+    ->setDescription('Please select between 2-4 fruits')
+    ->setUseOptionKeys(false)
+    ->setOptions(['Apfel', 'Birne', 'Orange', 'Döner', 'Brülle',])
+    ->setPreselectedOption(['Birne'])
+    ->addRule((new \Simplon\Form\Rules\CheckboxRangeCheckedRule())->setMinChecked(2)->setMaxChecked(4));
 
-    $resetToken = (new \Simplon\Form\Elements\ElementHiddenField())
-        ->setId('reset_token')
-        ->setValue('123');
+$cars = (new \Simplon\Form\Elements\Radio\RadioButtonGroupElement())
+    ->setId('cars')
+    ->setLabel('Car Brands')
+    ->setDescription('Please select the brand you favourite the most.')
+    ->setUseOptionKeys(false)
+    ->setOptions(['Audi', 'BMW', 'Mercedes', 'Trabant'])
+    ->addRule((new \Simplon\Form\Rules\RequiredRule())->setErrorMessage('Select a car'));
 
-    // ------------------------------------------
+$country = (new \Simplon\Form\Elements\Select\SelectElement())
+    ->setId('country')
+    ->setLabel('Country')
+    ->setDescription('Choose your country')
+    ->setPlaceholder('Choose')
+    ->setUseOptionKeys(false)
+    ->setOptions(['Germany', 'Spain', 'France'])
+    ->setSortByLabel(true)
+    ->addRule(new \Simplon\Form\Rules\RequiredRule());
 
-    $submitButton = (new \Simplon\Form\Elements\ElementSubmitButton())
-        ->setId('submit')
-        ->setLabel('Reset password');
+$sendEmail = (new \Simplon\Form\Elements\SwitchBox\SwitchBoxElement())
+    ->setId('sendEmail')
+    ->setLabel('Send Email')
+    ->setDescription('Subscribe our Newsletter?');
 
-    // ##########################################
+// ----------------------------------------------
 
-    $form = (new \Simplon\Form\Form())
-        ->setId('reset')
-        ->setUrl('')
-        ->setMethod('POST')
-        ->setGeneralErrorMessage('<strong>Validation failed.</strong> Have a look at the error notes below.')
-        ->setSubmitElement($submitButton)
-        ->setTemplate('./template.html')
-        ->addElement($password)
-        ->addElement($passwordControl)
-        ->addElement($resetToken);
+$form = (new \Simplon\Form\Form())
+    ->setId('reset')
+    ->setUrl('')
+    ->setMethod('POST')
+    ->setGeneralErrorMessage('<strong>Validation failed.</strong> Have a look at the error notes below.')
+    ->setSubmitElement($submitButton)
+    ->setCancelElement($cancelAnchor)
+    ->addElement($fullname)
+    ->addElement($city)
+    ->addElement($food)
+    ->addElement($cars)
+    ->addElement($country)
+    ->addElement($sendEmail)
+    ->setTemplate('./template.mustache');
 
-    // ##########################################
+// ----------------------------------------------
 
-    if ($form->isValid() === TRUE)
-    {
-        echo '<h1>Valid form!</h1><a href="page.php">back to the start</a>';
-        var_dump($form->getElementValues());
-        exit;
-    }
+if ($form->isValid() === true)
+{
+    echo '<h1>Valid form!</h1><a href="page.php">back to the start</a>';
+    echo '<hr>';
+    var_dump($form->getElementValues());
+    exit;
+}
 
-    echo $form->render();
+echo $form->render();
