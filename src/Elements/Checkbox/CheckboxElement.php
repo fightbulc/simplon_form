@@ -201,9 +201,6 @@ class CheckboxElement extends CoreElement
      */
     protected function renderElementHtml()
     {
-        // set JS
-        $this->addJs("$('#" . $this->getId() . ":checkbox').checkbox()");
-
         // render elm
         $elementHtml = $this->replaceFieldPlaceholder('items', $this->renderElementItemHtml(), $this->getElementHtml());
 

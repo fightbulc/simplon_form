@@ -124,9 +124,6 @@ class RadioElement extends CoreElement
      */
     protected function renderElementHtml()
     {
-        // set JS
-        $this->addJs("$('#" . $this->getId() . ":radio').radio()");
-
         // render elm
         $elementHtml = $this->replaceFieldPlaceholder('items', $this->renderElementItemHtml(), $this->getElementHtml());
 

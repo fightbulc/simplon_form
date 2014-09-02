@@ -14,7 +14,8 @@ class CoreElement implements InterfaceElement
     protected $description;
     protected $value;
     protected $class = [];
-    protected $js = [];
+    protected $assetFiles = [];
+    protected $webPathAssets = '/assets';
 
     /** @var InterfaceRule[] */
     protected $rules = [];
@@ -23,6 +24,26 @@ class CoreElement implements InterfaceElement
     protected $errorMessages = [];
     protected $errorContainerWrapper = 'ul';
     protected $errorItemWrapper = 'li';
+
+    /**
+     * @return string
+     */
+    public function getWebPathAssets()
+    {
+        return rtrim($this->webPathAssets, '/');
+    }
+
+    /**
+     * @param string $pathAssets
+     *
+     * @return static
+     */
+    public function setWebPathAssets($pathAssets)
+    {
+        $this->webPathAssets = $pathAssets;
+
+        return $this;
+    }
 
     /**
      * @param $tag
@@ -373,13 +394,13 @@ class CoreElement implements InterfaceElement
     }
 
     /**
-     * @param $js
+     * @param $fileAsset
      *
      * @return $this
      */
-    public function addJs($js)
+    public function addAssetFile($fileAsset)
     {
-        $this->js[] = $js;
+        $this->assetFiles[] = $this->getWebPathAssets() . '/' . $fileAsset;
 
         return $this;
     }
@@ -387,9 +408,9 @@ class CoreElement implements InterfaceElement
     /**
      * @return array
      */
-    public function getJs()
+    public function getAssetFiles()
     {
-        return $this->js;
+        return $this->assetFiles;
     }
 
     /**

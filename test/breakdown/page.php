@@ -22,6 +22,7 @@ $city = (new \Simplon\Form\Elements\AutoComplete\AutoCompleteElement())
     ->setLabel('Search city')
     ->setResultTemplate($resultTemplate)
     ->setSelectedTemplate($selectedTemplate)
+    ->setWebPathAssets('/simplon_form/test/breakdown/assets/')
     ->addRule(new \Simplon\Form\Rules\RequiredRule());
 
 // ------------------------------------------
@@ -71,10 +72,10 @@ $address = (new \Simplon\Form\Elements\TextMultiLine\TextMultiLineElement())
 // ------------------------------------------
 
 $age = (new \Simplon\Form\Elements\Select\SelectElement())
-    ->setId('age')
-    ->setLabel('Age')
+    ->setId('country')
+    ->setLabel('Country')
     ->setPlaceholder('Choose...')
-    ->setUseOptionKeys(true)
+    ->setUseOptionKeys(false)
     ->setTopSplitKeys(['DE'])
     ->setSortByLabel(true)
     ->setOptions(['DE', 'EN', 'GR', 'UK', 'AR'])
@@ -107,13 +108,10 @@ $cancelAnchor = (new \Simplon\Form\Elements\Anchor\AnchorElement())
 
 // ##########################################
 
-$form = (new \Simplon\Form\Form())
+$form = (new \Simplon\Form\Form($_POST))
     ->setId('test')
-    ->setUrl('')
-    ->setMethod('POST')
-    ->setSubmitElement($submitButton)
-    ->setCancelElement($cancelAnchor)
-    ->setTemplate('./template.mustache')
+    ->addElement($submitButton)
+    ->addElement($cancelAnchor)
     ->addElement($city)
     ->addElement($name)
     ->addElement($lastname)
@@ -131,4 +129,4 @@ if ($form->isValid() === true)
     exit;
 }
 
-echo $form->render();
+echo $form->render('./template.mustache');

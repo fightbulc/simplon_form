@@ -87,14 +87,15 @@ class AutoCompleteElement extends CoreElement
      */
     public function render()
     {
-        $this->addJs("console.log('loaded')");
-        $this->addJs("var p = $('#{$this->getId()}').remoteComplete({resultTemplate:'{$this->getResultTemplate()}', selectedTemplate:'{$this->getSelectedTemplate()}'})");
+        $this->addAssetFile("jquery.remote-complete/jquery.remote-complete.css");
+        $this->addAssetFile("jquery.remote-complete/jquery.remote-complete.js");
+        $this->addAssetFile("jquery.remote-complete/hogan-2.0.0.min.js");
 
         if (isset($POST['city_results']))
         {
             $data = $POST['city_results'][0];
 
-            $this->addJs("p.init([JSON.parse('" . json_encode(json_decode($data, true)) . "')])");
+            $this->addAssetFile("p.init([JSON.parse('" . json_encode(json_decode($data, true)) . "')])");
         }
 
         return parent::render();

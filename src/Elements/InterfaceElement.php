@@ -8,9 +8,9 @@ interface InterfaceElement
 
     public function getElementHtml();
 
-    public function addJs($code);
+    public function addAssetFile($code);
 
-    public function getJs();
+    public function getAssetFiles();
 
     public function setId($id);
 

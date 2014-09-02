@@ -35,7 +35,7 @@ class RequiredRule extends CoreRule
 
         $value = $elementInstance->getValue();
 
-        if (empty($value))
+        if ($value === '')
         {
             return false;
         }

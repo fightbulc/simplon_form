@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="assets/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="assets/bootstrap-3.0.2/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
-    <link href="assets/jquery.remote-complete/jquery.remote-complete.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="assets/simplon-form.default.css">
-    <script src="assets/jquery-2.0.3.min.js"></script>
 </head>
 <body>
 
@@ -131,17 +129,17 @@
 
                         <fieldset class="group-separator">
                             <div class="form-group">
-                                {{#age:label}}
+                                {{#country:label}}
                                     {{value}}
-                                {{/age:label}}
+                                {{/country:label}}
 
-                                {{#age:element}}
+                                {{#country:element}}
                                     {{value}}
-                                {{/age:element}}
+                                {{/country:element}}
 
-                                {{#age:error}}
+                                {{#country:error}}
                                     {{value}}
-                                {{/age:error}}
+                                {{/country:error}}
                             </div>
                         </fieldset>
 
@@ -167,30 +165,24 @@
                     </div>
 
                     <div class="panel-footer">
-                        {{#form:submit}}
+                        {{#submit:element}}
                             {{value}}
-                        {{/form:submit}}
+                        {{/submit:element}}
 
-                        &nbsp;or&nbsp;
-
-                        {{#form:cancel}}
+                        {{#cancel:element}}
                             {{value}}
-                        {{/form:cancel}}
+                        {{/cancel:element}}
                     </div>
                 </div>
 
-                {{#form:js}}
-                    {{value}}
-                {{/form:js}}
             {{/form:open}}
         </div>
-    </div>
 
+    </div>
 </div>
 
+<script src="assets/jquery-2.0.3.min.js"></script>
 <script src="assets/bootstrap-3.0.2/js/bootstrap.min.js"></script>
-<script src="assets/jquery.remote-complete/jquery.remote-complete.js"></script>
-<script src="assets/jquery.remote-complete/hogan-2.0.0.min.js"></script>
 
 </body>
 </html>

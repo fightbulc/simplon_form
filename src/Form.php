@@ -7,29 +7,29 @@ use Simplon\Form\Elements\InterfaceElement;
 
 class Form
 {
+    /** @var  array */
+    protected $requestData;
+
     protected $tmpl;
     protected $id = 'simplon-form';
     protected $url = '';
-    protected $method = 'GET';
+    protected $method = 'POST';
     protected $acceptCharset = 'utf-8';
     protected $enabledCsrf = true;
     protected $csrfSalt = 'x45%da08*(';
-
-    /** @var InterfaceElement */
-    protected $submitElement;
-
-    /** @var InterfaceElement */
-    protected $cancelElement;
 
     /** @var InterfaceElement[] */
     protected $elements = [];
     protected $invalidElements = [];
     protected $generalErrorMessage = '<strong>Oh snap!</strong> At least one field requires your attention. Have a look at the error notes below.';
 
-    protected $jsCode = [];
+    protected $assetFiles = [];
     protected $followUps = [];
 
-    public function __construct()
+    /**
+     * @param array $requestData
+     */
+    public function __construct($requestData = [])
     {
         // start session for csrf
         if (!session_id())
@@ -37,8 +37,48 @@ class Form
             session_start();
         }
 
-        // kick cookies
-        $_REQUEST = array_merge($_GET, $_POST);
+        // set data
+        $this->setRequestData($requestData);
+    }
+
+    /**
+     * @param null $key
+     *
+     * @return array|bool
+     */
+    public function getRequestData($key = null)
+    {
+        if ($key !== null)
+        {
+            if (isset($this->requestData[$key]) === true)
+            {
+                return $this->requestData[$key];
+            }
+
+            return false;
+        }
+
+        return (array)$this->requestData;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function hasRequestData()
+    {
+        return empty($this->requestData) === false;
+    }
+
+    /**
+     * @param array $requestData
+     *
+     * @return Form
+     */
+    public function setRequestData(array $requestData)
+    {
+        $this->requestData = $requestData;
+
+        return $this;
     }
 
     /**
@@ -89,46 +129,6 @@ class Form
         $template = '<div class="alert alert-danger">:value</div>';
 
         return str_replace(':value', $this->generalErrorMessage, $template);
-    }
-
-    /**
-     * @param \Simplon\Form\Elements\InterfaceElement $cancelElement
-     *
-     * @return $this
-     */
-    public function setCancelElement(InterfaceElement $cancelElement)
-    {
-        $this->cancelElement = $cancelElement;
-
-        return $this;
-    }
-
-    /**
-     * @return InterfaceElement
-     */
-    public function getCancelElement()
-    {
-        return $this->cancelElement;
-    }
-
-    /**
-     * @param \Simplon\Form\Elements\InterfaceElement $submitElement
-     *
-     * @return $this
-     */
-    public function setSubmitElement(InterfaceElement $submitElement)
-    {
-        $this->submitElement = $submitElement;
-
-        return $this;
-    }
-
-    /**
-     * @return \Simplon\Form\Elements\InterfaceElement
-     */
-    public function getSubmitElement()
-    {
-        return $this->submitElement;
     }
 
     /**
@@ -253,41 +253,41 @@ class Form
 
         foreach ($elements as $elm)
         {
-            $values[$elm->getId()] = $this->getRequestValue($elm->getId());
+            $values[$elm->getId()] = $this->getRequestData($elm->getId());
         }
 
         return $values;
     }
 
     /**
-     * @param array $jsCode
+     * @param array $assetFiles
      *
      * @return $this
      */
-    protected function setJsCode(array $jsCode)
+    protected function setAssetFiles(array $assetFiles)
     {
-        if (!empty($jsCode))
+        foreach ($assetFiles as $file)
         {
-            $this->jsCode[] = join(';', $jsCode) . ';';
+            $this->assetFiles[] = $file;
         }
 
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    protected function getJsCode()
+    protected function getAssetFiles()
     {
-        return $this->jsCode;
+        return $this->assetFiles;
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    protected function hasJsCode()
+    protected function hasAssetFiles()
     {
-        return count($this->getJsCode()) > 0 ? true : false;
+        return count($this->getAssetFiles()) > 0 ? true : false;
     }
 
     /**
@@ -308,6 +308,38 @@ class Form
     protected function getFollowUps()
     {
         return $this->followUps;
+    }
+
+    /**
+     * @param $id
+     * @param callable $closure
+     *
+     * @return Form
+     */
+    public function addFollowUp($id, \Closure $closure)
+    {
+        $this->followUps[$id] = $closure;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function runFollowUps()
+    {
+        $responses = [];
+        $followUps = $this->getFollowUps();
+
+        if (!empty($followUps))
+        {
+            foreach ($followUps as $id => $closure)
+            {
+                $responses[$id] = $closure($this->getElementValues());
+            }
+        }
+
+        return $responses;
     }
 
     /**
@@ -338,21 +370,6 @@ class Form
     protected function getTemplate()
     {
         return (string)$this->tmpl;
-    }
-
-    /**
-     * @param $key
-     *
-     * @return bool|mixed
-     */
-    protected function getRequestValue($key)
-    {
-        if (!isset($_REQUEST[$key]))
-        {
-            return false;
-        }
-
-        return $_REQUEST[$key];
     }
 
     /**
@@ -418,7 +435,7 @@ class Form
      */
     protected function isSubmitted()
     {
-        return $this->getRequestValue('csrf') === $this->getCsrfValue();
+        return $this->hasRequestData() === true;
     }
 
     /**
@@ -499,6 +516,28 @@ class Form
 
         $formOpen = str_replace(':attributes', join(' ', $renderedAttributes), $formOpen);
 
+        // set form js
+        // TODO do it better
+        if ($this->hasAssetFiles())
+        {
+            $jsFiles = [];
+
+            foreach ($this->getAssetFiles() as $file)
+            {
+                if (strpos($file, '.js') !== false)
+                {
+                    $jsFiles[] = '"' . $file . '"';
+                }
+                else
+                {
+                    $renderedAssets[] = '<link rel="stylesheet" href="' . $file . '">';
+                }
+            }
+
+            $renderedAssets[] = '<script>!function(e,t,r){function n(){for(;d[0]&&"loaded"==d[0][f];)c=d.shift(),c[o]=!i.parentNode.insertAfter(c,i)}for(var s,a,c,d=[],i=e.scripts[0],o="onreadystatechange",f="readyState";s=r.shift();)a=e.createElement(t),"async"in i?(a.async=!1,e.body.appendChild(a)):i[f]?(d.push(a),a[o]=n):e.write("<"+t+\' src="\'+s+\'" defer></\'+t+">"),a.src=s}(document, "script", [' . join(',', $jsFiles) . '])</script>';
+            $this->tmpl = str_replace('{{#form:open}}', "{{#form:open}}\n" . join("\n", $renderedAssets) . "\n", $this->tmpl);
+        }
+
         // set form open
         $this->tmpl = str_replace('{{#form:open}}', $formOpen, $this->getTemplate());
 
@@ -516,24 +555,6 @@ class Form
             $placeholders['hasError'] = $this->renderGeneralErrorMessage();
         }
 
-        // form:submit
-        if ($this->getSubmitElement())
-        {
-            $placeholders['submit'] = $this->getSubmitElement()->render()['element'];
-        }
-
-        // form:cancel
-        if ($this->getCancelElement())
-        {
-            $placeholders['cancel'] = $this->getCancelElement()->render()['element'];
-        }
-
-        // form:js
-        if ($this->hasJsCode())
-        {
-            $placeholders['js'] = '<script>$(function(){' . "\n" . join("\n", $this->getJsCode()) . "\n" . '});</script> ';
-        }
-
         $this->replaceTemplatePlaceholder('form', $placeholders);
     }
 
@@ -544,7 +565,7 @@ class Form
      */
     protected function cleanPlaceholders($tmpl)
     {
-        return (string)preg_replace('#{{\#*/*[\w\d]+:[\w\d]+}}\s*#sm', '', $tmpl);
+        return (string)preg_replace('|{{.*?}}\s*|sm', '', $tmpl);
     }
 
     /**
@@ -552,7 +573,7 @@ class Form
      */
     protected function cleanTemplate()
     {
-        $this->tmpl = (string)preg_replace('#({{\#([\w\d]+:[\w\d]+)}}.*?{{/\\2}}|{{\#[\w\d]+:[\w\d]+}})\s*#smi', '', $this->tmpl);
+        $this->tmpl = (string)preg_replace('#({{.*?}})\s*#smi', '', $this->tmpl);
     }
 
     /**
@@ -581,7 +602,7 @@ class Form
             foreach ($this->getElements() as $element)
             {
                 // fill element with submitted value
-                $requestValue = $this->getRequestValue($element->getId());
+                $requestValue = $this->getRequestData($element->getId());
 
                 // set post value
                 $element->setPostValue($requestValue);
@@ -598,7 +619,7 @@ class Form
                     // visual error indication
                     $element->setElementHtml(str_replace(':hasError', 'has-error', $element->getElementHtml()));
                 }
-                
+
                 // element is valid
                 elseif ($element->isValid() === true)
                 {
@@ -618,10 +639,18 @@ class Form
     }
 
     /**
+     * @param null $pathTemplate
+     *
      * @return string
      */
-    public function render()
+    public function render($pathTemplate = null)
     {
+        // set template
+        if ($pathTemplate !== null)
+        {
+            $this->setTemplate($pathTemplate);
+        }
+
         // include CSRF field if enabled
         $this->setCsrfElement();
 
@@ -630,12 +659,17 @@ class Form
         {
             if ($element->isValid() === false)
             {
-                $this->replaceTemplatePlaceholder($element->getId(), ['error' => $element->renderErrorMessages()]);
+                $this->replaceTemplatePlaceholder(
+                    $element->getId(),
+                    [
+                        'error' => $element->renderErrorMessages()
+                    ]
+                );
             }
 
             $this->replaceTemplatePlaceholder($element->getId(), $element->render());
 
-            $this->setJsCode($element->getJs());
+            $this->setAssetFiles($element->getAssetFiles());
         }
 
         // set form open/close tag
@@ -646,33 +680,5 @@ class Form
 
         // return finished template
         return $this->getTemplate();
-    }
-
-    /**
-     * @param callable $closure
-     *
-     * @return $this
-     */
-    public function addFollowUp(\Closure $closure)
-    {
-        $this->followUps[] = $closure;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function runFollowUps()
-    {
-        $followUps = $this->getFollowUps();
-
-        if (!empty($followUps))
-        {
-            foreach ($followUps as $closure)
-            {
-                $closure($this->getElementValues());
-            }
-        }
     }
 }

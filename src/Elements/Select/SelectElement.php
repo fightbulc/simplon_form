@@ -215,7 +215,7 @@ class SelectElement extends CoreElement
         {
             $isSelected = false;
 
-            if (empty($currentSelectedValue))
+            if ($currentSelectedValue === '')
             {
                 $isSelected = true;
             }
@@ -270,6 +270,7 @@ class SelectElement extends CoreElement
 
             // extract lists
             $topSplitOptions = array_intersect_key($options, $topSplitKeys);
+
             $options = array_diff_key($options, $topSplitKeys);
 
             // sort
@@ -282,7 +283,7 @@ class SelectElement extends CoreElement
                 {
                     $isSelected = false;
 
-                    if (!empty($currentSelectedValue) && $value == $currentSelectedValue)
+                    if ($currentSelectedValue !== '' && $value === $currentSelectedValue)
                     {
                         $isSelected = true;
                     }
@@ -304,7 +305,7 @@ class SelectElement extends CoreElement
         {
             $isSelected = false;
 
-            if (!empty($currentSelectedValue) && $value == $currentSelectedValue)
+            if ($currentSelectedValue !== '' && $value === $currentSelectedValue)
             {
                 $isSelected = true;
             }
@@ -324,7 +325,6 @@ class SelectElement extends CoreElement
 
             // extract lists
             $bottomSplitOptions = array_intersect_key($options, $bottomSplitKeys);
-            $options = array_diff_key($options, $bottomSplitKeys);
 
             // sort
             $bottomSplitOptions = $this->sortOptionsByLabel($bottomSplitOptions);
@@ -338,7 +338,7 @@ class SelectElement extends CoreElement
                 {
                     $isSelected = false;
 
-                    if (!empty($currentSelectedValue) && $value == $currentSelectedValue)
+                    if ($currentSelectedValue !== '' && $value === $currentSelectedValue)
                     {
                         $isSelected = true;
                     }
@@ -364,7 +364,7 @@ class SelectElement extends CoreElement
         $messages = parent::renderErrorMessages();
 
         $messages = str_replace('rule-error-messages', 'rule-error-messages rule-error-messages-select', $messages);
-        
+
         return $messages;
     }
 
@@ -373,9 +373,6 @@ class SelectElement extends CoreElement
      */
     protected function renderElementHtml()
     {
-        // set JS
-        $this->addJs("$('select').selectpicker({style: 'btn btn-lg btn-primary', menuStyle: 'dropdown-inverse'})");
-
         return parent::renderElementHtml();
     }
 }
