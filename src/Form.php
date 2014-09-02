@@ -611,13 +611,13 @@ class Form
                 $element->validateRules();
 
                 // if element is invalid
-                if ($element->isValid() !== true)
+                if ($element->isValid() === false)
                 {
-                    // cache invalid elements
-                    $this->addInvalidElement($element);
-
                     // visual error indication
                     $element->setElementHtml(str_replace(':hasError', 'has-error', $element->getElementHtml()));
+
+                    // cache invalid elements
+                    $this->addInvalidElement($element);
                 }
 
                 // element is valid
@@ -659,12 +659,7 @@ class Form
         {
             if ($element->isValid() === false)
             {
-                $this->replaceTemplatePlaceholder(
-                    $element->getId(),
-                    [
-                        'error' => $element->renderErrorMessages()
-                    ]
-                );
+                $this->replaceTemplatePlaceholder($element->getId(), ['error' => $element->renderErrorMessages()]);
             }
 
             $this->replaceTemplatePlaceholder($element->getId(), $element->render());
