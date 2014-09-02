@@ -1,8 +1,8 @@
 <?php
 
-  if($GET['elementValue'] == 'username')
+  if($_GET['elementValue'] === 's')
   {
-    echo '1';
+    echo 'OK';
   }
 
   return FALSE;

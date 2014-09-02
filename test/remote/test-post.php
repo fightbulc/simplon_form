@@ -1,8 +1,8 @@
 <?php
 
-  if($POST['elementValue'] == 'username')
+  if($_POST['elementValue'] === 'tino')
   {
-    echo '1';
+    echo 'OK';
   }
 
   return FALSE;

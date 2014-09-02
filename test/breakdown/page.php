@@ -27,12 +27,19 @@ $city = (new \Simplon\Form\Elements\AutoComplete\AutoCompleteElement())
 
 // ------------------------------------------
 
+$remotePostRequestRule = (new \Simplon\Form\Rules\RemoteRequestRule\RemoteGetRequestRule())
+    ->setUrl('http://open.dev/simplon_form/test/remote/test-get.php')
+    ->setParams(function ($elmValue) { return ['elementValue' => $elmValue]; })
+    ->setResponseCallback(function ($response) { return $response === 'OK'; })
+    ->setErrorMessage('Sorry, but this email address is already taken');
+
 $name = (new \Simplon\Form\Elements\TextSingleLine\TextSingleLineElement())
     ->setId('name')
     ->setLabel('Name')
     ->setPlaceholder('Your first name')
     ->addRule(new \Simplon\Form\Rules\RequiredRule())
-    ->addRule((new \Simplon\Form\Rules\ExactMatchRule())->setMatchValue('tino'));
+    ->addRule((new \Simplon\Form\Rules\ExactMatchRule())->setMatchValue('tino'))
+    ->addRule($remotePostRequestRule);
 
 // ------------------------------------------
 
