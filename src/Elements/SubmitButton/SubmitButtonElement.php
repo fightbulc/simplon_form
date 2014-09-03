@@ -11,6 +11,19 @@ class SubmitButtonElement extends CoreElement
     /**
      * @return array
      */
+    protected function getFieldPlaceholders()
+    {
+        $coreFieldPlaceholders = parent::getFieldPlaceholders();
+
+        // add options
+        $coreFieldPlaceholders['class'] = 'btn btn-success btn-wide btn-embossed';
+
+        return $coreFieldPlaceholders;
+    }
+
+    /**
+     * @return array
+     */
     public function render()
     {
         return [

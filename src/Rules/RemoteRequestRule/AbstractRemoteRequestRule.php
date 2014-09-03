@@ -36,7 +36,9 @@ abstract class AbstractRemoteRequestRule extends CoreRule
         $response = $this->sendRequest();
 
         // run callback
-        return $this->getResponseCallback($response);
+        $isValid = $this->getResponseCallback($response);
+
+        return $isValid;
     }
 
     /**
@@ -54,7 +56,7 @@ abstract class AbstractRemoteRequestRule extends CoreRule
     /**
      * @param callable $responseCallback
      *
-     * @return AbstractRemoteRequestRule
+     * @return static
      */
     public function setResponseCallback(\Closure $responseCallback)
     {
@@ -86,7 +88,7 @@ abstract class AbstractRemoteRequestRule extends CoreRule
     /**
      * @param callable $closure
      *
-     * @return AbstractRemoteRequestRule
+     * @return static
      */
     public function setParams(\Closure $closure)
     {
@@ -106,7 +108,7 @@ abstract class AbstractRemoteRequestRule extends CoreRule
     /**
      * @param string $url
      *
-     * @return AbstractRemoteRequestRule
+     * @return static
      */
     public function setUrl($url)
     {
