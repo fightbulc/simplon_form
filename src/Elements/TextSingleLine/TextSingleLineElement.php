@@ -6,12 +6,23 @@ use Simplon\Form\Elements\CoreElement;
 
 class TextSingleLineElement extends CoreElement
 {
+    /**
+     * @var string
+     */
     protected $elementHtml = '<div class=":hasError"><input type="text" class=":class" name=":id" id=":id" value=":value" placeholder=":placeholder"></div>';
+
+    /**
+     * @var array
+     */
     protected $class = ['form-control input-lg'];
+
+    /**
+     * @var string
+     */
     protected $placeholder;
 
     /**
-     * @param mixed $placeholder
+     * @param string $placeholder
      *
      * @return static
      */
@@ -23,7 +34,7 @@ class TextSingleLineElement extends CoreElement
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPlaceholder()
     {

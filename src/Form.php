@@ -2,8 +2,8 @@
 
 namespace Simplon\Form;
 
+use Simplon\Form\Elements\CoreElementInterface;
 use Simplon\Form\Elements\Hidden\HiddenElement;
-use Simplon\Form\Elements\InterfaceElement;
 
 class Form
 {
@@ -18,7 +18,7 @@ class Form
     protected $enabledCsrf = true;
     protected $csrfSalt = 'x45%da08*(';
 
-    /** @var InterfaceElement[] */
+    /** @var CoreElementInterface[] */
     protected $elements = [];
     protected $invalidElements = [];
     protected $generalErrorMessage = '<strong>Oh snap!</strong> At least one field requires your attention. Have a look at the error notes below.';
@@ -224,11 +224,11 @@ class Form
     }
 
     /**
-     * @param InterfaceElement $elementInstance
+     * @param CoreElementInterface $elementInstance
      *
      * @return $this
      */
-    public function addElement(InterfaceElement $elementInstance)
+    public function addElement(CoreElementInterface $elementInstance)
     {
         $this->elements[] = $elementInstance;
 
@@ -236,7 +236,7 @@ class Form
     }
 
     /**
-     * @return array|InterfaceElement[]
+     * @return array|CoreElementInterface[]
      */
     protected function getElements()
     {
@@ -401,11 +401,11 @@ class Form
     }
 
     /**
-     * @param InterfaceElement $elementInstance
+     * @param CoreElementInterface $elementInstance
      *
      * @return $this
      */
-    protected function addInvalidElement(InterfaceElement $elementInstance)
+    protected function addInvalidElement(CoreElementInterface $elementInstance)
     {
         $this->invalidElements[] = $elementInstance;
 
@@ -450,7 +450,7 @@ class Form
 
             if ($value !== false)
             {
-                preg_match('|({{#' . $key . '}}.*?{{/' . $key . '}})\s*|smi', $this->tmpl, $matched);
+                preg_match('|({{#' . $key . '}}.*?{{/' . $key . '}})\s*|sm', $this->tmpl, $matched);
 
                 if ($matched)
                 {
@@ -608,7 +608,10 @@ class Form
                 $element->setPostValue($requestValue);
 
                 // run through element rules
-                $element->validateRules();
+                $element->processFilters();
+
+                // run through element rules
+                $element->processRules();
 
                 // if element is invalid
                 if ($element->isValid() === false)

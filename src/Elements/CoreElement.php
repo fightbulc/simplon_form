@@ -2,27 +2,89 @@
 
 namespace Simplon\Form\Elements;
 
-use Simplon\Form\Rules\Core\CoreRule;
-use Simplon\Form\Rules\Core\InterfaceRule;
+use Simplon\Form\Filters\Core\CoreFilterInterface;
+use Simplon\Form\Rules\Core\CoreRuleInterface;
 
-class CoreElement implements InterfaceElement
+/**
+ * CoreElement
+ * @package Simplon\Form\Elements
+ * @author Tino Ehrich (tino@bigpun.me)
+ */
+abstract class CoreElement implements CoreElementInterface
 {
+    /**
+     * @var string
+     */
     protected $elementHtml = '<input type="text" class=":class" id=":id" name=":id" value=":value">';
 
+    /**
+     * @var string
+     */
     protected $id;
+
+    /**
+     * @var string
+     */
     protected $label;
+
+    /**
+     * @var string
+     */
     protected $description;
+
+    /**
+     * @var string
+     */
     protected $value;
+
+    /**
+     * @var array
+     */
     protected $class = [];
+
+    /**
+     * @var array
+     */
     protected $assetFiles = [];
+
+    /**
+     * @var string
+     */
     protected $webPathAssets = '/assets';
 
-    /** @var InterfaceRule[] */
+    /**
+     * @var CoreRuleInterface[]
+     */
     protected $rules = [];
+
+    /**
+     * @var CoreFilterInterface[]
+     */
+    protected $filters = [];
+
+    /**
+     * @var bool
+     */
     protected $postValue = false;
+
+    /**
+     * @var bool
+     */
     protected $isValid = true;
+
+    /**
+     * @var array
+     */
     protected $errorMessages = [];
+
+    /**
+     * @var string
+     */
     protected $errorContainerWrapper = 'ul';
+
+    /**
+     * @var string
+     */
     protected $errorItemWrapper = 'li';
 
     /**
@@ -244,7 +306,7 @@ class CoreElement implements InterfaceElement
     }
 
     /**
-     * @param array $rules
+     * @param CoreRuleInterface[] $rules
      *
      * @return static
      */
@@ -256,11 +318,11 @@ class CoreElement implements InterfaceElement
     }
 
     /**
-     * @param CoreRule $rule
+     * @param CoreRuleInterface $rule
      *
      * @return static
      */
-    public function addRule(CoreRule $rule)
+    public function addRule(CoreRuleInterface $rule)
     {
         $this->rules[] = $rule;
 
@@ -268,11 +330,43 @@ class CoreElement implements InterfaceElement
     }
 
     /**
-     * @return array|InterfaceRule[]
+     * @return CoreRuleInterface[]
      */
     public function getRules()
     {
         return $this->rules;
+    }
+
+    /**
+     * @param CoreFilterInterface[] $filters
+     *
+     * @return static
+     */
+    public function setFilters(array $filters)
+    {
+        $this->filters = $filters;
+
+        return $this;
+    }
+
+    /**
+     * @param CoreFilterInterface $filter
+     *
+     * @return static
+     */
+    public function addFilter(CoreFilterInterface $filter)
+    {
+        $this->filters[] = $filter;
+
+        return $this;
+    }
+
+    /**
+     * @return CoreFilterInterface[]
+     */
+    public function getFilters()
+    {
+        return $this->filters;
     }
 
     /**
@@ -294,7 +388,7 @@ class CoreElement implements InterfaceElement
     /**
      * @param $postValue
      *
-     * @return CoreElement
+     * @return CoreElementInterface
      */
     public function setPostValue($postValue)
     {
@@ -304,9 +398,27 @@ class CoreElement implements InterfaceElement
     }
 
     /**
+     * @return static
+     */
+    public function processFilters()
+    {
+        $filters = $this->getFilters();
+
+        if (empty($filters) === false)
+        {
+            foreach ($filters as $filterInstance)
+            {
+                $filterInstance->processFilter($this);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * @return bool|null
      */
-    public function validateRules()
+    public function processRules()
     {
         $rules = $this->getRules();
 

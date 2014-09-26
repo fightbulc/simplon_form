@@ -2,48 +2,43 @@
 
 namespace Simplon\Form\Rules;
 
-use Simplon\Form\Elements\InterfaceElement;
+use Simplon\Form\Elements\CoreElementInterface;
 use Simplon\Form\Rules\Core\CoreRule;
 
 class LengthMinRule extends CoreRule
 {
     protected $errorMessage = '":label" has too less characters (min allowed: :minLength)';
-    protected $keyMinLength = 'minLength';
 
     /**
-     * @param \Simplon\Form\Elements\InterfaceElement $elementInstance
+     * @var string
+     */
+    protected $keyLength = 'minLength';
+
+    /**
+     * @param $length
+     */
+    public function __construct($length)
+    {
+        $this->setConditions($this->keyLength, $length);
+    }
+
+    /**
+     * @param CoreElementInterface $elementInstance
      *
      * @return bool
      */
-    public function isValid(InterfaceElement $elementInstance)
+    public function isValid(CoreElementInterface $elementInstance)
     {
         $value = $elementInstance->getValue();
 
-        if (strlen($value) < $this->getLength())
-        {
-            return false;
-        }
-
-        return true;
+        return mb_strlen($value, 'UTF-8') >= $this->getLength();
     }
 
     /**
-     * @param mixed $minLength
-     *
-     * @return ExactMatchRule
-     */
-    public function setLength($minLength)
-    {
-        $this->setConditions($this->keyMinLength, $minLength);
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
+     * @return int
      */
     protected function getLength()
     {
-        return $this->getConditionsByKey($this->keyMinLength);
+        return $this->getConditionsByKey($this->keyLength);
     }
 }

@@ -2,41 +2,39 @@
 
 namespace Simplon\Form\Rules;
 
-use Simplon\Form\Elements\InterfaceElement;
+use Simplon\Form\Elements\CoreElementInterface;
 use Simplon\Form\Rules\Core\CoreRule;
 
 class RegExpRule extends CoreRule
 {
+    /**
+     * @var string
+     */
     protected $errorMessage = '":label" does not match ":regexp"';
+
+    /**
+     * @var string
+     */
     protected $keyMatch = 'regexp';
 
     /**
-     * @param InterfaceElement $elementInstance
-     *
-     * @return bool
+     * @param string $matchValue
      */
-    public function isValid(InterfaceElement $elementInstance)
+    public function __construct($matchValue)
     {
-        $value = $elementInstance->getValue();
-
-        if (preg_match($this->getRegExpValue(), $value) === 0)
-        {
-            return false;
-        }
-
-        return true;
+        $this->setConditions($this->keyMatch, $matchValue);
     }
 
     /**
-     * @param mixed $matchValue
+     * @param CoreElementInterface $elementInstance
      *
-     * @return ExactMatchRule
+     * @return bool
      */
-    public function setRegExpValue($matchValue)
+    public function isValid(CoreElementInterface $elementInstance)
     {
-        $this->setConditions($this->keyMatch, $matchValue);
+        $value = $elementInstance->getValue();
 
-        return $this;
+        return preg_match($this->getRegExpValue(), $value) !== 0;
     }
 
     /**

@@ -6,6 +6,9 @@ use Simplon\Form\Elements\CoreElement;
 
 class HiddenElement extends CoreElement
 {
+    /**
+     * @var string
+     */
     protected $elementHtml = '<input type="hidden" name=":id" value=":value">';
 
     /**

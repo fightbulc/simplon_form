@@ -2,48 +2,46 @@
 
 namespace Simplon\Form\Rules;
 
-use Simplon\Form\Elements\InterfaceElement;
+use Simplon\Form\Elements\CoreElementInterface;
 use Simplon\Form\Rules\Core\CoreRule;
 
 class ExactMatchRule extends CoreRule
 {
+    /**
+     * @var string
+     */
     protected $errorMessage = '":label" does not match ":match" (case-insensitive)';
+
+    /**
+     * @var string
+     */
     protected $keyMatch = 'match';
 
     /**
-     * @param InterfaceElement $elementInstance
+     * @param string $matchValue
+     */
+    public function __construct($matchValue)
+    {
+        $this->setConditions($this->keyMatch, $matchValue);
+    }
+
+    /**
+     * @param CoreElementInterface $elementInstance
      *
      * @return bool
      */
-    public function isValid(InterfaceElement $elementInstance)
+    public function isValid(CoreElementInterface $elementInstance)
     {
         $value = $elementInstance->getValue();
 
-        if (strcasecmp($value, $this->getMatchValue()) !== 0)
-        {
-            return false;
-        }
-
-        return true;
+        return strcasecmp($value, $this->getMatchValue()) === 0;
     }
 
     /**
-     * @param mixed $matchValue
-     *
-     * @return ExactMatchRule
-     */
-    public function setMatchValue($matchValue)
-    {
-        $this->setConditions($this->keyMatch, $matchValue);
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
+     * @return string
      */
     protected function getMatchValue()
     {
-        return $this->getConditionsByKey($this->keyMatch);
+        return (string)$this->getConditionsByKey($this->keyMatch);
     }
 }

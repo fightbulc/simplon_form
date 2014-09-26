@@ -2,19 +2,35 @@
 
 namespace Simplon\Form\Rules;
 
-use Simplon\Form\Elements\InterfaceElement;
+use Simplon\Form\Elements\CoreElementInterface;
 use Simplon\Form\Rules\Core\CoreRule;
 
 class CheckboxMaxCheckedRule extends CoreRule
 {
+    /**
+     * @var string
+     */
     protected $errorMessage = '":label" only allows :maxChecked selections';
 
     /**
-     * @param \Simplon\Form\Elements\InterfaceElement $elementInstance
+     * @var string
+     */
+    protected $keyMax = 'maxChecked';
+
+    /**
+     * @param $maxChecked
+     */
+    public function __construct($maxChecked)
+    {
+        $this->setConditions($this->keyMax, $maxChecked);
+    }
+
+    /**
+     * @param \Simplon\Form\Elements\CoreElementInterface $elementInstance
      *
      * @return bool
      */
-    public function isValid(InterfaceElement $elementInstance)
+    public function isValid(CoreElementInterface $elementInstance)
     {
         $value = $elementInstance->getPostValue();
 
@@ -31,18 +47,6 @@ class CheckboxMaxCheckedRule extends CoreRule
      */
     public function getMaxChecked()
     {
-        return (int)$this->getConditionsByKey('maxChecked');
-    }
-
-    /**
-     * @param int $maxChecked
-     *
-     * @return CheckboxMaxCheckedRule
-     */
-    public function setMaxChecked($maxChecked)
-    {
-        $this->setConditions('maxChecked', $maxChecked);
-
-        return $this;
+        return (int)$this->getConditionsByKey($this->keyMax);
     }
 }

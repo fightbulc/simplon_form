@@ -6,14 +6,44 @@ use Simplon\Form\Elements\CoreElement;
 
 class SelectElement extends CoreElement
 {
+    /**
+     * @var string
+     */
     protected $elementHtml = '<div class=":hasError"><select name=":id" id=":id" class="select-block">:options</select></div>';
 
+    /**
+     * @var array
+     */
     protected $options = [];
+
+    /**
+     * @var null
+     */
     protected $placeholder = null;
+
+    /**
+     * @var array
+     */
     protected $topSplitKeys = [];
+
+    /**
+     * @var array
+     */
     protected $bottomSplitKeys = [];
+
+    /**
+     * @var bool
+     */
     protected $useOptionKeys = true;
+
+    /**
+     * @var bool
+     */
     protected $sortByLabel = false;
+
+    /**
+     * @var string
+     */
     protected $sortByLabelDirection = 'asc';
 
     /**
@@ -29,7 +59,7 @@ class SelectElement extends CoreElement
      * @param $label
      * @param $selectedValue
      *
-     * @return mixed
+     * @return string
      */
     protected function renderElementOptionsHtml($value, $label, $selectedValue = false)
     {

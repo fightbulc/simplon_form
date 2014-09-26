@@ -2,32 +2,40 @@
 
 namespace Simplon\Form\Rules;
 
-use Simplon\Form\Elements\InterfaceElement;
+use Simplon\Form\Elements\CoreElementInterface;
 use Simplon\Form\Rules\Core\CoreRule;
 
 class MatchElementValueRule extends CoreRule
 {
+    /**
+     * @var string
+     */
     protected $errorMessage = '":label" does not match field ":matchElementLabel"';
+
+    /**
+     * @var string
+     */
     protected $keyMatchElement = 'matchElement';
 
     /**
-     * @param InterfaceElement $elementInstance
+     * @param CoreElementInterface $elementInstance
+     */
+    public function __construct(CoreElementInterface $elementInstance)
+    {
+        $this->setConditions($this->keyMatchElement, $elementInstance);
+    }
+
+    /**
+     * @param CoreElementInterface $elementInstance
      *
      * @return bool
      */
-    public function isValid(InterfaceElement $elementInstance)
+    public function isValid(CoreElementInterface $elementInstance)
     {
         $value = $elementInstance->getValue();
+        $matchElementValue = $this->getMatchElement()->getValue();
 
-        $matchElementValue = $this->getMatchElement()
-            ->getValue();
-
-        if ($value !== $matchElementValue || $elementInstance->isValid() === false)
-        {
-            return false;
-        }
-
-        return true;
+        return strcasecmp($value, $matchElementValue) === 0;
     }
 
     /**
@@ -36,25 +44,12 @@ class MatchElementValueRule extends CoreRule
     protected function getConditionPlaceholders()
     {
         return [
-            'matchElementLabel' => $this->getMatchElement()
-                ->getLabel(),
+            'matchElementLabel' => $this->getMatchElement()->getLabel(),
         ];
     }
 
     /**
-     * @param InterfaceElement $elementInstance
-     *
-     * @return MatchElementValueRule
-     */
-    public function setMatchElement(InterfaceElement $elementInstance)
-    {
-        $this->setConditions($this->keyMatchElement, $elementInstance);
-
-        return $this;
-    }
-
-    /**
-     * @return \Simplon\Form\Elements\InterfaceElement
+     * @return \Simplon\Form\Elements\CoreElementInterface
      */
     protected function getMatchElement()
     {

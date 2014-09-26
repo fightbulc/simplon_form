@@ -2,19 +2,35 @@
 
 namespace Simplon\Form\Rules;
 
-use Simplon\Form\Elements\InterfaceElement;
+use Simplon\Form\Elements\CoreElementInterface;
 use Simplon\Form\Rules\Core\CoreRule;
 
 class CheckboxMinCheckedRule extends CoreRule
 {
+    /**
+     * @var string
+     */
     protected $errorMessage = '":label" requires at least :minChecked selections';
 
     /**
-     * @param \Simplon\Form\Elements\InterfaceElement $elementInstance
+     * @var string
+     */
+    protected $keyMin = 'minChecked';
+
+    /**
+     * @param $minChecked
+     */
+    public function __construct($minChecked)
+    {
+        $this->setConditions($this->keyMin, $minChecked);
+    }
+
+    /**
+     * @param \Simplon\Form\Elements\CoreElementInterface $elementInstance
      *
      * @return bool
      */
-    public function isValid(InterfaceElement $elementInstance)
+    public function isValid(CoreElementInterface $elementInstance)
     {
         $value = $elementInstance->getPostValue();
 
@@ -29,20 +45,8 @@ class CheckboxMinCheckedRule extends CoreRule
     /**
      * @return int
      */
-    public function getMinChecked()
+    protected function getMinChecked()
     {
-        return (int)$this->getConditionsByKey('minChecked');
-    }
-
-    /**
-     * @param int $minChecked
-     *
-     * @return CheckboxMinCheckedRule
-     */
-    public function setMinChecked($minChecked)
-    {
-        $this->setConditions('minChecked', $minChecked);
-
-        return $this;
+        return (int)$this->getConditionsByKey($this->keyMin);
     }
 }

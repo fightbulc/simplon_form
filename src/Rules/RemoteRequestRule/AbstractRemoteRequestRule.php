@@ -2,10 +2,10 @@
 
 namespace Simplon\Form\Rules\RemoteRequestRule;
 
-use Simplon\Form\Elements\InterfaceElement;
-use Simplon\Form\Rules\Core\CoreRule;
+use Simplon\Form\Elements\CoreElementInterface;
+use Simplon\Form\Rules\Core\CoreRuleInterface;
 
-abstract class AbstractRemoteRequestRule extends CoreRule
+abstract class AbstractRemoteRequestRule extends CoreRuleInterface
 {
     /** @var string */
     protected $errorMessage = '":label" remote post failed';
@@ -23,11 +23,11 @@ abstract class AbstractRemoteRequestRule extends CoreRule
     protected $params;
 
     /**
-     * @param \Simplon\Form\Elements\InterfaceElement $elementInstance
+     * @param \Simplon\Form\Elements\CoreElementInterface $elementInstance
      *
      * @return bool
      */
-    public function isValid(InterfaceElement $elementInstance)
+    public function isValid(CoreElementInterface $elementInstance)
     {
         // prepare params
         $this->params = $this->getParamsClosure($elementInstance->getValue());

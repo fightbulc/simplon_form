@@ -2,7 +2,11 @@
 
 namespace Simplon\Form\Elements;
 
-interface InterfaceElement
+/**
+ * Interface CoreElementInterface
+ * @package Simplon\Form\Elements
+ */
+interface CoreElementInterface
 {
     public function setElementHtml($elementHtml);
 
@@ -34,7 +38,9 @@ interface InterfaceElement
 
     public function getPostValue();
 
-    public function validateRules();
+    public function processFilters();
+
+    public function processRules();
 
     public function getErrorMessages();
 

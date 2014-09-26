@@ -6,13 +6,28 @@ use Simplon\Form\Elements\CoreElement;
 
 class AutoCompleteElement extends CoreElement
 {
+    /**
+     * @var string
+     */
     protected $elementHtml = '<div class=":hasError"><input type="text" class="form-control" name=":id" id=":id" value=":value" placeholder=":placeholder" autocomplete="off"></div>';
+
+    /**
+     * @var string
+     */
     protected $placeholder;
+
+    /**
+     * @var string
+     */
     protected $resultTemplate;
+
+    /**
+     * @var string
+     */
     protected $selectedTemplate;
 
     /**
-     * @param mixed $resultTemplate
+     * @param string $resultTemplate
      *
      * @return AutoCompleteElement
      */
@@ -24,15 +39,15 @@ class AutoCompleteElement extends CoreElement
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getResultTemplate()
     {
-        return preg_replace('/\n+/', '', $this->resultTemplate);
+        return (string)preg_replace('/\n+/', '', $this->resultTemplate);
     }
 
     /**
-     * @param mixed $selectedTemplate
+     * @param string $selectedTemplate
      *
      * @return AutoCompleteElement
      */
@@ -44,15 +59,15 @@ class AutoCompleteElement extends CoreElement
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getSelectedTemplate()
     {
-        return preg_replace('/\n+/', '', $this->selectedTemplate);
+        return (string)preg_replace('/\n+/', '', $this->selectedTemplate);
     }
 
     /**
-     * @param mixed $placeholder
+     * @param string $placeholder
      *
      * @return static
      */
@@ -64,7 +79,7 @@ class AutoCompleteElement extends CoreElement
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPlaceholder()
     {

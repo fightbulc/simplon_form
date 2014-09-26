@@ -6,7 +6,14 @@ use Simplon\Form\Elements\CoreElement;
 
 class AnchorElement extends CoreElement
 {
+    /**
+     * @var string
+     */
     protected $elementHtml = '<a href=":url" class=":class" id=":id">:label</a>';
+
+    /**
+     * @var string
+     */
     protected $url;
 
     /**
@@ -16,17 +23,14 @@ class AnchorElement extends CoreElement
     {
         $coreFieldPlaceholders = parent::getFieldPlaceholders();
 
-        // add options
-        $coreFieldPlaceholders['class'] = 'btn btn-default btn-wide btn-embossed';
-
-        // add options
+        // add url placeholder
         $coreFieldPlaceholders['url'] = $this->getUrl();
 
         return $coreFieldPlaceholders;
     }
 
     /**
-     * @param mixed $url
+     * @param string $url
      *
      * @return AnchorElement
      */
@@ -38,7 +42,7 @@ class AnchorElement extends CoreElement
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getUrl()
     {

@@ -6,6 +6,9 @@ use Simplon\Form\Elements\CoreElement;
 
 class ButtonElement extends CoreElement
 {
+    /**
+     * @var string
+     */
     protected $elementHtml = '<button class=":class">:label</button>';
 
     /**

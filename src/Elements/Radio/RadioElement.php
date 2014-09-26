@@ -6,9 +6,24 @@ use Simplon\Form\Elements\CoreElement;
 
 class RadioElement extends CoreElement
 {
+    /**
+     * @var string
+     */
     protected $elementHtml = '<div id=":id">:items</div>';
+
+    /**
+     * @var string
+     */
     protected $elementItemHtml = '<label class="radio"><input type="radio" name=":id" id=":id_:value" value=":value" data-toggle="radio":checked> :label</label>';
+
+    /**
+     * @var bool
+     */
     protected $useOptionKeys = true;
+
+    /**
+     * @var array
+     */
     protected $options = [];
 
     /**

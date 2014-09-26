@@ -2,19 +2,40 @@
 
 namespace Simplon\Form\Rules\Core;
 
-use Simplon\Form\Elements\InterfaceElement;
+use Respect\Validation\Validator;
+use Simplon\Form\Elements\CoreElementInterface;
 
-class CoreRule implements InterfaceRule
+/**
+ * CoreRule
+ * @package Simplon\Form\Rules\Core
+ * @author Tino Ehrich (tino@bigpun.me)
+ */
+abstract class CoreRule implements CoreRuleInterface
 {
+    /**
+     * @var array
+     */
     protected $conditions = [];
+
+    /**
+     * @var string
+     */
     protected $errorMessage = '":label" did not pass validation';
 
     /**
-     * @param InterfaceElement $elementInstance
+     * @return Validator
+     */
+    protected function getValidationEngine()
+    {
+        return new Validator();
+    }
+
+    /**
+     * @param CoreElementInterface $elementInstance
      *
      * @return bool
      */
-    public function isValid(InterfaceElement $elementInstance)
+    public function isValid(CoreElementInterface $elementInstance)
     {
         return false;
     }
@@ -23,7 +44,7 @@ class CoreRule implements InterfaceRule
      * @param $key
      * @param $val
      *
-     * @return CoreRule
+     * @return CoreRuleInterface
      */
     protected function setConditions($key, $val)
     {
@@ -101,11 +122,11 @@ class CoreRule implements InterfaceRule
     }
 
     /**
-     * @param InterfaceElement $elementInstance
+     * @param CoreElementInterface $elementInstance
      *
      * @return string
      */
-    public function renderErrorMessage(InterfaceElement $elementInstance)
+    public function renderErrorMessage(CoreElementInterface $elementInstance)
     {
         $parsedFieldPlaceholders = $elementInstance->parseFieldPlaceholders($this->getErrorMessage());
 

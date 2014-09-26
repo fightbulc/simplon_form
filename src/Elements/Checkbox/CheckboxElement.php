@@ -6,10 +6,29 @@ use Simplon\Form\Elements\CoreElement;
 
 class CheckboxElement extends CoreElement
 {
+    /**
+     * @var string
+     */
     protected $elementHtml = '<div id=":id">:items</div>';
+
+    /**
+     * @var string
+     */
     protected $elementItemHtml = '<label class="checkbox"><input type="checkbox" name=":id[]" value=":value" data-toggle="checkbox":checked>:label</label>';
+
+    /**
+     * @var bool
+     */
     protected $useOptionKeys = true;
+
+    /**
+     * @var array
+     */
     protected $options = [];
+
+    /**
+     * @var array
+     */
     protected $checked = [];
 
     /**
@@ -145,7 +164,7 @@ class CheckboxElement extends CoreElement
     /**
      * @param null $postValue
      *
-     * @return CoreElement
+     * @return CoreElementInterface
      */
     public function setPostValue($postValue)
     {

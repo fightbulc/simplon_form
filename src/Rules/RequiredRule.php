@@ -3,19 +3,22 @@
 namespace Simplon\Form\Rules;
 
 use Simplon\Form\Elements\Checkbox\CheckboxElement;
-use Simplon\Form\Elements\InterfaceElement;
+use Simplon\Form\Elements\CoreElementInterface;
 use Simplon\Form\Rules\Core\CoreRule;
 
 class RequiredRule extends CoreRule
 {
+    /**
+     * @var string
+     */
     protected $errorMessage = '":label" is required';
 
     /**
-     * @param \Simplon\Form\Elements\InterfaceElement $elementInstance
+     * @param \Simplon\Form\Elements\CoreElementInterface $elementInstance
      *
      * @return bool
      */
-    public function isValid(InterfaceElement $elementInstance)
+    public function isValid(CoreElementInterface $elementInstance)
     {
         // ----------------------------------
         // fields with inmutable values
@@ -34,12 +37,8 @@ class RequiredRule extends CoreRule
         // fields with actual mutable values
 
         $value = $elementInstance->getValue();
+        $validator = $this->getValidationEngine()->notEmpty();
 
-        if ($value === '')
-        {
-            return false;
-        }
-
-        return true;
+        return $validator->validate($value);
     }
 }

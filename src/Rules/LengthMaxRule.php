@@ -2,48 +2,46 @@
 
 namespace Simplon\Form\Rules;
 
-use Simplon\Form\Elements\InterfaceElement;
+use Simplon\Form\Elements\CoreElementInterface;
 use Simplon\Form\Rules\Core\CoreRule;
 
 class LengthMaxRule extends CoreRule
 {
+    /**
+     * @var string
+     */
     protected $errorMessage = '":label" has too many characters (max. allowed: :maxLength)';
-    protected $keyMaxLength = 'maxLength';
 
     /**
-     * @param \Simplon\Form\Elements\InterfaceElement $elementInstance
+     * @var string
+     */
+    protected $keyLength = 'maxLength';
+
+    /**
+     * @param $length
+     */
+    public function __construct($length)
+    {
+        $this->setConditions($this->keyLength, $length);
+    }
+
+    /**
+     * @param CoreElementInterface $elementInstance
      *
      * @return bool
      */
-    public function isValid(InterfaceElement $elementInstance)
+    public function isValid(CoreElementInterface $elementInstance)
     {
         $value = $elementInstance->getValue();
 
-        if (strlen($value) > $this->getLength())
-        {
-            return false;
-        }
-
-        return true;
+        return mb_strlen($value, 'UTF-8') <= $this->getLength();
     }
 
     /**
-     * @param mixed $maxLength
-     *
-     * @return ExactMatchRule
-     */
-    public function setLength($maxLength)
-    {
-        $this->setConditions($this->keyMaxLength, $maxLength);
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
+     * @return int
      */
     protected function getLength()
     {
-        return $this->getConditionsByKey($this->keyMaxLength);
+        return $this->getConditionsByKey($this->keyLength);
     }
 }
