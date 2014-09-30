@@ -7,24 +7,75 @@ use Simplon\Form\Elements\Hidden\HiddenElement;
 
 class Form
 {
-    /** @var  array */
-    protected $requestData;
+    /**
+     * @var array
+     */
+    protected $requestData = [];
 
+    /**
+     * @var string
+     */
     protected $tmpl;
+
+    /**
+     * @var string
+     */
     protected $id = 'simplon-form';
+
+    /**
+     * @var string
+     */
     protected $url = '';
+
+    /**
+     * @var string
+     */
     protected $method = 'POST';
+
+    /**
+     * @var string
+     */
     protected $acceptCharset = 'utf-8';
+
+    /**
+     * @var bool
+     */
     protected $enabledCsrf = true;
-    protected $csrfSalt = 'x45%da08*(';
 
-    /** @var CoreElementInterface[] */
+    /**
+     * @var string
+     */
+    protected $csrfSalt = ')UsZQjxm8ka}bwh7cYvnjT';
+
+    /**
+     * @var CoreElementInterface[]
+     */
     protected $elements = [];
-    protected $invalidElements = [];
-    protected $generalErrorMessage = '<strong>Oh snap!</strong> At least one field requires your attention. Have a look at the error notes below.';
 
+    /**
+     * @var CoreElementInterface[]
+     */
+    protected $invalidElements = [];
+
+    /**
+     * @var string
+     */
+    protected $generalErrorMessage = '<strong>Validation failed.</strong> Have a look at the error notes below.';
+
+    /**
+     * @var array
+     */
     protected $assetFiles = [];
+
+    /**
+     * @var array
+     */
     protected $followUps = [];
+
+    /**
+     * @var null|bool
+     */
+    protected $validationResult = null;
 
     /**
      * @param array $requestData
@@ -517,7 +568,7 @@ class Form
         $formOpen = str_replace(':attributes', join(' ', $renderedAttributes), $formOpen);
 
         // set form js
-        // TODO do it better
+        // TODO: do it better
         if ($this->hasAssetFiles())
         {
             $jsFiles = [];
@@ -573,7 +624,7 @@ class Form
      */
     protected function cleanTemplate()
     {
-        $this->tmpl = (string)preg_replace('#({{.*?}})\s*#smi', '', $this->tmpl);
+        $this->tmpl = (string)preg_replace('#({{.*?}}|:hasError)\s*#smi', '', $this->tmpl);
     }
 
     /**
@@ -596,7 +647,7 @@ class Form
      */
     public function isValid()
     {
-        if ($this->isSubmitted())
+        if ($this->isSubmitted() && $this->validationResult === null)
         {
             // iterate through all elements
             foreach ($this->getElements() as $element)
@@ -631,14 +682,11 @@ class Form
                 }
             }
 
-            // no validation errors
-            if ($this->hasInvalidElements() === false)
-            {
-                return true;
-            }
+            // cache validation result
+            $this->validationResult = $this->hasInvalidElements() === false;
         }
 
-        return false;
+        return $this->validationResult;
     }
 
     /**

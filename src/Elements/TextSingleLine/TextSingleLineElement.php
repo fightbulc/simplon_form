@@ -14,7 +14,7 @@ class TextSingleLineElement extends CoreElement
     /**
      * @var array
      */
-    protected $class = ['form-control input-lg'];
+    protected $class = ['form-control'];
 
     /**
      * @var string

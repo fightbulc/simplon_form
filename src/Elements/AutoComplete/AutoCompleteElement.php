@@ -19,12 +19,37 @@ class AutoCompleteElement extends CoreElement
     /**
      * @var string
      */
+    protected $pathWebAssets = '';
+
+    /**
+     * @var string
+     */
     protected $resultTemplate;
 
     /**
      * @var string
      */
     protected $selectedTemplate;
+
+    /**
+     * @return string
+     */
+    public function getPathWebAssets()
+    {
+        return rtrim($this->pathWebAssets, '/');
+    }
+
+    /**
+     * @param string $pathAssets
+     *
+     * @return static
+     */
+    public function setPathWebAssets($pathAssets)
+    {
+        $this->pathWebAssets = $pathAssets;
+
+        return $this;
+    }
 
     /**
      * @param string $resultTemplate
@@ -102,9 +127,9 @@ class AutoCompleteElement extends CoreElement
      */
     public function render()
     {
-        $this->addAssetFile("jquery.remote-complete/jquery.remote-complete.css");
-        $this->addAssetFile("jquery.remote-complete/jquery.remote-complete.js");
-        $this->addAssetFile("jquery.remote-complete/hogan-2.0.0.min.js");
+        $this->addAssetFile("vendor/jquery.remote-complete/jquery.remote-complete.css");
+        $this->addAssetFile("vendor/jquery.remote-complete/jquery.remote-complete.js");
+        $this->addAssetFile("vendor/jquery.remote-complete/hogan-2.0.0.min.js");
 
         if (isset($POST['city_results']))
         {
