@@ -511,6 +511,9 @@ class Form
                 }
             }
         }
+
+        // remove unused element containers
+        $this->tmpl = preg_replace('/{{\#' . $elementId . ':.*?}}.*?{{\/' . $elementId . ':.*?}}/smu', '', $this->tmpl);
     }
 
     /**
@@ -616,7 +619,7 @@ class Form
      */
     protected function cleanPlaceholders($tmpl)
     {
-        return (string)preg_replace('|{{.*?}}\s*|sm', '', $tmpl);
+        return (string)preg_replace('|{{(?!lang:).*?}}\s*|smu', '', $tmpl);
     }
 
     /**
@@ -624,7 +627,7 @@ class Form
      */
     protected function cleanTemplate()
     {
-        $this->tmpl = (string)preg_replace('#({{.*?}}|:hasError)\s*#smi', '', $this->tmpl);
+        $this->tmpl = (string)preg_replace('#({{(?!lang:).*?}}|:hasError)\s*#smu', '', $this->tmpl);
     }
 
     /**
@@ -708,12 +711,14 @@ class Form
         // set elements
         foreach ($this->getElements() as $element)
         {
+            $elementParts = $element->render();
+
             if ($element->isValid() === false)
             {
-                $this->replaceTemplatePlaceholder($element->getId(), ['error' => $element->renderErrorMessages()]);
+                $elementParts['error'] = $element->renderErrorMessages();
             }
 
-            $this->replaceTemplatePlaceholder($element->getId(), $element->render());
+            $this->replaceTemplatePlaceholder($element->getId(), $elementParts);
 
             $this->setAssetFiles($element->getAssetFiles());
         }
