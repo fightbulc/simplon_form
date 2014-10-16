@@ -486,7 +486,9 @@ class Form
      */
     protected function isSubmitted()
     {
-        return $this->hasRequestData() === true;
+        return
+            $this->hasRequestData() === true && // any request data at all?
+            (int)$this->getRequestData('hide-' . $this->getId()) === 1; // has this form been submitted?
     }
 
     /**
@@ -527,14 +529,14 @@ class Form
 
             // create element
             $elementHiddenField = (new HiddenElement())
-                ->setId('csrf')
+                ->setId('hide-csrf')
                 ->setValue($csrfValue);
 
             // set element
             $this->addElement($elementHiddenField);
 
             // set in template
-            $this->tmpl = str_replace('{{#form:open}}', '{{#form:open}}{{#csrf:element}}{{value}}{{/csrf:element}}', $this->tmpl);
+            $this->tmpl = str_replace('{{#form:open}}', '{{#form:open}}{{#hide-csrf:element}}{{value}}{{/hide-csrf:element}}', $this->tmpl);
 
             return true;
         }
@@ -549,6 +551,9 @@ class Form
     {
         $formOpen = '<form :attributes>';
         $formClose = '</form>';
+
+        // set hidden form name
+        $formOpen .= '<input type="hidden" name="hide-' . $this->getId() . '" value="1">';
 
         // set attributes
         $attributes = [
