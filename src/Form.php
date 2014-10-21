@@ -302,9 +302,9 @@ class Form
         $values = [];
         $elements = $this->getElements();
 
-        foreach ($elements as $elm)
+        foreach ($elements as $element)
         {
-            $values[$elm->getId()] = $this->getRequestData($elm->getId());
+            $values[$element->getId()] = $element->getValue();
         }
 
         return $values;
@@ -633,21 +633,6 @@ class Form
     protected function cleanTemplate()
     {
         $this->tmpl = (string)preg_replace('#({{(?!lang:).*?}}|:hasError)\s*#smu', '', $this->tmpl);
-    }
-
-    /**
-     * @return array
-     */
-    protected function getAllElementsValues()
-    {
-        $keyValuePairs = array();
-
-        foreach ($this->getElements() as $elementClass)
-        {
-            $keyValuePairs[$elementClass->getId()] = $elementClass->getValue();
-        }
-
-        return $keyValuePairs;
     }
 
     /**
