@@ -12,9 +12,13 @@ interface CoreElementInterface
 
     public function getElementHtml();
 
-    public function addAssetFile($code);
+    public function addAssetFile($file);
 
     public function getAssetFiles();
+
+    public function addAssetInline($inline);
+
+    public function getAssetInlines();
 
     public function setId($id);
 

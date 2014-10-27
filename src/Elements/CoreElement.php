@@ -48,6 +48,11 @@ abstract class CoreElement implements CoreElementInterface
     protected $assetFiles = [];
 
     /**
+     * @var array
+     */
+    protected $assetInlines = [];
+
+    /**
      * @var CoreRuleInterface[]
      */
     protected $rules = [];
@@ -81,6 +86,31 @@ abstract class CoreElement implements CoreElementInterface
      * @var string
      */
     protected $errorItemWrapper = 'li';
+
+    /**
+     * @var string
+     */
+    protected $pathWebAssets = '';
+
+    /**
+     * @return string
+     */
+    public function getPathWebAssets()
+    {
+        return rtrim($this->pathWebAssets, '/');
+    }
+
+    /**
+     * @param string $pathAssets
+     *
+     * @return static
+     */
+    public function setPathWebAssets($pathAssets)
+    {
+        $this->pathWebAssets = $pathAssets;
+
+        return $this;
+    }
 
     /**
      * @param $tag
@@ -498,6 +528,26 @@ abstract class CoreElement implements CoreElementInterface
     public function getAssetFiles()
     {
         return $this->assetFiles;
+    }
+
+    /**
+     * @param $inline
+     *
+     * @return $this
+     */
+    public function addAssetInline($inline)
+    {
+        $this->assetInlines[] = trim($inline);
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAssetInlines()
+    {
+        return $this->assetInlines;
     }
 
     /**

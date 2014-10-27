@@ -19,37 +19,12 @@ class AutoCompleteElement extends CoreElement
     /**
      * @var string
      */
-    protected $pathWebAssets = '';
-
-    /**
-     * @var string
-     */
     protected $resultTemplate;
 
     /**
      * @var string
      */
     protected $selectedTemplate;
-
-    /**
-     * @return string
-     */
-    public function getPathWebAssets()
-    {
-        return rtrim($this->pathWebAssets, '/');
-    }
-
-    /**
-     * @param string $pathAssets
-     *
-     * @return static
-     */
-    public function setPathWebAssets($pathAssets)
-    {
-        $this->pathWebAssets = $pathAssets;
-
-        return $this;
-    }
 
     /**
      * @param string $resultTemplate

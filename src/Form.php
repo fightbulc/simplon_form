@@ -4,7 +4,6 @@ namespace Simplon\Form;
 
 use Simplon\Form\Elements\CoreElementInterface;
 use Simplon\Form\Elements\Hidden\HiddenElement;
-use Simplon\Form\Renderer\Mustache\MustacheRenderer;
 
 class Form
 {
@@ -67,6 +66,11 @@ class Form
      * @var array
      */
     protected $assetFiles = [];
+
+    /**
+     * @var array
+     */
+    protected $assetInlines = [];
 
     /**
      * @var array
@@ -343,6 +347,37 @@ class Form
     }
 
     /**
+     * @param array $assetInlines
+     *
+     * @return Form
+     */
+    protected function setAssetInlines(array $assetInlines)
+    {
+        foreach ($assetInlines as $inline)
+        {
+            $this->assetInlines[] = $inline;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getAssetInlines()
+    {
+        return $this->assetInlines;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function hasAssetInlines()
+    {
+        return count($this->getAssetInlines()) > 0 ? true : false;
+    }
+
+    /**
      * @param $followUps
      *
      * @return Form
@@ -598,6 +633,11 @@ class Form
             $this->tmpl = str_replace('{{#form:open}}', "{{#form:open}}\n" . join("\n", $renderedAssets) . "\n", $this->tmpl);
         }
 
+        if ($this->hasAssetInlines())
+        {
+            $this->tmpl = str_replace('</body>', "<script>$(function(){ setTimeout(function() { " . join(";\n", $this->getAssetInlines()) . " }, 500); });</script>\n</body>", $this->tmpl);
+        }
+
         // set form open
         $this->tmpl = str_replace('{{#form:open}}', $formOpen, $this->getTemplate());
 
@@ -690,10 +730,6 @@ class Form
      */
     public function render($pathTemplate = null)
     {
-        return (new MustacheRenderer())
-            ->setFormElements($this->getElements())
-            ->render($pathTemplate);
-
         // set template
         if ($pathTemplate !== null)
         {
@@ -716,6 +752,7 @@ class Form
             $this->replaceTemplatePlaceholder($element->getId(), $elementParts);
 
             $this->setAssetFiles($element->getAssetFiles());
+            $this->setAssetInlines($element->getAssetInlines());
         }
 
         // set form open/close tag
