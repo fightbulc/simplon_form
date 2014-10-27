@@ -92,9 +92,9 @@ class DateTimePickerElement extends TextSingleLineElement
      */
     public function render()
     {
-        $this->addAssetFile("vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css");
-        $this->addAssetFile("vendor/moment-js/moment-with-locales.min.js");
-        $this->addAssetFile("vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js");
+        $this->addAssetFile("moment-js/moment-with-locales.min.js");
+        $this->addAssetFile("bootstrap-datetimepicker/bootstrap-datetimepicker.min.css");
+        $this->addAssetFile("bootstrap-datetimepicker/bootstrap-datetimepicker.min.js");
         $this->addAssetInline("$('#{$this->getId()}').datetimepicker({$this->getOptionsAsJson()})");
 
         if ($this->hasRangeFromElement() === true)
