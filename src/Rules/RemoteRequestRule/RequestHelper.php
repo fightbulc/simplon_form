@@ -2,6 +2,11 @@
 
 namespace Simplon\Form\Rules\RemoteRequestRule;
 
+/**
+ * RequestHelper
+ * @package Simplon\Form\Rules\RemoteRequestRule
+ * @author Tino Ehrich (tino@bigpun.me)
+ */
 class RequestHelper
 {
     /**

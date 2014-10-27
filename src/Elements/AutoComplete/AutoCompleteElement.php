@@ -102,9 +102,9 @@ class AutoCompleteElement extends CoreElement
      */
     public function render()
     {
-        $this->addAssetFile("jquery.remote-complete/jquery.remote-complete.css");
-        $this->addAssetFile("jquery.remote-complete/jquery.remote-complete.js");
-        $this->addAssetFile("jquery.remote-complete/hogan-2.0.0.min.js");
+        $this->addAssetFile("vendor/jquery.remote-complete/jquery.remote-complete.css");
+        $this->addAssetFile("vendor/jquery.remote-complete/jquery.remote-complete.js");
+        $this->addAssetFile("vendor/jquery.remote-complete/hogan-2.0.0.min.js");
 
         if (isset($POST['city_results']))
         {

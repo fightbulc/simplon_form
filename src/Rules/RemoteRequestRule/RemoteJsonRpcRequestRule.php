@@ -2,10 +2,15 @@
 
 namespace Simplon\Form\Rules\RemoteRequestRule;
 
+/**
+ * RemoteJsonRpcRequestRule
+ * @package Simplon\Form\Rules\RemoteRequestRule
+ * @author Tino Ehrich (tino@bigpun.me)
+ */
 class RemoteJsonRpcRequestRule extends AbstractRemoteRequestRule
 {
     /**
-     * @var
+     * @var string
      */
     protected $method;
 
@@ -18,7 +23,7 @@ class RemoteJsonRpcRequestRule extends AbstractRemoteRequestRule
     }
 
     /**
-     * @param mixed $method
+     * @param string $method
      *
      * @return RemoteJsonRpcRequestRule
      */

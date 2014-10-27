@@ -16,6 +16,8 @@ class HiddenElement extends CoreElement
      */
     public function render()
     {
+        $this->addAssetFile('');
+
         return [
             'element' => $this->parseFieldPlaceholders($this->getElementHtml()),
         ];

@@ -48,9 +48,9 @@ abstract class CoreElement implements CoreElementInterface
     protected $assetFiles = [];
 
     /**
-     * @var string
+     * @var array
      */
-    protected $webPathAssets = '/assets';
+    protected $assetInlines = [];
 
     /**
      * @var CoreRuleInterface[]
@@ -88,11 +88,16 @@ abstract class CoreElement implements CoreElementInterface
     protected $errorItemWrapper = 'li';
 
     /**
+     * @var string
+     */
+    protected $pathWebAssets = '';
+
+    /**
      * @return string
      */
-    public function getWebPathAssets()
+    public function getPathWebAssets()
     {
-        return rtrim($this->webPathAssets, '/');
+        return rtrim($this->pathWebAssets, '/');
     }
 
     /**
@@ -100,9 +105,9 @@ abstract class CoreElement implements CoreElementInterface
      *
      * @return static
      */
-    public function setWebPathAssets($pathAssets)
+    public function setPathWebAssets($pathAssets)
     {
-        $this->webPathAssets = $pathAssets;
+        $this->pathWebAssets = $pathAssets;
 
         return $this;
     }
@@ -512,7 +517,7 @@ abstract class CoreElement implements CoreElementInterface
      */
     public function addAssetFile($fileAsset)
     {
-        $this->assetFiles[] = $this->getWebPathAssets() . '/' . $fileAsset;
+        $this->assetFiles[] = $this->getPathWebAssets() . '/' . $fileAsset;
 
         return $this;
     }
@@ -523,6 +528,26 @@ abstract class CoreElement implements CoreElementInterface
     public function getAssetFiles()
     {
         return $this->assetFiles;
+    }
+
+    /**
+     * @param $inline
+     *
+     * @return $this
+     */
+    public function addAssetInline($inline)
+    {
+        $this->assetInlines[] = trim($inline);
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAssetInlines()
+    {
+        return $this->assetInlines;
     }
 
     /**

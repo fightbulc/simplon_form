@@ -7,24 +7,80 @@ use Simplon\Form\Elements\Hidden\HiddenElement;
 
 class Form
 {
-    /** @var  array */
-    protected $requestData;
+    /**
+     * @var array
+     */
+    protected $requestData = [];
 
+    /**
+     * @var string
+     */
     protected $tmpl;
+
+    /**
+     * @var string
+     */
     protected $id = 'simplon-form';
+
+    /**
+     * @var string
+     */
     protected $url = '';
+
+    /**
+     * @var string
+     */
     protected $method = 'POST';
+
+    /**
+     * @var string
+     */
     protected $acceptCharset = 'utf-8';
+
+    /**
+     * @var bool
+     */
     protected $enabledCsrf = true;
-    protected $csrfSalt = 'x45%da08*(';
 
-    /** @var CoreElementInterface[] */
+    /**
+     * @var string
+     */
+    protected $csrfSalt = ')UsZQjxm8ka}bwh7cYvnjT';
+
+    /**
+     * @var CoreElementInterface[]
+     */
     protected $elements = [];
-    protected $invalidElements = [];
-    protected $generalErrorMessage = '<strong>Oh snap!</strong> At least one field requires your attention. Have a look at the error notes below.';
 
+    /**
+     * @var CoreElementInterface[]
+     */
+    protected $invalidElements = [];
+
+    /**
+     * @var string
+     */
+    protected $generalErrorMessage = '<strong>Validation failed.</strong> Have a look at the error notes below.';
+
+    /**
+     * @var array
+     */
     protected $assetFiles = [];
+
+    /**
+     * @var array
+     */
+    protected $assetInlines = [];
+
+    /**
+     * @var array
+     */
     protected $followUps = [];
+
+    /**
+     * @var null|bool
+     */
+    protected $validationResult = null;
 
     /**
      * @param array $requestData
@@ -42,7 +98,7 @@ class Form
     }
 
     /**
-     * @param null $key
+     * @param null|string $key
      *
      * @return array|bool
      */
@@ -82,7 +138,7 @@ class Form
     }
 
     /**
-     * @param $use
+     * @param bool $use
      *
      * @return Form
      */
@@ -94,15 +150,15 @@ class Form
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     protected function hasEnabledCsrf()
     {
-        return $this->enabledCsrf;
+        return (bool)$this->enabledCsrf;
     }
 
     /**
-     * @param mixed $generalErrorMessage
+     * @param string $generalErrorMessage
      *
      * @return Form
      */
@@ -114,21 +170,21 @@ class Form
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getGeneralErrorMessage()
     {
-        return $this->generalErrorMessage;
+        return (string)$this->generalErrorMessage;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     protected function renderGeneralErrorMessage()
     {
         $template = '<div class="alert alert-danger">:value</div>';
 
-        return str_replace(':value', $this->generalErrorMessage, $template);
+        return (string)str_replace(':value', $this->generalErrorMessage, $template);
     }
 
     /**
@@ -144,11 +200,11 @@ class Form
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     protected function getId()
     {
-        return $this->id;
+        return (string)$this->id;
     }
 
     /**
@@ -164,11 +220,11 @@ class Form
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     protected function getUrl()
     {
-        return $this->url;
+        return (string)$this->url;
     }
 
     /**
@@ -184,11 +240,11 @@ class Form
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     protected function getCharset()
     {
-        return $this->acceptCharset;
+        return (string)$this->acceptCharset;
     }
 
     /**
@@ -204,11 +260,11 @@ class Form
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     protected function getMethod()
     {
-        return $this->method;
+        return (string)$this->method;
     }
 
     /**
@@ -251,9 +307,9 @@ class Form
         $values = [];
         $elements = $this->getElements();
 
-        foreach ($elements as $elm)
+        foreach ($elements as $element)
         {
-            $values[$elm->getId()] = $this->getRequestData($elm->getId());
+            $values[$element->getId()] = $element->getValue();
         }
 
         return $values;
@@ -288,6 +344,37 @@ class Form
     protected function hasAssetFiles()
     {
         return count($this->getAssetFiles()) > 0 ? true : false;
+    }
+
+    /**
+     * @param array $assetInlines
+     *
+     * @return Form
+     */
+    protected function setAssetInlines(array $assetInlines)
+    {
+        foreach ($assetInlines as $inline)
+        {
+            $this->assetInlines[] = $inline;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getAssetInlines()
+    {
+        return $this->assetInlines;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function hasAssetInlines()
+    {
+        return count($this->getAssetInlines()) > 0 ? true : false;
     }
 
     /**
@@ -435,7 +522,9 @@ class Form
      */
     protected function isSubmitted()
     {
-        return $this->hasRequestData() === true;
+        return
+            $this->hasRequestData() === true && // any request data at all?
+            (int)$this->getRequestData('hide-' . $this->getId()) === 1; // has this form been submitted?
     }
 
     /**
@@ -460,6 +549,9 @@ class Form
                 }
             }
         }
+
+        // remove unused element containers
+        $this->tmpl = preg_replace('/{{\#' . $elementId . ':.*?}}.*?{{\/' . $elementId . ':.*?}}/smu', '', $this->tmpl);
     }
 
     /**
@@ -473,14 +565,14 @@ class Form
 
             // create element
             $elementHiddenField = (new HiddenElement())
-                ->setId('csrf')
+                ->setId('hide-csrf')
                 ->setValue($csrfValue);
 
             // set element
             $this->addElement($elementHiddenField);
 
             // set in template
-            $this->tmpl = str_replace('{{#form:open}}', '{{#form:open}}{{#csrf:element}}{{value}}{{/csrf:element}}', $this->tmpl);
+            $this->tmpl = str_replace('{{#form:open}}', '{{#form:open}}{{#hide-csrf:element}}{{value}}{{/hide-csrf:element}}', $this->tmpl);
 
             return true;
         }
@@ -495,6 +587,9 @@ class Form
     {
         $formOpen = '<form :attributes>';
         $formClose = '</form>';
+
+        // set hidden form name
+        $formOpen .= '<input type="hidden" name="hide-' . $this->getId() . '" value="1">';
 
         // set attributes
         $attributes = [
@@ -517,7 +612,7 @@ class Form
         $formOpen = str_replace(':attributes', join(' ', $renderedAttributes), $formOpen);
 
         // set form js
-        // TODO do it better
+        // TODO: do it better
         if ($this->hasAssetFiles())
         {
             $jsFiles = [];
@@ -536,6 +631,11 @@ class Form
 
             $renderedAssets[] = '<script>!function(e,t,r){function n(){for(;d[0]&&"loaded"==d[0][f];)c=d.shift(),c[o]=!i.parentNode.insertAfter(c,i)}for(var s,a,c,d=[],i=e.scripts[0],o="onreadystatechange",f="readyState";s=r.shift();)a=e.createElement(t),"async"in i?(a.async=!1,e.body.appendChild(a)):i[f]?(d.push(a),a[o]=n):e.write("<"+t+\' src="\'+s+\'" defer></\'+t+">"),a.src=s}(document, "script", [' . join(',', $jsFiles) . '])</script>';
             $this->tmpl = str_replace('{{#form:open}}', "{{#form:open}}\n" . join("\n", $renderedAssets) . "\n", $this->tmpl);
+        }
+
+        if ($this->hasAssetInlines())
+        {
+            $this->tmpl = str_replace('</body>', "<script>$(function(){ setTimeout(function() { " . join(";\n", $this->getAssetInlines()) . " }, 500); });</script>\n</body>", $this->tmpl);
         }
 
         // set form open
@@ -565,7 +665,7 @@ class Form
      */
     protected function cleanPlaceholders($tmpl)
     {
-        return (string)preg_replace('|{{.*?}}\s*|sm', '', $tmpl);
+        return (string)preg_replace('|{{(?!lang:).*?}}\s*|smu', '', $tmpl);
     }
 
     /**
@@ -573,22 +673,7 @@ class Form
      */
     protected function cleanTemplate()
     {
-        $this->tmpl = (string)preg_replace('#({{.*?}})\s*#smi', '', $this->tmpl);
-    }
-
-    /**
-     * @return array
-     */
-    protected function getAllElementsValues()
-    {
-        $keyValuePairs = array();
-
-        foreach ($this->getElements() as $elementClass)
-        {
-            $keyValuePairs[$elementClass->getId()] = $elementClass->getValue();
-        }
-
-        return $keyValuePairs;
+        $this->tmpl = (string)preg_replace('#({{(?!lang:).*?}}|:hasError)\s*#smu', '', $this->tmpl);
     }
 
     /**
@@ -596,7 +681,7 @@ class Form
      */
     public function isValid()
     {
-        if ($this->isSubmitted())
+        if ($this->isSubmitted() && $this->validationResult === null)
         {
             // iterate through all elements
             foreach ($this->getElements() as $element)
@@ -631,14 +716,11 @@ class Form
                 }
             }
 
-            // no validation errors
-            if ($this->hasInvalidElements() === false)
-            {
-                return true;
-            }
+            // cache validation result
+            $this->validationResult = $this->hasInvalidElements() === false;
         }
 
-        return false;
+        return $this->validationResult;
     }
 
     /**
@@ -660,14 +742,17 @@ class Form
         // set elements
         foreach ($this->getElements() as $element)
         {
+            $elementParts = $element->render();
+
             if ($element->isValid() === false)
             {
-                $this->replaceTemplatePlaceholder($element->getId(), ['error' => $element->renderErrorMessages()]);
+                $elementParts['error'] = $element->renderErrorMessages();
             }
 
-            $this->replaceTemplatePlaceholder($element->getId(), $element->render());
+            $this->replaceTemplatePlaceholder($element->getId(), $elementParts);
 
             $this->setAssetFiles($element->getAssetFiles());
+            $this->setAssetInlines($element->getAssetInlines());
         }
 
         // set form open/close tag

@@ -3,23 +3,38 @@
 namespace Simplon\Form\Rules\RemoteRequestRule;
 
 use Simplon\Form\Elements\CoreElementInterface;
-use Simplon\Form\Rules\Core\CoreRuleInterface;
+use Simplon\Form\Rules\Core\CoreRule;
 
-abstract class AbstractRemoteRequestRule extends CoreRuleInterface
+/**
+ * AbstractRemoteRequestRule
+ * @package Simplon\Form\Rules\RemoteRequestRule
+ * @author Tino Ehrich (tino@bigpun.me)
+ */
+abstract class AbstractRemoteRequestRule extends CoreRule
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $errorMessage = '":label" remote post failed';
 
-    /** @var  \Closure */
+    /**
+     * @var \Closure
+     */
     protected $paramsClosure;
 
-    /** @var  \Closure */
+    /**
+     * @var \Closure
+     */
     protected $responseCallback;
 
-    /** @var  string */
+    /**
+     * @var string
+     */
     protected $url;
 
-    /** @var  array */
+    /**
+     * @var array
+     */
     protected $params;
 
     /**

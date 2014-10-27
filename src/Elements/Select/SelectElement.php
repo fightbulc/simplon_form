@@ -9,7 +9,12 @@ class SelectElement extends CoreElement
     /**
      * @var string
      */
-    protected $elementHtml = '<div class=":hasError"><select name=":id" id=":id" class="select-block">:options</select></div>';
+    protected $elementHtml = '<div class=":hasError"><select name=":id" id=":id" class=":class">:options</select></div>';
+
+    /**
+     * @var array
+     */
+    protected $class = ['form-control'];
 
     /**
      * @var array
