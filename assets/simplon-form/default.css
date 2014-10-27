@@ -1,0 +1,28 @@
+body
+{
+    margin-top: 30px;
+}
+
+fieldset.group-separator
+{
+    padding-bottom: 12px;
+    margin-bottom: 25px;
+    border-bottom: 1px dashed #CCC;
+}
+
+fieldset.group-separator ul
+{
+    margin: 0;
+}
+
+ul
+{
+    padding-top: 5px;
+}
+
+label.checkbox,
+label.radio
+{
+    margin: 0;
+    padding: 0 0 0 20px;
+}
