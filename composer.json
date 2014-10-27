@@ -17,12 +17,10 @@
             "role": "developer"
         }
     ],
-
     "require": {
         "php": ">=5.4",
         "Respect/Validation": "0.6.*"
     },
-
     "autoload": {
         "psr-4": {
             "Simplon\\Form\\": "src/"

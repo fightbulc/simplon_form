@@ -4,6 +4,7 @@ namespace Simplon\Form;
 
 use Simplon\Form\Elements\CoreElementInterface;
 use Simplon\Form\Elements\Hidden\HiddenElement;
+use Simplon\Form\Renderer\Mustache\MustacheRenderer;
 
 class Form
 {
@@ -93,7 +94,7 @@ class Form
     }
 
     /**
-     * @param null $key
+     * @param null|string $key
      *
      * @return array|bool
      */
@@ -133,7 +134,7 @@ class Form
     }
 
     /**
-     * @param $use
+     * @param bool $use
      *
      * @return Form
      */
@@ -145,15 +146,15 @@ class Form
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     protected function hasEnabledCsrf()
     {
-        return $this->enabledCsrf;
+        return (bool)$this->enabledCsrf;
     }
 
     /**
-     * @param mixed $generalErrorMessage
+     * @param string $generalErrorMessage
      *
      * @return Form
      */
@@ -165,21 +166,21 @@ class Form
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getGeneralErrorMessage()
     {
-        return $this->generalErrorMessage;
+        return (string)$this->generalErrorMessage;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     protected function renderGeneralErrorMessage()
     {
         $template = '<div class="alert alert-danger">:value</div>';
 
-        return str_replace(':value', $this->generalErrorMessage, $template);
+        return (string)str_replace(':value', $this->generalErrorMessage, $template);
     }
 
     /**
@@ -195,11 +196,11 @@ class Form
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     protected function getId()
     {
-        return $this->id;
+        return (string)$this->id;
     }
 
     /**
@@ -215,11 +216,11 @@ class Form
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     protected function getUrl()
     {
-        return $this->url;
+        return (string)$this->url;
     }
 
     /**
@@ -235,11 +236,11 @@ class Form
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     protected function getCharset()
     {
-        return $this->acceptCharset;
+        return (string)$this->acceptCharset;
     }
 
     /**
@@ -255,11 +256,11 @@ class Form
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     protected function getMethod()
     {
-        return $this->method;
+        return (string)$this->method;
     }
 
     /**
@@ -689,6 +690,10 @@ class Form
      */
     public function render($pathTemplate = null)
     {
+        return (new MustacheRenderer())
+            ->setFormElements($this->getElements())
+            ->render($pathTemplate);
+
         // set template
         if ($pathTemplate !== null)
         {
