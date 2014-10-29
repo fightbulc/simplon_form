@@ -288,17 +288,22 @@ class SelectElement extends CoreElement
      */
     protected function getRenderedOptions()
     {
-        $currentSelectedValue = (string)$this->getValue();
+        $renderedOptions = [
+            'top'    => [],
+            'mid'    => [],
+            'bottom' => [],
+        ];
 
-        $renderedOptions = [];
         $options = $this->getOptions();
+        $topSplitKeys = $this->getTopSplitKeys();
+        $bottomSplitKeys = $this->getBottomSplitKeys();
+        $currentSelectedValue = (string)$this->getValue();
 
         // ----------------------------------
 
         // top split
-        $topSplitKeys = $this->getTopSplitKeys();
 
-        if (!empty($topSplitKeys))
+        if (empty($topSplitKeys) === false)
         {
             // key comparision required
             $topSplitKeys = array_flip($topSplitKeys);
@@ -312,7 +317,7 @@ class SelectElement extends CoreElement
             $topSplitOptions = $this->sortOptionsByLabel($topSplitOptions);
 
             // render options
-            if (!empty($topSplitOptions))
+            if (empty($topSplitOptions) === false)
             {
                 foreach ($topSplitOptions as $value => $label)
                 {
@@ -323,14 +328,14 @@ class SelectElement extends CoreElement
                         $isSelected = true;
                     }
 
-                    $renderedOptions[] = $this->renderElementOptionsHtml($value, $label, $isSelected);
+                    $renderedOptions['top'][] = $this->renderElementOptionsHtml($value, $label, $isSelected);
                 }
-
-                $renderedOptions[] = $this->renderElementOptionsHtml('-1', '----------');
             }
         }
 
         // ----------------------------------
+
+        // mid split
 
         // sort
         $options = $this->sortOptionsByLabel($options);
@@ -338,20 +343,22 @@ class SelectElement extends CoreElement
         // render options
         foreach ($options as $value => $label)
         {
-            $isSelected = false;
-
-            if ($currentSelectedValue !== '' && (string)$value === $currentSelectedValue)
+            if (in_array($value, $bottomSplitKeys) === false)
             {
-                $isSelected = true;
-            }
+                $isSelected = false;
 
-            $renderedOptions[] = $this->renderElementOptionsHtml($value, $label, $isSelected);
+                if ($currentSelectedValue !== '' && (string)$value === $currentSelectedValue)
+                {
+                    $isSelected = true;
+                }
+
+                $renderedOptions['mid'][] = $this->renderElementOptionsHtml($value, $label, $isSelected);
+            }
         }
 
         // ----------------------------------
 
         // bottom split
-        $bottomSplitKeys = $this->getBottomSplitKeys();
 
         if (!empty($bottomSplitKeys))
         {
@@ -367,8 +374,6 @@ class SelectElement extends CoreElement
             // render options
             if (!empty($bottomSplitOptions))
             {
-                $renderedOptions[] = $this->renderElementOptionsHtml('-1', '----------');
-
                 foreach ($bottomSplitOptions as $value => $label)
                 {
                     $isSelected = false;
@@ -378,15 +383,31 @@ class SelectElement extends CoreElement
                         $isSelected = true;
                     }
 
-                    $renderedOptions[] = $this->renderElementOptionsHtml($value, $label, $isSelected);
+                    $renderedOptions['bottom'][] = $this->renderElementOptionsHtml($value, $label, $isSelected);
                 }
             }
         }
 
         // ----------------------------------
 
+        // glue contents
+
+        if (empty($renderedOptions['top']) === false && (empty($renderedOptions['mid']) === false || empty($renderedOptions['bottom']) === false))
+        {
+            $renderedOptions['top'][] = $this->renderElementOptionsHtml('-1', '----------');
+        }
+
+        if (empty($renderedOptions['mid']) === false && empty($renderedOptions['bottom']) === false)
+        {
+            $renderedOptions['mid'][] = $this->renderElementOptionsHtml('-1', '----------');
+        }
+
+        // ----------------------------------
+
         // render default label if defined
-        $renderedOptions = $this->renderPlaceholder($renderedOptions);
+        $renderedOptions = $this->renderPlaceholder(
+            array_merge($renderedOptions['top'], $renderedOptions['mid'], $renderedOptions['bottom'])
+        );
 
         return join("\n", $renderedOptions);
     }
