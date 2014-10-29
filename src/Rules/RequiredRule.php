@@ -36,9 +36,6 @@ class RequiredRule extends CoreRule
         // ----------------------------------
         // fields with actual mutable values
 
-        $value = $elementInstance->getValue();
-        $validator = $this->getValidationEngine()->notEmpty();
-
-        return $validator->validate($value);
+        return $elementInstance->getValue() !== '';
     }
 }
