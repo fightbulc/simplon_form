@@ -288,7 +288,7 @@ class SelectElement extends CoreElement
      */
     protected function getRenderedOptions()
     {
-        $currentSelectedValue = $this->getValue();
+        $currentSelectedValue = (string)$this->getValue();
 
         $renderedOptions = [];
         $options = $this->getOptions();
@@ -318,7 +318,7 @@ class SelectElement extends CoreElement
                 {
                     $isSelected = false;
 
-                    if ($currentSelectedValue !== '' && $value === $currentSelectedValue)
+                    if ($currentSelectedValue !== '' && (string)$value === $currentSelectedValue)
                     {
                         $isSelected = true;
                     }
@@ -340,7 +340,7 @@ class SelectElement extends CoreElement
         {
             $isSelected = false;
 
-            if ($currentSelectedValue !== '' && $value === $currentSelectedValue)
+            if ($currentSelectedValue !== '' && (string)$value === $currentSelectedValue)
             {
                 $isSelected = true;
             }
@@ -373,7 +373,7 @@ class SelectElement extends CoreElement
                 {
                     $isSelected = false;
 
-                    if ($currentSelectedValue !== '' && $value === $currentSelectedValue)
+                    if ($currentSelectedValue !== '' && (string)$value === $currentSelectedValue)
                     {
                         $isSelected = true;
                     }
