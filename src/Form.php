@@ -635,7 +635,7 @@ class Form
 
         if ($this->hasAssetInlines())
         {
-            $this->tmpl = str_replace('</body>', "<script>$(function(){ setTimeout(function() { " . join(";\n", $this->getAssetInlines()) . " }, 500); });</script>\n</body>", $this->tmpl);
+            $this->tmpl = str_replace('{{form:assets:inline}}', "<script>document.addEventListener('DOMContentLoaded', function() { setTimeout(function() { " . join(";\n", $this->getAssetInlines()) . " }, 500); });</script>", $this->tmpl);
         }
 
         // set form open
