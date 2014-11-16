@@ -88,31 +88,6 @@ abstract class CoreElement implements CoreElementInterface
     protected $errorItemWrapper = 'li';
 
     /**
-     * @var string
-     */
-    protected $pathWebAssets = '';
-
-    /**
-     * @return string
-     */
-    public function getPathWebAssets()
-    {
-        return rtrim($this->pathWebAssets, '/');
-    }
-
-    /**
-     * @param string $pathAssets
-     *
-     * @return static
-     */
-    public function setPathWebAssets($pathAssets)
-    {
-        $this->pathWebAssets = $pathAssets;
-
-        return $this;
-    }
-
-    /**
      * @param $tag
      * @param $value
      * @param $string
@@ -169,17 +144,25 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
-     * @return string
+     * @return bool
      */
-    public function getElementHtml()
+    public function hasElement()
     {
-        return $this->elementHtml;
+        return $this->getElementHtml() !== '';
     }
 
     /**
      * @return string
      */
-    protected function renderElementHtml()
+    public function getElementHtml()
+    {
+        return (string)$this->elementHtml;
+    }
+
+    /**
+     * @return string
+     */
+    public function renderElementHtml()
     {
         return $this->parseFieldPlaceholders($this->getElementHtml());
     }
@@ -197,6 +180,14 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasDescription()
+    {
+        return $this->getDescription() !== '';
+    }
+
+    /**
      * @return string
      */
     public function getDescription()
@@ -207,7 +198,7 @@ abstract class CoreElement implements CoreElementInterface
     /**
      * @return null|string
      */
-    protected function renderDescription()
+    public function renderDescription()
     {
         $description = $this->getDescription();
         $template = '<p>:description</p>';
@@ -253,6 +244,14 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasLabel()
+    {
+        return $this->getLabel() !== '';
+    }
+
+    /**
      * @return string
      */
     public function getLabel()
@@ -263,7 +262,7 @@ abstract class CoreElement implements CoreElementInterface
     /**
      * @return string
      */
-    protected function renderLabel()
+    public function renderLabel()
     {
         $template = '<label for=":id">:label</label>';
 
@@ -454,6 +453,16 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasError()
+    {
+        $errorMessages = $this->getErrorMessages();
+
+        return empty($errorMessages);
+    }
+
+    /**
      * @return array
      */
     public function getErrorMessages()
@@ -474,16 +483,6 @@ abstract class CoreElement implements CoreElementInterface
         $template = '<:containerWrapper class="rule-error-messages text-danger list-unstyled">:errorMessagesString</:containerWrapper>';
 
         return $this->replaceFieldPlaceholderMany($placeholders, $template);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isValid()
-    {
-        $errorMessages = $this->getErrorMessages();
-
-        return empty($errorMessages);
     }
 
     /**
@@ -511,13 +510,20 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
+     * @return void
+     */
+    public function setup()
+    {
+    }
+
+    /**
      * @param $fileAsset
      *
      * @return $this
      */
     public function addAssetFile($fileAsset)
     {
-        $this->assetFiles[] = $this->getPathWebAssets() . '/' . $fileAsset;
+        $this->assetFiles[] = $fileAsset;
 
         return $this;
     }
@@ -548,17 +554,5 @@ abstract class CoreElement implements CoreElementInterface
     public function getAssetInlines()
     {
         return $this->assetInlines;
-    }
-
-    /**
-     * @return array
-     */
-    public function render()
-    {
-        return [
-            'label'       => $this->renderLabel(),
-            'description' => $this->renderDescription(),
-            'element'     => $this->renderElementHtml(),
-        ];
     }
 }

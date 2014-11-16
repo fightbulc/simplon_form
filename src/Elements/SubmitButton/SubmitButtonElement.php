@@ -10,14 +10,4 @@ class SubmitButtonElement extends CoreElement
      * @var string
      */
     protected $elementHtml = '<input type="submit" class=":class" value=":label">';
-
-    /**
-     * @return array
-     */
-    public function render()
-    {
-        return [
-            'element' => $this->parseFieldPlaceholders($this->getElementHtml()),
-        ];
-    }
 }

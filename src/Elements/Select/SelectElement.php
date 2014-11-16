@@ -402,12 +402,4 @@ class SelectElement extends CoreElement
 
         return $messages;
     }
-
-    /**
-     * @return string
-     */
-    protected function renderElementHtml()
-    {
-        return parent::renderElementHtml();
-    }
 }

@@ -51,6 +51,4 @@ class TextSingleLineElement extends CoreElement
 
         return $placeholders;
     }
-
-
 }

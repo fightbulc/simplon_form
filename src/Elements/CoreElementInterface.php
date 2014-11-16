@@ -5,10 +5,13 @@ namespace Simplon\Form\Elements;
 /**
  * Interface CoreElementInterface
  * @package Simplon\Form\Elements
+ * @author Tino Ehrich (tino@bigpun.me)
  */
 interface CoreElementInterface
 {
     public function setElementHtml($elementHtml);
+
+    public function hasElement();
 
     public function getElementHtml();
 
@@ -26,9 +29,13 @@ interface CoreElementInterface
 
     public function setLabel($label);
 
+    public function hasLabel();
+
     public function getLabel();
 
     public function setDescription($description);
+
+    public function hasDescription();
 
     public function getDescription();
 
@@ -46,13 +53,31 @@ interface CoreElementInterface
 
     public function processRules();
 
+    public function hasError();
+
     public function getErrorMessages();
 
     public function renderErrorMessages();
 
-    public function isValid();
-
     public function parseFieldPlaceholders($stringWithPlaceholders);
 
-    public function render();
+    /**
+     * @return void
+     */
+    public function setup();
+
+    /**
+     * @return string
+     */
+    public function renderLabel();
+
+    /**
+     * @return null|string
+     */
+    public function renderDescription();
+
+    /**
+     * @return string
+     */
+    public function renderElementHtml();
 }

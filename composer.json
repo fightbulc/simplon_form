@@ -4,21 +4,26 @@
     "homepage": "https://github.com/fightbulc/simplon_form",
     "type": "library",
     "keywords": [
-        "form building",
+        "form",
+        "fields",
         "validation",
         "callbacks",
-        "flexibility"
+        "flexibility",
+        "mustache",
+        "phtml"
     ],
     "license": "MIT",
     "authors": [
         {
             "name": "Tino Ehrich",
-            "email": "opensource@efides.com",
+            "email": "tino@bigpun.me",
             "role": "developer"
         }
     ],
     "require": {
         "php": ">=5.4",
+        "simplon/mustache": "0.1.*",
+        "simplon/phtml": "0.1.*",
         "Respect/Validation": "0.6.*"
     },
     "autoload": {
