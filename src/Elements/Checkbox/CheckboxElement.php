@@ -3,6 +3,7 @@
 namespace Simplon\Form\Elements\Checkbox;
 
 use Simplon\Form\Elements\CoreElement;
+use Simplon\Form\Elements\CoreElementInterface;
 
 class CheckboxElement extends CoreElement
 {
@@ -183,6 +184,17 @@ class CheckboxElement extends CoreElement
     /**
      * @return string
      */
+    public function renderElementHtml()
+    {
+        // render elm
+        $elementHtml = $this->replaceFieldPlaceholder('items', $this->renderElementItemHtml(), $this->getElementHtml());
+
+        return $this->parseFieldPlaceholders($elementHtml);
+    }
+
+    /**
+     * @return string
+     */
     protected function renderElementItemHtml()
     {
         $rendered = [];
@@ -213,16 +225,5 @@ class CheckboxElement extends CoreElement
         }
 
         return join('', $rendered);
-    }
-
-    /**
-     * @return string
-     */
-    protected function renderElementHtml()
-    {
-        // render elm
-        $elementHtml = $this->replaceFieldPlaceholder('items', $this->renderElementItemHtml(), $this->getElementHtml());
-
-        return $this->parseFieldPlaceholders($elementHtml);
     }
 }

@@ -98,21 +98,19 @@ class AutoCompleteElement extends CoreElement
     }
 
     /**
-     * @return array
+     * @return void
      */
-    public function render()
+    public function setup()
     {
         $this->addAssetFile("vendor/jquery.remote-complete/jquery.remote-complete.css");
         $this->addAssetFile("vendor/jquery.remote-complete/jquery.remote-complete.js");
         $this->addAssetFile("vendor/jquery.remote-complete/hogan-2.0.0.min.js");
 
-        if (isset($POST['city_results']))
+        if (isset($_POST['city_results']))
         {
-            $data = $POST['city_results'][0];
+            $data = $_POST['city_results'][0];
 
             $this->addAssetFile("p.init([JSON.parse('" . json_encode(json_decode($data, true)) . "')])");
         }
-
-        return parent::render();
     }
 }
