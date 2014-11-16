@@ -23,14 +23,4 @@ class ButtonElement extends CoreElement
 
         return $coreFieldPlaceholders;
     }
-
-    /**
-     * @return array
-     */
-    public function render()
-    {
-        return [
-            'element' => $this->renderElementHtml(),
-        ];
-    }
 }

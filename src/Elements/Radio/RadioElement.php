@@ -137,7 +137,7 @@ class RadioElement extends CoreElement
     /**
      * @return string
      */
-    protected function renderElementHtml()
+    public function renderElementHtml()
     {
         // render elm
         $elementHtml = $this->replaceFieldPlaceholder('items', $this->renderElementItemHtml(), $this->getElementHtml());

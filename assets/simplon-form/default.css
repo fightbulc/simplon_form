@@ -26,3 +26,8 @@ label.radio
     margin: 0;
     padding: 0 0 0 20px;
 }
+
+form.simplon-form
+{
+    display: none;
+}

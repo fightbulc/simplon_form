@@ -48,14 +48,4 @@ class AnchorElement extends CoreElement
     {
         return $this->url;
     }
-
-    /**
-     * @return array
-     */
-    public function render()
-    {
-        return [
-            'element' => $this->parseFieldPlaceholders($this->getElementHtml()),
-        ];
-    }
 }
