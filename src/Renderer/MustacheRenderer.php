@@ -37,9 +37,6 @@ class MustacheRenderer extends CoreRenderer
 
         foreach ($this->form->getElements() as $element)
         {
-            // setup element
-            $element->setup();
-
             // get elements
             $elementParts = [
                 'label'       => $element->renderLabel(),
@@ -62,7 +59,7 @@ class MustacheRenderer extends CoreRenderer
         // add general error message
         if ($this->form->isValid() === false)
         {
-            $params['form:hasError'] = ['value' => $this->form->renderGeneralErrorMessage()];
+            $params['hasError'] = ['value' => $this->form->renderGeneralErrorMessage()];
         }
 
         return $params;

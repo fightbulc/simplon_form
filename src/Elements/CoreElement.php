@@ -459,7 +459,7 @@ abstract class CoreElement implements CoreElementInterface
     {
         $errorMessages = $this->getErrorMessages();
 
-        return empty($errorMessages);
+        return empty($errorMessages) === false;
     }
 
     /**

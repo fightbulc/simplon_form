@@ -3,7 +3,6 @@
 namespace Simplon\Form;
 
 use Simplon\Form\Elements\CoreElementInterface;
-use Simplon\Form\Elements\Hidden\HiddenElement;
 
 class Form
 {
@@ -11,11 +10,6 @@ class Form
      * @var array
      */
     private $requestData = [];
-
-    /**
-     * @var string
-     */
-    private $tmpl;
 
     /**
      * @var string
@@ -38,14 +32,24 @@ class Form
     private $acceptCharset = 'utf-8';
 
     /**
-     * @var bool
+     * @var string
      */
-    private $enabledCsrf = true;
+    private $csrfName;
 
     /**
      * @var string
      */
-    private $csrfSalt = ')UsZQjxm8ka}bwh7cYvnjT';
+    private $csrfValue;
+
+    /**
+     * @var bool
+     */
+    private $isValidCsrf = false;
+
+    /**
+     * @var null|bool
+     */
+    private $isValid = null;
 
     /**
      * @var CoreElementInterface[]
@@ -73,16 +77,6 @@ class Form
     private $assetInlines = [];
 
     /**
-     * @var array
-     */
-    private $followUps = [];
-
-    /**
-     * @var null|bool
-     */
-    private $isValid = null;
-
-    /**
      * @var string
      */
     private $urlRootAssets;
@@ -92,14 +86,6 @@ class Form
      */
     public function __construct($requestData = [])
     {
-        // set base assets
-        $this->addAssetFiles([
-            'bootstrap-3.3.1/css/bootstrap.css',
-            'default.css',
-            'jquery-2.1.1/jquery-2.1.1.min.js',
-            'bootstrap-3.3.1/js/bootstrap.min.js',
-        ]);
-
         // start session for csrf
         if (!session_id())
         {
@@ -108,6 +94,17 @@ class Form
 
         // set data
         $this->setRequestData($requestData);
+
+        // handle csrf
+        $this->handleCsrf();
+
+        // set base assets
+        $this->addAssetFiles([
+            'bootstrap-3.3.1/css/bootstrap.css',
+            'default.css',
+            'jquery-2.1.1/jquery-2.1.1.min.js',
+            'bootstrap-3.3.1/js/bootstrap.min.js',
+        ]);
     }
 
     /**
@@ -118,38 +115,6 @@ class Form
     public function setUrlRootAssets($urlRootAssets)
     {
         $this->urlRootAssets = rtrim($urlRootAssets, '/');
-
-        return $this;
-    }
-
-    /**
-     * @param null|string $key
-     *
-     * @return array|bool
-     */
-    public function getRequestData($key = null)
-    {
-        if ($key !== null)
-        {
-            if (isset($this->requestData[$key]) === true)
-            {
-                return $this->requestData[$key];
-            }
-
-            return false;
-        }
-
-        return (array)$this->requestData;
-    }
-
-    /**
-     * @param bool $use
-     *
-     * @return Form
-     */
-    public function enableCsrf($use)
-    {
-        $this->enabledCsrf = $use !== false ? true : false;
 
         return $this;
     }
@@ -291,50 +256,6 @@ class Form
     }
 
     /**
-     * @param $followUps
-     *
-     * @return Form
-     */
-    public function setFollowUps($followUps)
-    {
-        $this->followUps = $followUps;
-
-        return $this;
-    }
-
-    /**
-     * @param $id
-     * @param callable $closure
-     *
-     * @return Form
-     */
-    public function addFollowUp($id, \Closure $closure)
-    {
-        $this->followUps[$id] = $closure;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function runFollowUps()
-    {
-        $responses = [];
-        $followUps = $this->getFollowUps();
-
-        if (!empty($followUps))
-        {
-            foreach ($followUps as $id => $closure)
-            {
-                $responses[$id] = $closure($this->getElementValues());
-            }
-        }
-
-        return $responses;
-    }
-
-    /**
      * @param $salt
      *
      * @return Form
@@ -371,7 +292,7 @@ class Form
                 // mark elements validation state
                 switch ($element->hasError())
                 {
-                    case false:
+                    case true:
                         // visual error indication
                         $element->setElementHtml(str_replace(':hasError', 'has-error', $element->getElementHtml()));
 
@@ -379,8 +300,8 @@ class Form
                         $this->addInvalidElement($element);
                         break;
 
-                    case true:
-                        // visual error indication
+                    case false:
+                        // visual success indication
                         $element->setElementHtml(str_replace(':hasError', 'has-success', $element->getElementHtml()));
                         break;
 
@@ -410,7 +331,13 @@ class Form
      */
     public function addFormAndAssetsTags($template)
     {
-        $form = "<form {{attributes}}>\n\n{{hiddenId}}\n\n{{template}}\n\n{{css}}\n\n{{js}}</form>";
+        $form = "<form {{attributes}}>\n\n{{internalFields}}\n\n{{template}}\n\n{{css}}\n\n{{js}}</form>";
+
+        // set internal fields
+        $internalFields = [
+            '<input type="hidden" name="hide-' . $this->getId() . '" value="1">',
+            '<input type="hidden" name="hide-' . $this->getCsrfName() . '" value="' . $this->getCsrfValue() . '">',
+        ];
 
         // set attributes
         $attributes = [
@@ -434,8 +361,8 @@ class Form
         // render attributes
         $form = str_replace('{{attributes}}', join(' ', $renderedAttributes), $form);
 
-        // render hidden form name
-        $form = str_replace('{{hiddenId}}', '<input type="hidden" name="hide-' . $this->getId() . '" value="1">', $form);
+        // render internal fields
+        $form = str_replace('{{internalFields}}', join("\n", $internalFields), $form);
 
         // render css asset
         $form = str_replace('{{css}}', $this->renderHeaderAssets(), $form);
@@ -485,6 +412,26 @@ class Form
     }
 
     /**
+     * @param null|string $key
+     *
+     * @return array|bool
+     */
+    private function getRequestData($key = null)
+    {
+        if ($key !== null)
+        {
+            if (isset($this->requestData[$key]) === true)
+            {
+                return $this->requestData[$key];
+            }
+
+            return false;
+        }
+
+        return (array)$this->requestData;
+    }
+
+    /**
      * @param array $requestData
      *
      * @return Form
@@ -494,14 +441,6 @@ class Form
         $this->requestData = $requestData;
 
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    private function hasEnabledCsrf()
-    {
-        return (bool)$this->enabledCsrf;
     }
 
     /**
@@ -537,19 +476,103 @@ class Form
     }
 
     /**
-     * @return array
+     * @param int $length
+     *
+     * @return string
      */
-    private function getFollowUps()
+    private function createRandomToken($length = 12)
     {
-        return $this->followUps;
+        $randomString = '';
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        // generate token
+        for ($i = 0; $i < $length; $i++)
+        {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        return $randomString;
+    }
+
+    /**
+     * @return void
+     */
+    private function handleCsrf()
+    {
+        // validate csrf
+        $this->validateCsrfTokens();
+
+        // render tokens
+        $this->renderCsrfTokens();
+
+        // cache as session
+        $_SESSION['csrf'] = [
+            'name'  => $this->getCsrfName(),
+            'value' => $this->getCsrfValue(),
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    private function validateCsrfTokens()
+    {
+        $process =
+            $this->hasRequestData() === true
+            && isset($_SESSION['csrf'])
+            && isset($_SESSION['csrf']['name'])
+            && isset($_SESSION['csrf']['value']);
+
+        if ($process)
+        {
+            // test value
+            if ($_SESSION['csrf']['value'] === $this->getRequestData('hide-' . $_SESSION['csrf']['name']))
+            {
+                $this->isValidCsrf = true;
+            }
+        }
+    }
+
+    /**
+     * @return void
+     */
+    private function renderCsrfTokens()
+    {
+        $this
+            ->setCsrfName($this->createRandomToken(32))
+            ->setCsrfValue($this->createRandomToken(32));
+    }
+
+    /**
+     * @param string $csrfName
+     *
+     * @return Form
+     */
+    private function setCsrfName($csrfName)
+    {
+        $this->csrfName = $csrfName;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    private function getCsrfSalt()
+    private function getCsrfName()
     {
-        return $this->csrfSalt;
+        return $this->csrfName;
+    }
+
+    /**
+     * @param string $csrfValue
+     *
+     * @return Form
+     */
+    private function setCsrfValue($csrfValue)
+    {
+        $this->csrfValue = $csrfValue;
+
+        return $this;
     }
 
     /**
@@ -557,7 +580,7 @@ class Form
      */
     private function getCsrfValue()
     {
-        return md5(session_id() . $this->getCsrfSalt());
+        return $this->csrfValue;
     }
 
     /**
@@ -596,34 +619,9 @@ class Form
     private function isSubmitted()
     {
         return
-            $this->hasRequestData() === true && // any request data at all?
-            (int)$this->getRequestData('hide-' . $this->getId()) === 1; // has this form been submitted?
-    }
-
-    /**
-     * @return bool
-     */
-    private function setCsrfElement()
-    {
-        if ($this->hasEnabledCsrf())
-        {
-            $csrfValue = $this->getCsrfValue();
-
-            // create element
-            $elementHiddenField = (new HiddenElement())
-                ->setId('hide-csrf')
-                ->setValue($csrfValue);
-
-            // set element
-            $this->addElement($elementHiddenField);
-
-            // set in template
-            $this->tmpl = str_replace('{{#form:open}}', '{{#form:open}}{{#hide-csrf:element}}{{value}}{{/hide-csrf:element}}', $this->tmpl);
-
-            return true;
-        }
-
-        return false;
+            $this->hasRequestData() === true // any request data at all?
+            && (int)$this->getRequestData('hide-' . $this->getId()) === 1 // has this form been submitted?
+            && $this->isValidCsrf === true; // csrf must match
     }
 
     /**
