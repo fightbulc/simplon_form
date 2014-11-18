@@ -88,50 +88,6 @@ abstract class CoreElement implements CoreElementInterface
     protected $errorItemWrapper = 'li';
 
     /**
-     * @param $tag
-     * @param $value
-     * @param $string
-     *
-     * @return string
-     */
-    protected function replaceFieldPlaceholder($tag, $value, $string)
-    {
-        return (string)str_replace(":$tag", $value, $string);
-    }
-
-    /**
-     * @param array $pairs
-     * @param $string
-     *
-     * @return string
-     */
-    protected function replaceFieldPlaceholderMany(array $pairs, $string)
-    {
-        foreach ($pairs as $tag => $value)
-        {
-            $string = $this->replaceFieldPlaceholder($tag, $value, $string);
-        }
-
-        return $string;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getErrorContainerWrapper()
-    {
-        return $this->errorContainerWrapper;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getErrorItemWrapper()
-    {
-        return $this->errorItemWrapper;
-    }
-
-    /**
      * @param $elementHtml
      *
      * @return $this
@@ -445,14 +401,6 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
-     * @param $message
-     */
-    protected function addErrorMessage($message)
-    {
-        $this->errorMessages[] = "<{$this->getErrorItemWrapper()}>{$message}</{$this->getErrorItemWrapper()}>";
-    }
-
-    /**
      * @return bool
      */
     public function hasError()
@@ -486,6 +434,69 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
+     * @return void
+     */
+    public function setup()
+    {
+    }
+
+    /**
+     * @param $tag
+     * @param $value
+     * @param $string
+     *
+     * @return string
+     */
+    protected function replaceFieldPlaceholder($tag, $value, $string)
+    {
+        return (string)str_replace(":$tag", $value, $string);
+    }
+
+    /**
+     * @param array $pairs
+     * @param $string
+     *
+     * @return string
+     */
+    protected function replaceFieldPlaceholderMany(array $pairs, $string)
+    {
+        foreach ($pairs as $tag => $value)
+        {
+            $string = $this->replaceFieldPlaceholder($tag, $value, $string);
+        }
+
+        return $string;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getErrorContainerWrapper()
+    {
+        return $this->errorContainerWrapper;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getErrorItemWrapper()
+    {
+        return $this->errorItemWrapper;
+    }
+
+    /**
+     * @param $message
+     *
+     * @return static
+     */
+    protected function addErrorMessage($message)
+    {
+        $this->errorMessages[] = "<{$this->getErrorItemWrapper()}>{$message}</{$this->getErrorItemWrapper()}>";
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     protected function getFieldPlaceholders()
@@ -510,25 +521,6 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
-     * @return void
-     */
-    public function setup()
-    {
-    }
-
-    /**
-     * @param $fileAsset
-     *
-     * @return $this
-     */
-    public function addAssetFile($fileAsset)
-    {
-        $this->assetFiles[] = $fileAsset;
-
-        return $this;
-    }
-
-    /**
      * @return array
      */
     public function getAssetFiles()
@@ -537,22 +529,34 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
-     * @param $inline
-     *
-     * @return $this
-     */
-    public function addAssetInline($inline)
-    {
-        $this->assetInlines[] = trim($inline);
-
-        return $this;
-    }
-
-    /**
      * @return array
      */
     public function getAssetInlines()
     {
         return $this->assetInlines;
+    }
+
+    /**
+     * @param $fileAsset
+     *
+     * @return $this
+     */
+    protected function addAssetFile($fileAsset)
+    {
+        $this->assetFiles[] = $fileAsset;
+
+        return $this;
+    }
+
+    /**
+     * @param $inline
+     *
+     * @return $this
+     */
+    protected function addAssetInline($inline)
+    {
+        $this->assetInlines[] = trim($inline);
+
+        return $this;
     }
 }

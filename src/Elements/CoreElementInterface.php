@@ -15,14 +15,6 @@ interface CoreElementInterface
 
     public function getElementHtml();
 
-    public function addAssetFile($file);
-
-    public function getAssetFiles();
-
-    public function addAssetInline($inline);
-
-    public function getAssetInlines();
-
     public function setId($id);
 
     public function getId();
@@ -59,8 +51,6 @@ interface CoreElementInterface
 
     public function renderErrorMessages();
 
-    public function parseFieldPlaceholders($stringWithPlaceholders);
-
     /**
      * @return void
      */
@@ -80,4 +70,21 @@ interface CoreElementInterface
      * @return string
      */
     public function renderElementHtml();
+
+    /**
+     * @param $stringWithPlaceholders
+     *
+     * @return string
+     */
+    public function parseFieldPlaceholders($stringWithPlaceholders);
+
+    /**
+     * @return array
+     */
+    public function getAssetFiles();
+
+    /**
+     * @return array
+     */
+    public function getAssetInlines();
 }

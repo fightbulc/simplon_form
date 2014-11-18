@@ -44,7 +44,7 @@ class MustacheRenderer extends CoreRenderer
                 'element'     => $element->renderElementHtml(),
             ];
 
-            if ($element->hasError() === false)
+            if ($element->hasError() === true)
             {
                 $elementParts['error'] = $element->renderErrorMessages();
             }
