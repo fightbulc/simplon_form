@@ -258,7 +258,7 @@ class Form
     /**
      * @return bool
      */
-    public function validateFields()
+    public function isValid()
     {
         if ($this->isSubmitted() && $this->isValid === null)
         {
@@ -301,14 +301,6 @@ class Form
             $this->isValid = $this->hasInvalidElements() === false;
         }
 
-        return $this->isValid;
-    }
-
-    /**
-     * @return bool|null
-     */
-    public function isValid()
-    {
         return $this->isValid;
     }
 
@@ -392,19 +384,11 @@ class Form
     }
 
     /**
-     * @return bool
-     */
-    private function hasRequestData()
-    {
-        return empty($this->requestData) === false;
-    }
-
-    /**
      * @param null|string $key
      *
      * @return array|bool
      */
-    private function getRequestData($key = null)
+    protected function getRequestData($key = null)
     {
         if ($key !== null)
         {
@@ -417,6 +401,14 @@ class Form
         }
 
         return (array)$this->requestData;
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasRequestData()
+    {
+        return empty($this->requestData) === false;
     }
 
     /**
@@ -659,14 +651,6 @@ class Form
     private function getAssetInlines()
     {
         return $this->assetInlines;
-    }
-
-    /**
-     * @return bool
-     */
-    private function hasAssetInlines()
-    {
-        return count($this->getAssetInlines()) > 0 ? true : false;
     }
 
     /**
