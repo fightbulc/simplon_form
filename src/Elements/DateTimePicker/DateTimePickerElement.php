@@ -72,9 +72,9 @@ class DateTimePickerElement extends TextSingleLineElement
     protected $optionLanguage = 'en';
 
     /**
-     * @var null|string
+     * @var \DateTime
      */
-    protected $optionDefaultDate = null; // sets a default date, accepts js dates, strings and moment objects
+    protected $optionDefaultDate;
 
     /**
      * @var array
@@ -110,7 +110,6 @@ class DateTimePickerElement extends TextSingleLineElement
      * @var array
      */
     protected $optionDaysOfWeekDisabled = [];
-
 
     /**
      * @return DateTimePickerElement
@@ -148,18 +147,6 @@ class DateTimePickerElement extends TextSingleLineElement
     public function setOptionDaysOfWeekDisabled($optionDaysOfWeekDisabled)
     {
         $this->optionDaysOfWeekDisabled = $optionDaysOfWeekDisabled;
-
-        return $this;
-    }
-
-    /**
-     * @param null|string $optionDefaultDate
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptionDefaultDate($optionDefaultDate)
-    {
-        $this->optionDefaultDate = $optionDefaultDate;
 
         return $this;
     }
@@ -362,6 +349,18 @@ class DateTimePickerElement extends TextSingleLineElement
     }
 
     /**
+     * @param \DateTime $optionDefaultDate
+     *
+     * @return DateTimePickerElement
+     */
+    public function setOptionDefaultDate(\DateTime $optionDefaultDate)
+    {
+        $this->optionDefaultDate = $optionDefaultDate;
+
+        return $this;
+    }
+
+    /**
      * @return void
      */
     public function setup()
@@ -372,7 +371,9 @@ class DateTimePickerElement extends TextSingleLineElement
         $this->addAssetFile('bootstrap-datetimepicker-3.1.3/bootstrap-datetimepicker.min.js');
 
         // init field
-        $this->addAssetInline("$('#{$this->getId()}').datetimepicker({$this->getOptionsAsJson()})");
+        $json = $this->getOptionsAsJson();
+        $json = preg_replace('/"new Date\((\d+), (\d+), (\d+)\)"/i', 'new Date(\\1, \\2, \\3)', $json);
+        $this->addAssetInline("$('#{$this->getId()}').datetimepicker({$json})");
 
         if ($this->hasRangeFromElement() === true)
         {
@@ -414,19 +415,24 @@ class DateTimePickerElement extends TextSingleLineElement
     }
 
     /**
+     * @return \DateTime|null
+     */
+    private function getOptionDefaultDate()
+    {
+        if ($this->optionDefaultDate instanceof \DateTime)
+        {
+            return 'new Date(' . $this->optionDefaultDate->format('Y') . ', ' . ($this->optionDefaultDate->format('m') - 1) . ', ' . $this->optionDefaultDate->format('d') . ')';
+        }
+
+        return null;
+    }
+
+    /**
      * @return array
      */
     private function getOptionDaysOfWeekDisabled()
     {
         return $this->optionDaysOfWeekDisabled;
-    }
-
-    /**
-     * @return null|string
-     */
-    private function getOptionDefaultDate()
-    {
-        return $this->optionDefaultDate;
     }
 
     /**
