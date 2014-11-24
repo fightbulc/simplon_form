@@ -375,7 +375,7 @@ class DateTimePickerElement extends TextSingleLineElement
 
         // init field
         $json = $this->getOptionsAsJson();
-        $json = preg_replace('/"new Date\((\d+), (\d+), (\d+)\)"/i', 'new Date(\\1, \\2, \\3)', $json);
+        $json = preg_replace('/"new Date\((\d+), (\d+), (\d+), (\d+), (\d+), (\d+)\)"/i', 'new Date(\\1, \\2, \\3, \\4, \\5, \\6)', $json);
         $this->addAssetInline("$('#{$this->getId()}').datetimepicker({$json})");
 
         if ($this->hasRangeFromElement() === true)
@@ -422,7 +422,7 @@ class DateTimePickerElement extends TextSingleLineElement
         {
             if ($v instanceof \DateTime)
             {
-                $dates[$k] = 'new Date(' . $v->format('Y') . ', ' . ($v->format('m') - 1) . ', ' . $v->format('d') . ')';
+                $dates[$k] = 'new Date(' . $v->format('Y') . ', ' . ($v->format('m') - 1) . ', ' . $v->format('d') . ', ' . $v->format('H') . ', ' . $v->format('i') . ', ' . $v->format('s') . ')';
             }
         }
 
