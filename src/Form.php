@@ -294,6 +294,8 @@ class Form
                         break;
 
                     default:
+                        // visual error indication
+                        $element->setElementHtml(str_replace(':hasError', '', $element->getElementHtml()));
                 }
             }
 
@@ -376,9 +378,10 @@ class Form
         $this->addAssetInlines(["$('#" . $this->getId() . "').fadeIn()"]);
 
         // domready + inline scripts
+        $jqueryNoConflict = "var jQuerySimplon = $.noConflict(true);\n\n";
         $domReadyFunction = "var DOMReady = function(a,b,c){b=document,c='addEventListener';b[c]?b[c]('DOMContentLoaded',a):window.attachEvent('onload',a)};";
-        $domReadyCallback = "DOMReady(function () {" . join("\n;", $this->getAssetInlines()) . "; \n\n});";
-        $content .= "\n\n<script type=\"text/javascript\">\n\n// SIMPLON FORM - INLINE HANDLINGS\n\n{$domReadyFunction}\n\n{$domReadyCallback}\n\n</script>\n\n";
+        $domReadyCallback = "DOMReady(function () {\n(function($){" . join(";\n", $this->getAssetInlines()) . ";})(jQuerySimplon);\n});";
+        $content .= "\n\n<script type=\"text/javascript\">\n\n// SIMPLON FORM - INLINE HANDLINGS\n\n{$jqueryNoConflict}{$domReadyFunction}\n\n{$domReadyCallback}\n\n</script>\n\n";
 
         return $content;
     }

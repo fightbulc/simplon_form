@@ -52,14 +52,19 @@ class DateTimePickerElement extends TextSingleLineElement
     protected $optionMinuteStepping = 1;
 
     /**
-     * @var string
+     * @var \DateTime|null
      */
-    protected $optionMinDate = '1/1/1990';
+    protected $optionMinDate = null;
 
     /**
-     * @var null|string
+     * @var \DateTime|null
      */
     protected $optionMaxDate = null;
+
+    /**
+     * @var \DateTime|null
+     */
+    protected $optionDefaultDate = null;
 
     /**
      * @var bool
@@ -69,12 +74,7 @@ class DateTimePickerElement extends TextSingleLineElement
     /**
      * @var string
      */
-    protected $optionLanguage = 'en';
-
-    /**
-     * @var \DateTime
-     */
-    protected $optionDefaultDate;
+    protected $optionLanguage = 'en_GB';
 
     /**
      * @var array
@@ -112,6 +112,18 @@ class DateTimePickerElement extends TextSingleLineElement
     protected $optionDaysOfWeekDisabled = [];
 
     /**
+     * @param \DateTime $value
+     *
+     * @return static
+     */
+    public function setValue($value)
+    {
+        $this->setOptionDefaultDate($value);
+
+        return $this;
+    }
+
+    /**
      * @return DateTimePickerElement
      */
     protected function getRangeFromElement()
@@ -135,6 +147,9 @@ class DateTimePickerElement extends TextSingleLineElement
     public function setRangeFromElement(DateTimePickerElement $rangeFromElement)
     {
         $this->rangeFromElement = $rangeFromElement;
+
+        // set min date
+        $this->setOptionMinDate($rangeFromElement->getOptionDefaultDate());
 
         return $this;
     }
@@ -200,7 +215,7 @@ class DateTimePickerElement extends TextSingleLineElement
     }
 
     /**
-     * @param null|string $optionMaxDate
+     * @param \DateTime $optionMaxDate
      *
      * @return DateTimePickerElement
      */
@@ -212,7 +227,7 @@ class DateTimePickerElement extends TextSingleLineElement
     }
 
     /**
-     * @param string $optionMinDate
+     * @param \DateTime $optionMinDate
      *
      * @return DateTimePickerElement
      */
@@ -349,18 +364,6 @@ class DateTimePickerElement extends TextSingleLineElement
     }
 
     /**
-     * @param \DateTime $optionDefaultDate
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptionDefaultDate(\DateTime $optionDefaultDate)
-    {
-        $this->optionDefaultDate = $optionDefaultDate;
-
-        return $this;
-    }
-
-    /**
      * @return void
      */
     public function setup()
@@ -398,11 +401,8 @@ class DateTimePickerElement extends TextSingleLineElement
             'useSeconds'        => $this->getOptionUseSeconds(),
             'useCurrent'        => $this->getOptionUseCurrent(),
             'minuteStepping'    => $this->getOptionMinuteStepping(),
-            'minDate'           => $this->getOptionMinDate(),
-            'maxDate'           => $this->getOptionMaxDate(),
             'showToday'         => $this->getOptionShowToday(),
             'language'          => $this->getOptionLanguage(),
-            'defaultDate'       => $this->getOptionDefaultDate(),
             'disabledDates'     => $this->getOptionDisabledDates(),
             'enabledDates'      => $this->getOptionEnabledDates(),
             'icons'             => $this->getOptionIcons(),
@@ -411,20 +411,24 @@ class DateTimePickerElement extends TextSingleLineElement
             'dayOfWeekDisabled' => $this->getOptionDaysOfWeekDisabled(),
         ];
 
-        return json_encode($options);
-    }
+        // handle dates
+        $dates = [
+            'minDate'     => $this->getOptionMinDate(),
+            'maxDate'     => $this->getOptionMaxDate(),
+            'defaultDate' => $this->getOptionDefaultDate(),
+        ];
 
-    /**
-     * @return \DateTime|null
-     */
-    private function getOptionDefaultDate()
-    {
-        if ($this->optionDefaultDate instanceof \DateTime)
+        foreach ($dates as $k => $v)
         {
-            return 'new Date(' . $this->optionDefaultDate->format('Y') . ', ' . ($this->optionDefaultDate->format('m') - 1) . ', ' . $this->optionDefaultDate->format('d') . ')';
+            if ($v instanceof \DateTime)
+            {
+                $dates[$k] = 'new Date(' . $v->format('Y') . ', ' . ($v->format('m') - 1) . ', ' . $v->format('d') . ')';
+            }
         }
 
-        return null;
+        $options = array_merge($dates, $options);
+
+        return json_encode($options);
     }
 
     /**
@@ -468,7 +472,27 @@ class DateTimePickerElement extends TextSingleLineElement
     }
 
     /**
-     * @return null|string
+     * @return \DateTime|null
+     */
+    private function getOptionDefaultDate()
+    {
+        return $this->optionDefaultDate;
+    }
+
+    /**
+     * @param \DateTime $optionDefaultDate
+     *
+     * @return DateTimePickerElement
+     */
+    private function setOptionDefaultDate(\DateTime $optionDefaultDate)
+    {
+        $this->optionDefaultDate = $optionDefaultDate;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
      */
     private function getOptionMaxDate()
     {
@@ -476,7 +500,7 @@ class DateTimePickerElement extends TextSingleLineElement
     }
 
     /**
-     * @return string
+     * @return \DateTime|null
      */
     private function getOptionMinDate()
     {
