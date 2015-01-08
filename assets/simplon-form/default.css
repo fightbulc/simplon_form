@@ -1,40 +1,30 @@
-body
-{
-    margin-top: 30px;
-}
-
-fieldset.group-separator
+.simplon-form fieldset.group-separator
 {
     padding-bottom: 12px;
     margin-bottom: 25px;
     border-bottom: 1px dashed #CCC;
 }
 
-fieldset.group-separator:last-of-type
+.simplon-form fieldset.group-separator:last-of-type
 {
     margin: 0;
     border: 0;
     padding: 0;
 }
 
-fieldset.group-separator ul
+.simplon-form fieldset.group-separator ul
 {
     margin: 0;
 }
 
-ul
+.simplon-form ul
 {
     padding-top: 5px;
 }
 
-label.checkbox,
-label.radio
+.simplon-form label.checkbox,
+.simplon-form label.radio
 {
     margin: 0;
     padding: 0 0 0 20px;
-}
-
-form.simplon-form
-{
-    display: none;
 }

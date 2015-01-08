@@ -14,7 +14,62 @@ class DateTimePickerElement extends TextSingleLineElement
     /**
      * @var string
      */
-    protected $elementHtml = '<div class=":hasError input-group date"><input type="text" class=":class" name=":id" id=":id" value=":value" placeholder=":placeholder"><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>';
+    protected $elementInlineHtml = '<div id=":id" class="rd-inline"><input type="hidden" name=":id" id=":id_value" value=":value"></div>';
+
+    /**
+     * @var \DateTime
+     */
+    protected $minDate;
+
+    /**
+     * @var \DateTime
+     */
+    protected $maxDate;
+
+    /**
+     * @var bool
+     */
+    protected $hasDate = true;
+
+    /**
+     * @var bool
+     */
+    protected $hasTime = true;
+
+    /**
+     * @var int
+     */
+    protected $numberOfVisibleMonths = 1;
+
+    /**
+     * @var int
+     */
+    protected $weeksStartingDay = 1;
+
+    /**
+     * @var string
+     */
+    protected $dateValidatorCode = 'return true;';
+
+    /**
+     * @var string
+     */
+    protected $formatDate = 'YYYY-MM-DD';
+
+    /**
+     * @var string
+     */
+    protected $formatTime = 'HH:mm';
+
+    /**
+     * @var bool
+     */
+    protected $useInline = false;
+
+    /**
+     * @var DateTimePickerElement
+     */
+    protected $rangeToElement;
 
     /**
      * @var DateTimePickerElement
@@ -22,121 +77,111 @@ class DateTimePickerElement extends TextSingleLineElement
     protected $rangeFromElement;
 
     /**
-     * @var bool
-     */
-    protected $optionPickDate = true;
-
-    /**
-     * @var bool
-     */
-    protected $optionPickTime = true;
-
-    /**
-     * @var bool
-     */
-    protected $optionUseMinutes = true;
-
-    /**
-     * @var bool
-     */
-    protected $optionUseSeconds = true;
-
-    /**
-     * @var bool
-     */
-    protected $optionUseCurrent = true;
-
-    /**
-     * @var int
-     */
-    protected $optionMinuteStepping = 1;
-
-    /**
-     * @var \DateTime|null
-     */
-    protected $optionMinDate = null;
-
-    /**
-     * @var \DateTime|null
-     */
-    protected $optionMaxDate = null;
-
-    /**
-     * @var \DateTime|null
-     */
-    protected $optionDefaultDate = null;
-
-    /**
-     * @var bool
-     */
-    protected $optionShowToday = true;
-
-    /**
-     * @var string
-     */
-    protected $optionLanguage = 'en_GB';
-
-    /**
-     * @var array
-     */
-    protected $optionDisabledDates = []; // an array of dates that cannot be selected
-
-    /**
-     * @var array
-     */
-    protected $optionEnabledDates = []; // an array of dates that can be selected
-
-    /**
-     * @var array
-     */
-    protected $optionIcons = [
-        'time' => 'glyphicon glyphicon-time',
-        'date' => 'glyphicon glyphicon-calendar',
-        'up'   => 'glyphicon glyphicon-chevron-up',
-        'down' => 'glyphicon glyphicon-chevron-down',
-    ];
-
-    /**
-     * @var bool
-     */
-    protected $optionUseStrictValidation = false;
-
-    /**
-     * @var bool
-     */
-    protected $optionSideBySide = false;
-
-    /**
-     * @var array
-     */
-    protected $optionDaysOfWeekDisabled = [];
-
-    /**
-     * @param \DateTime $value
+     * @param boolean $hasDate
      *
-     * @return static
+     * @return DateTimePickerElement
      */
-    public function setValue($value)
+    public function setHasDate($hasDate)
     {
-        $this->setOptionDefaultDate($value);
+        $this->hasDate = $hasDate === true;
 
         return $this;
     }
 
     /**
+     * @param boolean $hasTime
+     *
      * @return DateTimePickerElement
      */
-    protected function getRangeFromElement()
+    public function setHasTime($hasTime)
     {
-        return $this->rangeFromElement;
+        $this->hasTime = $hasTime === true;
+
+        return $this;
     }
 
     /**
-     * @return bool
+     * @param \DateTime $maxDate
+     *
+     * @return DateTimePickerElement
      */
-    protected function hasRangeFromElement()
+    public function setMaxDate(\DateTime $maxDate)
     {
-        return $this->getRangeFromElement() instanceof DateTimePickerElement;
+        $this->maxDate = $maxDate;
+
+        return $this;
+    }
+
+    /**
+     * @param \DateTime $minDate
+     *
+     * @return DateTimePickerElement
+     */
+    public function setMinDate(\DateTime $minDate)
+    {
+        $this->minDate = $minDate;
+
+        return $this;
+    }
+
+    /**
+     * @param int $numberOfVisibleMonths
+     *
+     * @return DateTimePickerElement
+     */
+    public function setNumberOfVisibleMonths($numberOfVisibleMonths)
+    {
+        $this->numberOfVisibleMonths = $numberOfVisibleMonths;
+
+        return $this;
+    }
+
+    /**
+     * @param int $weeksStartingDay
+     *
+     * @return DateTimePickerElement
+     */
+    public function setWeeksStartingDay($weeksStartingDay)
+    {
+        $this->weeksStartingDay = $weeksStartingDay;
+
+        return $this;
+    }
+
+    /**
+     * @param string $dateValidatorCode
+     *
+     * @return DateTimePickerElement
+     */
+    public function setDateValidatorCode($dateValidatorCode)
+    {
+        $this->dateValidatorCode = $dateValidatorCode;
+
+        return $this;
+    }
+
+    /**
+     * @param boolean $useInline
+     *
+     * @return DateTimePickerElement
+     */
+    public function setUseInline($useInline)
+    {
+        $this->useInline = $useInline === true;
+
+        return $this;
+    }
+
+    /**
+     * @param DateTimePickerElement $rangeToElement
+     *
+     * @return DateTimePickerElement
+     */
+    public function setRangeToElement(DateTimePickerElement $rangeToElement)
+    {
+        $this->rangeToElement = $rangeToElement;
+
+        return $this;
     }
 
     /**
@@ -148,219 +193,38 @@ class DateTimePickerElement extends TextSingleLineElement
     {
         $this->rangeFromElement = $rangeFromElement;
 
-        // set min date
-        $this->setOptionMinDate($rangeFromElement->getOptionDefaultDate());
+        // cross reference
+        $rangeFromElement->setRangeToElement($this);
 
         return $this;
     }
 
     /**
-     * @param array $optionDaysOfWeekDisabled
+     * @param \DateTime $value
      *
      * @return DateTimePickerElement
      */
-    public function setOptionDaysOfWeekDisabled($optionDaysOfWeekDisabled)
+    public function setValue($value)
     {
-        $this->optionDaysOfWeekDisabled = $optionDaysOfWeekDisabled;
+        if ($value instanceof \DateTime)
+        {
+            parent::setValue($value->format('c'));
+        }
 
         return $this;
     }
 
     /**
-     * @param array $optionDisabledDates
-     *
-     * @return DateTimePickerElement
+     * @return bool|mixed
      */
-    public function setOptionDisabledDates($optionDisabledDates)
+    public function getPostValue()
     {
-        $this->optionDisabledDates = $optionDisabledDates;
+        if ($this->getUseInline() === true && isset($_POST[$this->getId()]))
+        {
+            return $_POST[$this->getId()];
+        }
 
-        return $this;
-    }
-
-    /**
-     * @param array $optionEnabledDates
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptionEnabledDates($optionEnabledDates)
-    {
-        $this->optionEnabledDates = $optionEnabledDates;
-
-        return $this;
-    }
-
-    /**
-     * @param array $optionIcons
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptionIcons($optionIcons)
-    {
-        $this->optionIcons = $optionIcons;
-
-        return $this;
-    }
-
-    /**
-     * @param string $optionLanguage
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptionLanguage($optionLanguage)
-    {
-        $this->optionLanguage = $optionLanguage;
-
-        return $this;
-    }
-
-    /**
-     * @param \DateTime $optionMaxDate
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptionMaxDate($optionMaxDate)
-    {
-        $this->optionMaxDate = $optionMaxDate;
-
-        return $this;
-    }
-
-    /**
-     * @param \DateTime $optionMinDate
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptionMinDate($optionMinDate)
-    {
-        $this->optionMinDate = $optionMinDate;
-
-        return $this;
-    }
-
-    /**
-     * @param int $optionMinuteStepping
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptionMinuteStepping($optionMinuteStepping)
-    {
-        $this->optionMinuteStepping = $optionMinuteStepping;
-
-        return $this;
-    }
-
-    /**
-     * @param boolean $optionPickDate
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptionPickDate($optionPickDate)
-    {
-        $this->optionPickDate = $optionPickDate;
-
-        return $this;
-    }
-
-    /**
-     * @param boolean $optionPickTime
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptionPickTime($optionPickTime)
-    {
-        $this->optionPickTime = $optionPickTime;
-
-        // adjust time options
-        $this
-            ->setOptionUseMinutes($optionPickTime)
-            ->setOptionUseSeconds($optionPickTime);
-
-        return $this;
-    }
-
-    /**
-     * @param array $options
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptions($options)
-    {
-        $this->options = $options;
-
-        return $this;
-    }
-
-    /**
-     * @param boolean $optionShowToday
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptionShowToday($optionShowToday)
-    {
-        $this->optionShowToday = $optionShowToday;
-
-        return $this;
-    }
-
-    /**
-     * @param boolean $optionSideBySide
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptionSideBySide($optionSideBySide)
-    {
-        $this->optionSideBySide = $optionSideBySide;
-
-        return $this;
-    }
-
-    /**
-     * @param boolean $optionUseCurrent
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptionUseCurrent($optionUseCurrent)
-    {
-        $this->optionUseCurrent = $optionUseCurrent;
-
-        return $this;
-    }
-
-    /**
-     * @param boolean $optionUseMinutes
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptionUseMinutes($optionUseMinutes)
-    {
-        $this->optionUseMinutes = $optionUseMinutes;
-
-        return $this;
-    }
-
-    /**
-     * @param boolean $optionUseSeconds
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptionUseSeconds($optionUseSeconds)
-    {
-        $this->optionUseSeconds = $optionUseSeconds;
-
-        return $this;
-    }
-
-    /**
-     * @param boolean $optionUseStrictValidation
-     *
-     * @return DateTimePickerElement
-     */
-    public function setOptionUseStrictValidation($optionUseStrictValidation)
-    {
-        $this->optionUseStrictValidation = $optionUseStrictValidation;
-
-        return $this;
+        return parent::getPostValue();
     }
 
     /**
@@ -370,212 +234,157 @@ class DateTimePickerElement extends TextSingleLineElement
     {
         // required assets
         $this->addAssetFile('moment-js-2.8.3/moment-with-locales.min.js');
-        $this->addAssetFile('bootstrap-datetimepicker-3.1.3/bootstrap-datetimepicker.min.css');
-        $this->addAssetFile('bootstrap-datetimepicker-3.1.3/bootstrap-datetimepicker.min.js');
+        $this->addAssetFile('rome-1.2.3/dist/rome.standalone.min.js');
+        $this->addAssetFile('rome-1.2.3/dist/rome-custom.css');
 
-        // init field
-        $json = $this->getOptionsAsJson();
-        $json = preg_replace('/"new Date\((\d+), (\d+), (\d+), (\d+), (\d+), (\d+)\)"/i', 'new Date(\\1, \\2, \\3, \\4, \\5, \\6)', $json);
-        $this->addAssetInline("$('#{$this->getId()}').datetimepicker({$json})");
-
-        if ($this->hasRangeFromElement() === true)
-        {
-            $fromId = $this->getRangeFromElement()->getId();
-            $toId = $this->getId();
-
-            // handle range conditions
-            $this->addAssetInline("$('#{$fromId}').on('dp.change', function (e) { $('#{$toId}').data('DateTimePicker').setMinDate(e.date); })");
-            $this->addAssetInline("$('#{$toId}').on('dp.change', function (e) { $('#{$fromId}').data('DateTimePicker').setMaxDate(e.date); })");
-        }
-    }
-
-    /**
-     * @return string
-     */
-    private function getOptionsAsJson()
-    {
+        // options
         $options = [
-            'pickDate'          => $this->getOptionPickDate(),
-            'pickTime'          => $this->getOptionPickTime(),
-            'useMinutes'        => $this->getOptionUseMinutes(),
-            'useSeconds'        => $this->getOptionUseSeconds(),
-            'useCurrent'        => $this->getOptionUseCurrent(),
-            'minuteStepping'    => $this->getOptionMinuteStepping(),
-            'showToday'         => $this->getOptionShowToday(),
-            'language'          => $this->getOptionLanguage(),
-            'disabledDates'     => $this->getOptionDisabledDates(),
-            'enabledDates'      => $this->getOptionEnabledDates(),
-            'icons'             => $this->getOptionIcons(),
-            'useStrict'         => $this->getOptionUseStrictValidation(),
-            'sideBySide'        => $this->getOptionSideBySide(),
-            'dayOfWeekDisabled' => $this->getOptionDaysOfWeekDisabled(),
+            'min'              => '"' . $this->getMinDate() . '"',
+            'max'              => '"' . $this->getMaxDate() . '"',
+            'date'             => $this->getHasDate() === true ? 'true' : 'false',
+            'time'             => $this->getHasTime() === true ? 'true' : 'false',
+            'monthsInCalendar' => $this->getNumberOfVisibleMonths(),
+            'weekStart'        => $this->getWeeksStartingDay(),
+            'dateValidator'    => $this->getDateValidatorCode(),
+            'inputFormat'      => '"' . $this->getFormat() . '"',
+            'initialValue'     => '"' . $this->getValue() . '"',
         ];
 
-        // handle dates
-        $dates = [
-            'minDate'     => $this->getOptionMinDate(),
-            'maxDate'     => $this->getOptionMaxDate(),
-            'defaultDate' => $this->getOptionDefaultDate(),
-        ];
+        // render options as JS object
+        $json = [];
 
-        foreach ($dates as $k => $v)
+        foreach ($options as $k => $v)
         {
-            if ($v instanceof \DateTime)
-            {
-                $dates[$k] = 'new Date(' . $v->format('Y') . ', ' . ($v->format('m') - 1) . ', ' . $v->format('d') . ', ' . $v->format('H') . ', ' . $v->format('i') . ', ' . $v->format('s') . ')';
-            }
+            $json[$k] = $k . ': ' . $v;
         }
 
-        $options = array_merge($dates, $options);
+        // load widget
+        $this->addAssetInline('rome(' . $this->getId() . ', {' . join(', ', $json) . '})');
 
-        return json_encode($options);
+        // handle inline
+        if ($this->getUseInline() === true)
+        {
+            $this->elementHtml = $this->elementInlineHtml;
+            $this->addAssetInline('rome(' . $this->getId() . ').on("data", function (value) { document.getElementById("' . $this->getId() . '_value").value = value; })');
+        }
     }
 
     /**
-     * @return array
+     * @return boolean
      */
-    private function getOptionDaysOfWeekDisabled()
+    private function getHasDate()
     {
-        return $this->optionDaysOfWeekDisabled;
+        return $this->hasDate;
     }
 
     /**
-     * @return array
+     * @return boolean
      */
-    private function getOptionDisabledDates()
+    private function getHasTime()
     {
-        return $this->optionDisabledDates;
+        return $this->hasTime;
     }
 
     /**
-     * @return array
+     * @return string|null
      */
-    private function getOptionEnabledDates()
+    private function getMaxDate()
     {
-        return $this->optionEnabledDates;
+        if ($this->maxDate instanceof \DateTime)
+        {
+            return $this->maxDate->format('c');
+        }
+
+        return null;
     }
 
     /**
-     * @return array
+     * @return string|null
      */
-    private function getOptionIcons()
+    private function getMinDate()
     {
-        return $this->optionIcons;
-    }
+        if ($this->minDate instanceof \DateTime)
+        {
+            return $this->minDate->format('c');
+        }
 
-    /**
-     * @return string
-     */
-    private function getOptionLanguage()
-    {
-        return $this->optionLanguage;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    private function getOptionDefaultDate()
-    {
-        return $this->optionDefaultDate;
-    }
-
-    /**
-     * @param \DateTime $optionDefaultDate
-     *
-     * @return DateTimePickerElement
-     */
-    private function setOptionDefaultDate(\DateTime $optionDefaultDate)
-    {
-        $this->optionDefaultDate = $optionDefaultDate;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    private function getOptionMaxDate()
-    {
-        return $this->optionMaxDate;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    private function getOptionMinDate()
-    {
-        return $this->optionMinDate;
+        return null;
     }
 
     /**
      * @return int
      */
-    private function getOptionMinuteStepping()
+    private function getNumberOfVisibleMonths()
     {
-        return $this->optionMinuteStepping;
+        return $this->numberOfVisibleMonths;
+    }
+
+    /**
+     * @return int
+     */
+    private function getWeeksStartingDay()
+    {
+        return $this->weeksStartingDay;
+    }
+
+    /**
+     * @return string
+     */
+    private function getDateValidatorCode()
+    {
+        if ($this->getRangeToElement() !== null)
+        {
+            return 'rome.val.beforeEq(' . $this->getRangeToElement()->getId() . ')';
+        }
+        elseif ($this->getRangeFromElement() !== null)
+        {
+            return 'rome.val.afterEq(' . $this->getRangeFromElement()->getId() . ')';
+        }
+
+        return 'function(d){' . $this->dateValidatorCode . '}';
+    }
+
+    /**
+     * @return string
+     */
+    private function getFormat()
+    {
+        $format = [];
+
+        if ($this->getHasDate() === true)
+        {
+            $format[] = $this->formatDate;
+        }
+
+        if ($this->getHasTime() === true)
+        {
+            $format[] = $this->formatTime;
+        }
+
+        return join(' ', $format);
     }
 
     /**
      * @return boolean
      */
-    private function getOptionPickDate()
+    private function getUseInline()
     {
-        return $this->optionPickDate;
+        return $this->useInline;
     }
 
     /**
-     * @return boolean
+     * @return DateTimePickerElement
      */
-    private function getOptionPickTime()
+    private function getRangeToElement()
     {
-        return $this->optionPickTime;
+        return $this->rangeToElement;
     }
 
     /**
-     * @return boolean
+     * @return DateTimePickerElement
      */
-    private function getOptionShowToday()
+    private function getRangeFromElement()
     {
-        return $this->optionShowToday;
-    }
-
-    /**
-     * @return boolean
-     */
-    private function getOptionSideBySide()
-    {
-        return $this->optionSideBySide;
-    }
-
-    /**
-     * @return boolean
-     */
-    private function getOptionUseCurrent()
-    {
-        return $this->optionUseCurrent;
-    }
-
-    /**
-     * @return boolean
-     */
-    private function getOptionUseMinutes()
-    {
-        return $this->optionUseMinutes;
-    }
-
-    /**
-     * @return boolean
-     */
-    private function getOptionUseSeconds()
-    {
-        return $this->optionUseSeconds;
-    }
-
-    /**
-     * @return boolean
-     */
-    private function getOptionUseStrictValidation()
-    {
-        return $this->optionUseStrictValidation;
+        return $this->rangeFromElement;
     }
 }

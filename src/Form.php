@@ -100,10 +100,7 @@ class Form
 
         // set base assets
         $this->addAssetFiles([
-            'bootstrap-3.3.1/css/bootstrap.css',
             'default.css',
-            'jquery-2.1.1/jquery-2.1.1.min.js',
-            'bootstrap-3.3.1/js/bootstrap.min.js',
         ]);
     }
 
@@ -374,14 +371,10 @@ class Form
         // render includes
         $content = $this->renderAssets(['js'], '<script src="{{url}}" type="text/javascript"></script>');
 
-        // let form fade in
-        $this->addAssetInlines(["$('#" . $this->getId() . "').fadeIn()"]);
-
         // domready + inline scripts
-        $jqueryNoConflict = "var jQuerySimplon = $.noConflict(true);\n\n";
         $domReadyFunction = "var DOMReady = function(a,b,c){b=document,c='addEventListener';b[c]?b[c]('DOMContentLoaded',a):window.attachEvent('onload',a)};";
-        $domReadyCallback = "DOMReady(function () {\n(function($){" . join(";\n", $this->getAssetInlines()) . ";})(jQuerySimplon);\n});";
-        $content .= "\n\n<script type=\"text/javascript\">\n\n// SIMPLON FORM - INLINE HANDLINGS\n\n{$jqueryNoConflict}{$domReadyFunction}\n\n{$domReadyCallback}\n\n</script>\n\n";
+        $domReadyCallback = "DOMReady(function () {\n" . join(";\n", $this->getAssetInlines()) . ";\n});";
+        $content .= "\n\n<script type=\"text/javascript\">\n\n// SIMPLON FORM - INLINE HANDLINGS\n\n{$domReadyFunction}\n\n{$domReadyCallback}\n\n</script>\n\n";
 
         return $content;
     }

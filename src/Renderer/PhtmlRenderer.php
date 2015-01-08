@@ -17,7 +17,7 @@ class PhtmlRenderer extends CoreRenderer
      * @param array $customParams
      *
      * @return string
-     * @throws \Simplon\Mustache\MustacheException
+     * @throws \Simplon\Phtml\PhtmlException
      */
     public function render($pathTemplate, array $customParams = [])
     {
