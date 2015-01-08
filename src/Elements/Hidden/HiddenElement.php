@@ -9,5 +9,5 @@ class HiddenElement extends CoreElement
     /**
      * @var string
      */
-    protected $elementHtml = '<input type="hidden" name=":id" value=":value">';
+    protected $elementHtml = '<input type="hidden" name=":name" value=":value">';
 }

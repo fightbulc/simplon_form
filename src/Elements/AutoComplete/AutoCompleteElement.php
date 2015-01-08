@@ -9,7 +9,7 @@ class AutoCompleteElement extends CoreElement
     /**
      * @var string
      */
-    protected $elementHtml = '<div class=":hasError"><input type="text" class="form-control" name=":id" id=":id" value=":value" placeholder=":placeholder" autocomplete="off"></div>';
+    protected $elementHtml = '<div class=":hasError"><input type="text" class="form-control" name=":name" id=":id" value=":value" placeholder=":placeholder" autocomplete="off"></div>';
 
     /**
      * @var string

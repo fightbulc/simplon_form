@@ -15,7 +15,7 @@ abstract class CoreElement implements CoreElementInterface
     /**
      * @var string
      */
-    protected $elementHtml = '<input type="text" class=":class" id=":id" name=":id" value=":value">';
+    protected $elementHtml = '<input type="text" class=":class" id=":id" name=":name" value=":value">';
 
     /**
      * @var string
@@ -86,6 +86,11 @@ abstract class CoreElement implements CoreElementInterface
      * @var string
      */
     protected $errorItemWrapper = 'li';
+
+    /**
+     * @var mixed
+     */
+    protected $arrayKey;
 
     /**
      * @param $elementHtml
@@ -182,9 +187,25 @@ abstract class CoreElement implements CoreElementInterface
     /**
      * @return string
      */
-    public function getId()
+    public function getRawId()
     {
         return (string)$this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->getArrayKey() !== null ? $this->getRawId() . '_' . $this->getArrayKey() : $this->getRawId();
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getArrayKey() !== null ? $this->getRawId() . '[' . $this->getArrayKey() . ']' : $this->getRawId();
     }
 
     /**
@@ -434,9 +455,11 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
+     * @param array $requestData
+     *
      * @return void
      */
-    public function setup()
+    public function setup(array $requestData)
     {
     }
 
@@ -503,6 +526,7 @@ abstract class CoreElement implements CoreElementInterface
     {
         return [
             'id'          => $this->getId(),
+            'name'        => $this->getName(),
             'label'       => $this->getLabel(),
             'value'       => $this->getValue(),
             'class'       => $this->getClassString(),
@@ -534,6 +558,48 @@ abstract class CoreElement implements CoreElementInterface
     public function getAssetInlines()
     {
         return $this->assetInlines;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getArrayKey()
+    {
+        return $this->arrayKey;
+    }
+
+    /**
+     * @param mixed $arrayKey
+     *
+     * @return CoreElement
+     */
+    public function setArrayKey($arrayKey)
+    {
+        $this->arrayKey = $arrayKey;
+
+        return $this;
+    }
+
+    /**
+     * @param array $requestData
+     *
+     * @return CoreElement
+     */
+    public function handleRequestData(array $requestData)
+    {
+        if (isset($requestData[$this->id]))
+        {
+            $value = $requestData[$this->id];
+
+            if ($this->getArrayKey() !== null && isset($requestData[$this->id][$this->getArrayKey()]))
+            {
+                $value = $requestData[$this->id][$this->getArrayKey()];
+            }
+
+            $this->setPostValue($value);
+        }
+
+        return $this;
     }
 
     /**

@@ -14,7 +14,7 @@ class DateTimePickerElement extends TextSingleLineElement
     /**
      * @var string
      */
-    protected $elementInlineHtml = '<div id=":id" class="rd-inline"><input type="hidden" name=":id" id=":id_value" value=":value"></div>';
+    protected $elementInlineHtml = '<div id=":id" class="rd-inline"><input type="hidden" name=":name" id=":id_value" value=":value"></div>';
 
     /**
      * @var \DateTime
@@ -215,27 +215,26 @@ class DateTimePickerElement extends TextSingleLineElement
     }
 
     /**
-     * @return bool|mixed
-     */
-    public function getPostValue()
-    {
-        if ($this->getUseInline() === true && isset($_POST[$this->getId()]))
-        {
-            return $_POST[$this->getId()];
-        }
-
-        return parent::getPostValue();
-    }
-
-    /**
+     * @param array $requestData
+     *
      * @return void
      */
-    public function setup()
+    public function setup(array $requestData)
     {
         // required assets
         $this->addAssetFile('moment-js-2.8.3/moment-with-locales.min.js');
         $this->addAssetFile('rome-1.2.3/dist/rome.standalone.min.js');
         $this->addAssetFile('rome-1.2.3/dist/rome-custom.css');
+
+        // element request value
+        if ($this->getUseInline() === true && isset($requestData[$this->getId()]))
+        {
+            $value = $requestData[$this->getId()];
+        }
+        else
+        {
+            $value = $this->getValue();
+        }
 
         // options
         $options = [
@@ -247,7 +246,7 @@ class DateTimePickerElement extends TextSingleLineElement
             'weekStart'        => $this->getWeeksStartingDay(),
             'dateValidator'    => $this->getDateValidatorCode(),
             'inputFormat'      => '"' . $this->getFormat() . '"',
-            'initialValue'     => '"' . $this->getValue() . '"',
+            'initialValue'     => '"' . $value . '"',
         ];
 
         // render options as JS object

@@ -32,6 +32,11 @@ class Form
     private $acceptCharset = 'utf-8';
 
     /**
+     * @var bool
+     */
+    private $useCsrf = true;
+
+    /**
      * @var string
      */
     private $csrfName;
@@ -95,13 +100,22 @@ class Form
         // set data
         $this->setRequestData($requestData);
 
-        // handle csrf
-        $this->handleCsrf();
-
         // set base assets
         $this->addAssetFiles([
             'default.css',
         ]);
+    }
+
+    /**
+     * @param boolean $useCsrf
+     *
+     * @return Form
+     */
+    public function setUseCsrf($useCsrf)
+    {
+        $this->useCsrf = $useCsrf === true;
+
+        return $this;
     }
 
     /**
@@ -212,7 +226,7 @@ class Form
         $this->elements[] = $element;
 
         // run element setup to initiate assets and whatnot
-        $element->setup();
+        $element->setup($this->getRequestData());
 
         // handle assets
         $this->addAssetFiles($element->getAssetFiles());
@@ -246,7 +260,14 @@ class Form
 
         foreach ($elements as $element)
         {
-            $values[$element->getId()] = $element->getValue();
+            if ($element->getArrayKey() !== null)
+            {
+                $values[$element->getRawId()][$element->getArrayKey()] = $element->getValue();
+            }
+            else
+            {
+                $values[$element->getRawId()] = $element->getValue();
+            }
         }
 
         return $values;
@@ -257,16 +278,16 @@ class Form
      */
     public function isValid()
     {
+        // handle csrf
+        $this->handleCsrf();
+
         if ($this->isSubmitted() && $this->isValid === null)
         {
             // iterate through all elements
             foreach ($this->getElements() as $element)
             {
-                // fill element with submitted value
-                $requestValue = $this->getRequestData($element->getId());
-
-                // set post value
-                $element->setPostValue($requestValue);
+                // element handles request data
+                $element->handleRequestData($this->getRequestData());
 
                 // run through element rules
                 $element->processFilters();
@@ -380,22 +401,10 @@ class Form
     }
 
     /**
-     * @param null|string $key
-     *
-     * @return array|bool
+     * @return array
      */
-    protected function getRequestData($key = null)
+    protected function getRequestData()
     {
-        if ($key !== null)
-        {
-            if (isset($this->requestData[$key]) === true)
-            {
-                return $this->requestData[$key];
-            }
-
-            return false;
-        }
-
         return (array)$this->requestData;
     }
 
@@ -489,12 +498,22 @@ class Form
     }
 
     /**
-     * @return void
+     * @return bool
      */
     private function validateCsrfTokens()
     {
+        if ($this->getUseCsrf() === false)
+        {
+            $this->isValidCsrf = true;
+
+            return true;
+        }
+
+        // --------------------------------------
+
         $process =
             $this->hasRequestData() === true
+            && isset($this->requestData['hide-' . $_SESSION['csrf']['name']])
             && isset($_SESSION['csrf'])
             && isset($_SESSION['csrf']['name'])
             && isset($_SESSION['csrf']['value']);
@@ -502,11 +521,13 @@ class Form
         if ($process)
         {
             // test value
-            if ($_SESSION['csrf']['value'] === $this->getRequestData('hide-' . $_SESSION['csrf']['name']))
+            if ($_SESSION['csrf']['value'] === $this->requestData['hide-' . $_SESSION['csrf']['name']])
             {
                 $this->isValidCsrf = true;
             }
         }
+
+        return true;
     }
 
     /**
@@ -596,7 +617,7 @@ class Form
     {
         return
             $this->hasRequestData() === true // any request data at all?
-            && (int)$this->getRequestData('hide-' . $this->getId()) === 1 // has this form been submitted?
+            && (int)$this->requestData['hide-' . $this->getId()] === 1 // has this form been submitted?
             && $this->isValidCsrf === true; // csrf must match
     }
 
@@ -680,5 +701,13 @@ class Form
     private function getUrlRootAssets()
     {
         return $this->urlRootAssets;
+    }
+
+    /**
+     * @return boolean
+     */
+    private function getUseCsrf()
+    {
+        return $this->useCsrf;
     }
 }

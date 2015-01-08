@@ -14,7 +14,7 @@ class RadioElement extends CoreElement
     /**
      * @var string
      */
-    protected $elementItemHtml = '<label class="radio"><input type="radio" name=":id" id=":id_:value" value=":value" data-toggle="radio":checked> :label</label>';
+    protected $elementItemHtml = '<label class="radio"><input type="radio" name=":name" id=":id_:value" value=":value" data-toggle="radio":checked> :label</label>';
 
     /**
      * @var bool

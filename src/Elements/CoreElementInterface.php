@@ -17,6 +17,8 @@ interface CoreElementInterface
 
     public function setId($id);
 
+    public function getRawId();
+
     public function getId();
 
     public function setLabel($label);
@@ -52,9 +54,11 @@ interface CoreElementInterface
     public function renderErrorMessages();
 
     /**
+     * @param array $requestData
+     *
      * @return void
      */
-    public function setup();
+    public function setup(array $requestData);
 
     /**
      * @return string
@@ -87,4 +91,28 @@ interface CoreElementInterface
      * @return array
      */
     public function getAssetInlines();
+
+    /**
+     * @return string
+     */
+    public function getName();
+
+    /**
+     * @return mixed
+     */
+    public function getArrayKey();
+
+    /**
+     * @param mixed $arrayKey
+     *
+     * @return CoreElement
+     */
+    public function setArrayKey($arrayKey);
+
+    /**
+     * @param array $requestData
+     *
+     * @return CoreElement
+     */
+    public function handleRequestData(array $requestData);
 }
