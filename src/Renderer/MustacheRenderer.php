@@ -15,14 +15,15 @@ class MustacheRenderer extends CoreRenderer
     /**
      * @param string $pathTemplate
      * @param array $customParams
+     * @param array $customParsers
      *
      * @return string
      * @throws \Simplon\Mustache\MustacheException
      */
-    public function render($pathTemplate, array $customParams = [])
+    public function render($pathTemplate, array $customParams = [], array $customParsers = [])
     {
         $params = array_merge($this->getParams(), $customParams);
-        $template = Mustache::renderByFile($pathTemplate, $params);
+        $template = Mustache::renderByFile($pathTemplate, $params, $customParsers);
         $template = $this->form->addFormAndAssetsTags($template);
 
         return $template;
