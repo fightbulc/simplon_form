@@ -28,12 +28,19 @@
 {
     display: inline-block;
     margin-right: 25px;
+}
+
+.rd-inline .rd-month
+{
     width: 100%;
 }
 
 .rd-month-label
 {
-    padding: 1px 0 6px;
+    border-radius: 4px;
+    background: #EEE;
+    padding: 4px;
+    margin-bottom: 4px;
 }
 
 .rd-month:last-child
@@ -44,12 +51,23 @@
 .rd-back,
 .rd-next
 {
+    position: absolute;
     cursor: pointer;
     border: none;
     outline: none;
     background: none;
+    margin: 2px 0 0;
     padding: 0;
-    margin: 0;
+}
+
+.rd-back
+{
+    left: 35px;
+}
+
+.rd-next
+{
+    right: 35px;
 }
 
 .rd-back[disabled],
