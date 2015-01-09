@@ -4,8 +4,9 @@ namespace Simplon\Form\Elements;
 
 /**
  * Interface CoreElementInterface
+ *
  * @package Simplon\Form\Elements
- * @author Tino Ehrich (tino@bigpun.me)
+ * @author  Tino Ehrich (tino@bigpun.me)
  */
 interface CoreElementInterface
 {
@@ -54,11 +55,9 @@ interface CoreElementInterface
     public function renderErrorMessages();
 
     /**
-     * @param array $requestData
-     *
      * @return void
      */
-    public function setup(array $requestData);
+    public function setup();
 
     /**
      * @return string
@@ -114,5 +113,5 @@ interface CoreElementInterface
      *
      * @return CoreElement
      */
-    public function handleRequestData(array $requestData);
+    public function setPostValueByRequestData(array $requestData);
 }

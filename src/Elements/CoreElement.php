@@ -7,8 +7,9 @@ use Simplon\Form\Rules\Core\CoreRuleInterface;
 
 /**
  * CoreElement
+ *
  * @package Simplon\Form\Elements
- * @author Tino Ehrich (tino@bigpun.me)
+ * @author  Tino Ehrich (tino@bigpun.me)
  */
 abstract class CoreElement implements CoreElementInterface
 {
@@ -162,10 +163,9 @@ abstract class CoreElement implements CoreElementInterface
     public function renderDescription()
     {
         $description = $this->getDescription();
-        $template = '<p>:description</p>';
+        $template    = '<p>:description</p>';
 
-        if (empty($description))
-        {
+        if (empty($description)) {
             return null;
         }
 
@@ -385,10 +385,8 @@ abstract class CoreElement implements CoreElementInterface
     {
         $filters = $this->getFilters();
 
-        if (empty($filters) === false)
-        {
-            foreach ($filters as $filterInstance)
-            {
+        if (empty($filters) === false) {
+            foreach ($filters as $filterInstance) {
                 $filterInstance->processFilter($this);
             }
         }
@@ -403,17 +401,14 @@ abstract class CoreElement implements CoreElementInterface
     {
         $rules = $this->getRules();
 
-        if (empty($rules))
-        {
+        if (empty($rules)) {
             return null;
         }
 
-        foreach ($rules as $ruleInstance)
-        {
+        foreach ($rules as $ruleInstance) {
             $isValid = $ruleInstance->isValid($this);
 
-            if ($isValid === false)
-            {
+            if ($isValid === false) {
                 $this->addErrorMessage($ruleInstance->renderErrorMessage($this));
             }
         }
@@ -445,7 +440,7 @@ abstract class CoreElement implements CoreElementInterface
     public function renderErrorMessages()
     {
         $placeholders = [
-            'containerWrapper'    => $this->getErrorContainerWrapper(),
+            'containerWrapper' => $this->getErrorContainerWrapper(),
             'errorMessagesString' => join('', $this->getErrorMessages()),
         ];
 
@@ -455,11 +450,9 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
-     * @param array $requestData
-     *
      * @return void
      */
-    public function setup(array $requestData)
+    public function setup()
     {
     }
 
@@ -477,14 +470,13 @@ abstract class CoreElement implements CoreElementInterface
 
     /**
      * @param array $pairs
-     * @param $string
+     * @param       $string
      *
      * @return string
      */
     protected function replaceFieldPlaceholderMany(array $pairs, $string)
     {
-        foreach ($pairs as $tag => $value)
-        {
+        foreach ($pairs as $tag => $value) {
             $string = $this->replaceFieldPlaceholder($tag, $value, $string);
         }
 
@@ -525,11 +517,11 @@ abstract class CoreElement implements CoreElementInterface
     protected function getFieldPlaceholders()
     {
         return [
-            'id'          => $this->getId(),
-            'name'        => $this->getName(),
-            'label'       => $this->getLabel(),
-            'value'       => $this->getValue(),
-            'class'       => $this->getClassString(),
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'label' => $this->getLabel(),
+            'value' => $this->getValue(),
+            'class' => $this->getClassString(),
             'description' => $this->getDescription(),
         ];
     }
@@ -585,14 +577,12 @@ abstract class CoreElement implements CoreElementInterface
      *
      * @return CoreElement
      */
-    public function handleRequestData(array $requestData)
+    public function setPostValueByRequestData(array $requestData)
     {
-        if (isset($requestData[$this->id]))
-        {
+        if (isset($requestData[$this->id])) {
             $value = $requestData[$this->id];
 
-            if ($this->getArrayKey() !== null && isset($requestData[$this->id][$this->getArrayKey()]))
-            {
+            if ($this->getArrayKey() !== null && isset($requestData[$this->id][$this->getArrayKey()])) {
                 $value = $requestData[$this->id][$this->getArrayKey()];
             }
 

@@ -215,26 +215,14 @@ class DateTimePickerElement extends TextSingleLineElement
     }
 
     /**
-     * @param array $requestData
-     *
      * @return void
      */
-    public function setup(array $requestData)
+    public function setup()
     {
         // required assets
         $this->addAssetFile('moment-js-2.8.3/moment-with-locales.min.js');
         $this->addAssetFile('rome-1.2.3/dist/rome.standalone.min.js');
         $this->addAssetFile('rome-1.2.3/dist/rome-custom.css');
-
-        // element request value
-        if ($this->getUseInline() === true && isset($requestData[$this->getId()]))
-        {
-            $value = $requestData[$this->getId()];
-        }
-        else
-        {
-            $value = $this->getValue();
-        }
 
         // options
         $options = [
@@ -246,7 +234,7 @@ class DateTimePickerElement extends TextSingleLineElement
             'weekStart'        => $this->getWeeksStartingDay(),
             'dateValidator'    => $this->getDateValidatorCode(),
             'inputFormat'      => '"' . $this->getFormat() . '"',
-            'initialValue'     => '"' . $value . '"',
+            'initialValue'     => '"' . $this->getValue() . '"',
         ];
 
         // render options as JS object

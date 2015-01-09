@@ -219,18 +219,22 @@ class Form
     /**
      * @param CoreElementInterface $element
      *
-     * @return $this
+     * @return Form
      */
     public function addElement(CoreElementInterface $element)
     {
-        $this->elements[] = $element;
+        // element knows how to read/set its request value
+        $element->setPostValueByRequestData($this->getRequestData());
 
         // run element setup to initiate assets and whatnot
-        $element->setup($this->getRequestData());
+        $element->setup();
 
         // handle assets
         $this->addAssetFiles($element->getAssetFiles());
         $this->addAssetInlines($element->getAssetInlines());
+
+        // collect elements
+        $this->elements[] = $element;
 
         return $this;
     }
@@ -286,9 +290,6 @@ class Form
             // iterate through all elements
             foreach ($this->getElements() as $element)
             {
-                // element handles request data
-                $element->handleRequestData($this->getRequestData());
-
                 // run through element rules
                 $element->processFilters();
 
