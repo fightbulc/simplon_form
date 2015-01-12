@@ -26,6 +26,11 @@ abstract class CoreElement implements CoreElementInterface
     /**
      * @var string
      */
+    protected $name;
+
+    /**
+     * @var string
+     */
     protected $label;
 
     /**
@@ -87,11 +92,6 @@ abstract class CoreElement implements CoreElementInterface
      * @var string
      */
     protected $errorItemWrapper = 'li';
-
-    /**
-     * @var mixed
-     */
-    protected $arrayKey;
 
     /**
      * @param $elementHtml
@@ -188,17 +188,21 @@ abstract class CoreElement implements CoreElementInterface
     /**
      * @return string
      */
-    public function getRawId()
+    public function getId()
     {
-        return (string)$this->id;
+        return $this->id;
     }
 
     /**
-     * @return string
+     * @param $name
+     *
+     * @return static
      */
-    public function getId()
+    public function setName($name)
     {
-        return $this->getArrayKey() !== null ? $this->getRawId() . '_' . $this->getArrayKey() : $this->getRawId();
+        $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -206,7 +210,7 @@ abstract class CoreElement implements CoreElementInterface
      */
     public function getName()
     {
-        return $this->getArrayKey() !== null ? $this->getRawId() . '[' . $this->getArrayKey() . ']' : $this->getRawId();
+        return $this->name !== null ? $this->name : $this->id;
     }
 
     /**
@@ -524,7 +528,7 @@ abstract class CoreElement implements CoreElementInterface
     protected function getFieldPlaceholders()
     {
         return [
-            'id'          => $this->getId(),
+            'id'          => $this->getAttrId(),
             'name'        => $this->getName(),
             'label'       => $this->getLabel(),
             'value'       => $this->getValue(),
@@ -560,26 +564,6 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
-     * @return mixed
-     */
-    public function getArrayKey()
-    {
-        return $this->arrayKey;
-    }
-
-    /**
-     * @param mixed $arrayKey
-     *
-     * @return CoreElement
-     */
-    public function setArrayKey($arrayKey)
-    {
-        $this->arrayKey = $arrayKey;
-
-        return $this;
-    }
-
-    /**
      * @param array $requestData
      *
      * @return CoreElement
@@ -590,15 +574,50 @@ abstract class CoreElement implements CoreElementInterface
         {
             $value = $requestData[$this->id];
 
-            if ($this->getArrayKey() !== null && isset($requestData[$this->id][$this->getArrayKey()]))
+            if (is_array($value) === true)
             {
-                $value = $requestData[$this->id][$this->getArrayKey()];
+                $value = null;
             }
 
             $this->setPostValue($value);
         }
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        $isValid = true;
+
+        // run through element rules
+        $this->processFilters();
+
+        // run through element rules
+        $this->processRules();
+
+        // mark elements validation state
+        switch ($this->hasError())
+        {
+            case true:
+                // visual error indication
+                $this->setElementHtml(str_replace(':hasError', 'has-error', $this->getElementHtml()));
+                $isValid = false;
+                break;
+
+            case false:
+                // visual success indication
+                $this->setElementHtml(str_replace(':hasError', 'has-success', $this->getElementHtml()));
+                break;
+
+            default:
+                // remove visual error indication
+                $this->setElementHtml(str_replace(':hasError', '', $this->getElementHtml()));
+        }
+
+        return $isValid;
     }
 
     /**
@@ -623,5 +642,19 @@ abstract class CoreElement implements CoreElementInterface
         $this->assetInlines[] = trim($inline);
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getAttrId()
+    {
+        if (strpos($this->getName(), '[') !== false)
+        {
+            // transform e.g. key[en] => key_en
+            return str_replace(']', '', str_replace('[', '_', $this->getName()));
+        }
+
+        return $this->getName();
     }
 }

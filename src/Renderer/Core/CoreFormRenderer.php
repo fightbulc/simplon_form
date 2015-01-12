@@ -5,11 +5,11 @@ namespace Simplon\Form\Renderer\Core;
 use Simplon\Form\Form;
 
 /**
- * CoreRenderer
+ * CoreFormFormRenderer
  * @package Simplon\Form\Renderer\Core
  * @author Tino Ehrich (tino@bigpun.me)
  */
-abstract class CoreRenderer implements CoreRendererInterface
+abstract class CoreFormRenderer implements CoreFormRendererInterface
 {
     /**
      * @var Form

@@ -2,15 +2,15 @@
 
 namespace Simplon\Form\Renderer;
 
-use Simplon\Form\Renderer\Core\CoreRenderer;
+use Simplon\Form\Renderer\Core\CoreFormRenderer;
 use Simplon\Mustache\Mustache;
 
 /**
- * MustacheRenderer
+ * MustacheFormRenderer
  * @package Simplon\Form\Renderer
  * @author Tino Ehrich (tino@bigpun.me)
  */
-class MustacheRenderer extends CoreRenderer
+class MustacheFormRenderer extends CoreFormRenderer
 {
     /**
      * @param string $pathTemplate

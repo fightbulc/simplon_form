@@ -4,52 +4,94 @@ namespace Simplon\Form\Elements;
 
 /**
  * Interface CoreElementInterface
- *
  * @package Simplon\Form\Elements
- * @author  Tino Ehrich (tino@bigpun.me)
+ * @author Tino Ehrich (tino@bigpun.me)
  */
 interface CoreElementInterface
 {
     public function setElementHtml($elementHtml);
 
+    /**
+     * @return bool
+     */
     public function hasElement();
 
+    /**
+     * @return string
+     */
     public function getElementHtml();
 
     public function setId($id);
 
-    public function getRawId();
-
+    /**
+     * @return string
+     */
     public function getId();
+
+    /**
+     * @param $name
+     *
+     * @return static
+     */
+    public function setName($name);
+
+    /**
+     * @return string
+     */
+    public function getName();
 
     public function setLabel($label);
 
+    /**
+     * @return bool
+     */
     public function hasLabel();
 
+    /**
+     * @return string
+     */
     public function getLabel();
 
     public function setDescription($description);
 
+    /**
+     * @return bool
+     */
     public function hasDescription();
 
+    /**
+     * @return string
+     */
     public function getDescription();
 
     public function setValue($value);
 
+    /**
+     * @return mixed
+     */
     public function getValue();
 
     public function setRules(array $rules);
 
     public function setPostValue($postValue);
 
+    /**
+     * @return mixed
+     */
     public function getPostValue();
 
     public function processFilters();
 
     public function processRules();
 
+    /**
+     * @return bool
+     */
     public function hasError();
 
+    /**
+     * @return string
+     */
     public function getErrorMessages();
 
     public function renderErrorMessages();
@@ -92,26 +134,14 @@ interface CoreElementInterface
     public function getAssetInlines();
 
     /**
-     * @return string
-     */
-    public function getName();
-
-    /**
-     * @return mixed
-     */
-    public function getArrayKey();
-
-    /**
-     * @param mixed $arrayKey
-     *
-     * @return CoreElement
-     */
-    public function setArrayKey($arrayKey);
-
-    /**
      * @param array $requestData
      *
      * @return CoreElement
      */
     public function setPostValueByRequestData(array $requestData);
+
+    /**
+     * @return bool
+     */
+    public function isValid();
 }

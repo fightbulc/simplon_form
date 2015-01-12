@@ -9,7 +9,7 @@ use Simplon\Form\Form;
  * @package Simplon\Form\Renderer\Core
  * @author Tino Ehrich (tino@bigpun.me)
  */
-interface CoreRendererInterface
+interface CoreFormRendererInterface
 {
     /**
      * @param Form $form

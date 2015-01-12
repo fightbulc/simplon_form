@@ -2,15 +2,15 @@
 
 namespace Simplon\Form\Renderer;
 
-use Simplon\Form\Renderer\Core\CoreRenderer;
+use Simplon\Form\Renderer\Core\CoreFormRenderer;
 use Simplon\Phtml\Phtml;
 
 /**
- * PhtmlRenderer
+ * PhtmlFormRenderer
  * @package Simplon\Form\Renderer
  * @author Tino Ehrich (tino@bigpun.me)
  */
-class PhtmlRenderer extends CoreRenderer
+class PhtmlFormRenderer extends CoreFormRenderer
 {
     /**
      * @param string $pathTemplate

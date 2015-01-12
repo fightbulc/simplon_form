@@ -3,6 +3,7 @@
 namespace Simplon\Form;
 
 use Simplon\Form\Elements\CoreElementInterface;
+use Simplon\Form\Interfaces\ArrayElementInterface;
 
 class Form
 {
@@ -60,11 +61,6 @@ class Form
      * @var CoreElementInterface[]
      */
     private $elements = [];
-
-    /**
-     * @var CoreElementInterface[]
-     */
-    private $invalidElements = [];
 
     /**
      * @var string
@@ -259,22 +255,25 @@ class Form
      */
     public function getElementValues()
     {
-        $values = [];
+        $results = [];
         $elements = $this->getElements();
 
         foreach ($elements as $element)
         {
-            if ($element->getArrayKey() !== null)
+            if ($element instanceof ArrayElementInterface)
             {
-                $values[$element->getRawId()][$element->getArrayKey()] = $element->getValue();
+                foreach ($element->getElementValues() as $arrayElementResult)
+                {
+                    $results[$arrayElementResult->getId()][$arrayElementResult->getKey()] = $arrayElementResult->getValue();
+                }
             }
             else
             {
-                $values[$element->getRawId()] = $element->getValue();
+                $results[$element->getId()] = $element->getValue();
             }
         }
 
-        return $values;
+        return $results;
     }
 
     /**
@@ -290,36 +289,13 @@ class Form
             // iterate through all elements
             foreach ($this->getElements() as $element)
             {
-                // run through element rules
-                $element->processFilters();
-
-                // run through element rules
-                $element->processRules();
-
-                // mark elements validation state
-                switch ($element->hasError())
+                if ($element->isValid() === false)
                 {
-                    case true:
-                        // visual error indication
-                        $element->setElementHtml(str_replace(':hasError', 'has-error', $element->getElementHtml()));
-
-                        // cache invalid elements
-                        $this->addInvalidElement($element);
-                        break;
-
-                    case false:
-                        // visual success indication
-                        $element->setElementHtml(str_replace(':hasError', 'has-success', $element->getElementHtml()));
-                        break;
-
-                    default:
-                        // visual error indication
-                        $element->setElementHtml(str_replace(':hasError', '', $element->getElementHtml()));
+                    $this->isValid = false;
                 }
             }
 
-            // cache validation result
-            $this->isValid = $this->hasInvalidElements() === false;
+            $this->isValid = $this->isValid !== false;
         }
 
         return $this->isValid;
@@ -579,36 +555,6 @@ class Form
     private function getCsrfValue()
     {
         return $this->csrfValue;
-    }
-
-    /**
-     * @param CoreElementInterface $elementInstance
-     *
-     * @return $this
-     */
-    private function addInvalidElement(CoreElementInterface $elementInstance)
-    {
-        $this->invalidElements[] = $elementInstance;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    private function getInvalidElements()
-    {
-        return $this->invalidElements;
-    }
-
-    /**
-     * @return bool
-     */
-    private function hasInvalidElements()
-    {
-        $elms = $this->getInvalidElements();
-
-        return empty($elms) === false;
     }
 
     /**

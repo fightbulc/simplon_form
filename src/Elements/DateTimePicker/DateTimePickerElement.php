@@ -6,7 +6,7 @@ use Simplon\Form\Elements\TextSingleLine\TextSingleLineElement;
 
 /**
  * DateTimePickerElement
- * @package Simplon\Form\Elements\DateTimePicker
+ *
  * @author Tino Ehrich (tino@bigpun.me)
  */
 class DateTimePickerElement extends TextSingleLineElement
