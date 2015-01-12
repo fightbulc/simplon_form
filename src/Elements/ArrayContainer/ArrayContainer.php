@@ -6,7 +6,6 @@ use Simplon\Form\Elements\CoreElement;
 use Simplon\Form\Elements\CoreElementInterface;
 use Simplon\Form\Interfaces\ArrayElementInterface;
 use Simplon\Form\Renderer\Core\CoreElementRendererInterface;
-use Simplon\Form\Utils\ArrayElementResults;
 
 /**
  * ArrayElement
@@ -42,7 +41,7 @@ class ArrayContainer extends CoreElement implements ArrayElementInterface
      */
     public function addElement(CoreElementInterface $element)
     {
-        $this->elements[] = $element;
+        $this->elements[$element->getId()] = $element;
 
         return $this;
     }
@@ -54,7 +53,10 @@ class ArrayContainer extends CoreElement implements ArrayElementInterface
      */
     public function setElements(array $elements)
     {
-        $this->elements = $elements;
+        foreach ($elements as $elm)
+        {
+            $this->addElement($elm);
+        }
 
         return $this;
     }
@@ -110,14 +112,24 @@ class ArrayContainer extends CoreElement implements ArrayElementInterface
     {
         foreach ($this->getElements() as $element)
         {
+            $elementValues = [];
+
             if (isset($requestData[$element->getId()]))
             {
                 foreach ($requestData[$element->getId()] as $key => $val)
                 {
                     /** @var CoreElementInterface $elm */
                     $elm = $this->getLoopElements()['byId'][$element->getId()][$key];
+
+                    // apply value to virtual field
                     $elm->setPostValue($val);
+
+                    // cache values for applying it to the original field
+                    $elementValues[$key] = $val;
                 }
+
+                // apply to original field
+                $element->setPostValue($elementValues);
             }
         }
 
@@ -147,26 +159,22 @@ class ArrayContainer extends CoreElement implements ArrayElementInterface
     }
 
     /**
-     * @return ArrayElementResults[]
+     * @return CoreElementInterface[]
      */
     public function getElementValues()
     {
-        $arrayElementResultsMany = [];
+        $elementValues = [];
 
         foreach ($this->getValues() as $value)
         {
-            /** @var CoreElementInterface $element */
-            foreach ($this->getLoopElements()['byVal'][$value] as $element)
+            /** @var CoreElementInterface $elmVirtual */
+            foreach ($this->getLoopElements()['byVal'][$value] as $elmVirtual)
             {
-                $arrayElementResultsMany[] = (new ArrayElementResults())
-                    ->setId($element->getId())
-                    ->setKey($value)
-                    ->setValue($element->getValue())
-                    ->setElement($element);
+                $elementValues[] = $this->getElements()[$elmVirtual->getId()];
             }
         }
 
-        return $arrayElementResultsMany;
+        return $elementValues;
     }
 
     /**

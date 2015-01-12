@@ -2,7 +2,7 @@
 
 namespace Simplon\Form\Interfaces;
 
-use Simplon\Form\Utils\ArrayElementResults;
+use Simplon\Form\Elements\CoreElementInterface;
 
 /**
  * Interface ArrayElementInterface
@@ -12,7 +12,7 @@ use Simplon\Form\Utils\ArrayElementResults;
 interface ArrayElementInterface
 {
     /**
-     * @return ArrayElementResults[]
+     * @return CoreElementInterface[]
      */
     public function getElementValues();
 }

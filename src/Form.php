@@ -13,6 +13,11 @@ class Form
     private $requestData = [];
 
     /**
+     * @var array
+     */
+    private $elementValues = [];
+
+    /**
      * @var string
      */
     private $id = 'simplon-form';
@@ -255,25 +260,28 @@ class Form
      */
     public function getElementValues()
     {
-        $results = [];
-        $elements = $this->getElements();
-
-        foreach ($elements as $element)
+        if (empty($this->elementValues))
         {
-            if ($element instanceof ArrayElementInterface)
+            $elements = $this->getElements();
+
+            foreach ($elements as $element)
             {
-                foreach ($element->getElementValues() as $arrayElementResult)
+                if ($element instanceof ArrayElementInterface)
                 {
-                    $results[$arrayElementResult->getId()][$arrayElementResult->getKey()] = $arrayElementResult->getValue();
+                    foreach ($element->getElementValues() as $arrayElement)
+                    {
+                        $this->elementValues[$arrayElement->getId()] = $arrayElement->getValue();
+                    }
+                }
+                else
+                {
+                    $this->elementValues[$element->getId()] = $element->getValue();
                 }
             }
-            else
-            {
-                $results[$element->getId()] = $element->getValue();
-            }
+
         }
 
-        return $results;
+        return $this->elementValues;
     }
 
     /**
