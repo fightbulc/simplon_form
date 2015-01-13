@@ -27,7 +27,12 @@ class ArrayContainer extends CoreElement implements ArrayElementInterface
     /**
      * @var array
      */
-    protected $values;
+    protected $elementValues;
+
+    /**
+     * @var array
+     */
+    protected $arrayKeys;
 
     /**
      * @var CoreElementRendererInterface
@@ -62,13 +67,13 @@ class ArrayContainer extends CoreElement implements ArrayElementInterface
     }
 
     /**
-     * @param array $values
+     * @param array $arrayKeys
      *
      * @return ArrayContainer
      */
-    public function setValues(array $values)
+    public function setArrayKeys(array $arrayKeys)
     {
-        $this->values = $values;
+        $this->arrayKeys = $arrayKeys;
 
         return $this;
     }
@@ -92,11 +97,11 @@ class ArrayContainer extends CoreElement implements ArrayElementInterface
     {
         $html = [];
 
-        foreach ($this->getValues() as $value)
+        foreach ($this->getArrayKeys() as $key)
         {
             $html[] = $this
                 ->getRenderer()
-                ->setElements($this->getLoopElements()['byVal'][$value])
+                ->setElements($this->getLoopElements()['byKey'][$key])
                 ->render();
         }
 
@@ -143,10 +148,10 @@ class ArrayContainer extends CoreElement implements ArrayElementInterface
     {
         $isValid = true;
 
-        foreach ($this->getValues() as $value)
+        foreach ($this->getArrayKeys() as $key)
         {
             /** @var CoreElementInterface $element */
-            foreach ($this->getLoopElements()['byVal'][$value] as $element)
+            foreach ($this->getLoopElements()['byKey'][$key] as $element)
             {
                 if ($element->isValid() === false)
                 {
@@ -159,22 +164,34 @@ class ArrayContainer extends CoreElement implements ArrayElementInterface
     }
 
     /**
-     * @return CoreElementInterface[]
+     * @param array $elementValues
+     *
+     * @return ArrayContainer
      */
-    public function getElementValues()
+    public function setElementValues(array $elementValues)
     {
-        $elementValues = [];
+        $this->elementValues = $elementValues;
 
-        foreach ($this->getValues() as $value)
+        return $this;
+    }
+
+    /**
+     * @param array $resultContainer
+     *
+     * @return array
+     */
+    public function getElementValues(array $resultContainer = [])
+    {
+        foreach ($this->getArrayKeys() as $key)
         {
             /** @var CoreElementInterface $elmVirtual */
-            foreach ($this->getLoopElements()['byVal'][$value] as $elmVirtual)
+            foreach ($this->getLoopElements()['byKey'][$key] as $elmVirtual)
             {
-                $elementValues[] = $this->getElements()[$elmVirtual->getId()];
+                $resultContainer[$elmVirtual->getId()][$key] = $elmVirtual->getValue();
             }
         }
 
-        return $elementValues;
+        return $resultContainer;
     }
 
     /**
@@ -196,9 +213,9 @@ class ArrayContainer extends CoreElement implements ArrayElementInterface
     /**
      * @return array
      */
-    private function getValues()
+    private function getArrayKeys()
     {
-        return $this->values;
+        return $this->arrayKeys;
     }
 
     /**
@@ -208,22 +225,27 @@ class ArrayContainer extends CoreElement implements ArrayElementInterface
     {
         if ($this->loopElements === null)
         {
-            foreach ($this->getValues() as $value)
+            foreach ($this->getArrayKeys() as $key)
             {
                 foreach ($this->elements as $element)
                 {
                     $elm = clone $element;
 
                     $elm->setName(
-                        $elm->getName() . '[' . $value . ']'
+                        $elm->getName() . '[' . $key . ']'
                     );
 
                     $elm->setLabel(
-                        str_replace('{{key}}', $value, $elm->getLabel())
+                        str_replace('{{key}}', $key, $elm->getLabel())
                     );
 
-                    $this->loopElements['byId'][$element->getId()][$value] = $elm;
-                    $this->loopElements['byVal'][$value][$element->getId()] = $elm;
+                    if (isset($this->elementValues[$elm->getId()][$key]))
+                    {
+                        $elm->setPostValue($this->elementValues[$elm->getId()][$key]);
+                    }
+
+                    $this->loopElements['byId'][$element->getId()][$key] = $elm;
+                    $this->loopElements['byKey'][$key][$element->getId()] = $elm;
                 }
             }
         }

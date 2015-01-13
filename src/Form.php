@@ -268,10 +268,7 @@ class Form
             {
                 if ($element instanceof ArrayElementInterface)
                 {
-                    foreach ($element->getElementValues() as $arrayElement)
-                    {
-                        $this->elementValues[$arrayElement->getId()] = $arrayElement->getValue();
-                    }
+                    $this->elementValues = $element->getElementValues($this->elementValues);
                 }
                 else
                 {

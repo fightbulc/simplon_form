@@ -2,8 +2,6 @@
 
 namespace Simplon\Form\Interfaces;
 
-use Simplon\Form\Elements\CoreElementInterface;
-
 /**
  * Interface ArrayElementInterface
  *
@@ -12,7 +10,9 @@ use Simplon\Form\Elements\CoreElementInterface;
 interface ArrayElementInterface
 {
     /**
-     * @return CoreElementInterface[]
+     * @param array $resultContainer
+     *
+     * @return array
      */
-    public function getElementValues();
+    public function getElementValues(array $resultContainer = []);
 }
