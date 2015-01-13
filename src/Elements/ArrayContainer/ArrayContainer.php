@@ -132,9 +132,6 @@ class ArrayContainer extends CoreElement implements ArrayElementInterface
                     // cache values for applying it to the original field
                     $elementValues[$key] = $val;
                 }
-
-                // apply to original field
-                $element->setPostValue($elementValues);
             }
         }
 
