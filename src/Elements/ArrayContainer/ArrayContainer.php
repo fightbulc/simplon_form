@@ -102,7 +102,7 @@ class ArrayContainer extends CoreElement implements ArrayElementInterface
             $html[] = $this
                 ->getRenderer()
                 ->setElements($this->getLoopElements()['byKey'][$key])
-                ->render();
+                ->render(['key' => $key]);
         }
 
         return join('', $html);
