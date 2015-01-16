@@ -221,8 +221,8 @@ class DateTimePickerElement extends TextSingleLineElement
     {
         // required assets
         $this->addAssetFile('moment-js-2.8.3/moment-with-locales.min.js');
-        $this->addAssetFile('rome-1.2.3/dist/rome.standalone.min.js');
-        $this->addAssetFile('rome-1.2.3/dist/rome-custom.css');
+        $this->addAssetFile('rome-1.2.3/live/rome.standalone.min.js');
+        $this->addAssetFile('rome-1.2.3/live/rome-custom.css');
 
         // options
         $options = [
