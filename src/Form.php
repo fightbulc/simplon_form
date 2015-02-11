@@ -569,7 +569,7 @@ class Form
     {
         return
             $this->hasRequestData() === true // any request data at all?
-            && (int)$this->requestData['hide-' . $this->getId()] === 1 // has this form been submitted?
+            && isset($this->requestData['hide-' . $this->getId()]) // has this form been submitted?
             && $this->isValidCsrf === true; // csrf must match
     }
 
