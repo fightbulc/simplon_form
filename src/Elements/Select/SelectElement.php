@@ -60,23 +60,6 @@ class SelectElement extends CoreElement
     }
 
     /**
-     * @param $value
-     * @param $label
-     * @param $selectedValue
-     *
-     * @return string
-     */
-    protected function renderElementOptionsHtml($value, $label, $selectedValue = false)
-    {
-        $tmpl = $this->getElementOptionsHtml();
-        $tmpl = $this->replaceFieldPlaceholder('value', $value, $tmpl);
-        $tmpl = $this->replaceFieldPlaceholder('label', $label, $tmpl);
-        $tmpl = $this->replaceFieldPlaceholder('selected', $selectedValue === true ? ' selected' : null, $tmpl);
-
-        return $tmpl;
-    }
-
-    /**
      * @param array $options
      *
      * @return $this
@@ -88,12 +71,49 @@ class SelectElement extends CoreElement
         {
             $newOptions = [];
 
-            foreach ($options as $option)
+            $assignKey = function (array $options, $key)
             {
-                $newOptions[$option] = $option;
+                $options[$key] = $key;
+
+                return $options;
+            };
+
+            // handle drop downs with optgroups
+            if ($this->hasOptGroup($options) === true)
+            {
+                $newOptions = [
+                    'optgroups' => [],
+                ];
+
+                foreach ($options['optgroups'] as $optGroupKey => $optGroupValues)
+                {
+                    $newOptions['optgroups'][$optGroupKey] = [
+                        'label'   => $optGroupValues['label'],
+                        'options' => [],
+                    ];
+
+                    foreach ($optGroupValues['options'] as $optGroupOptionValue)
+                    {
+                        $newOptions['optgroups'][$optGroupKey]['options'] = $assignKey(
+                            $newOptions['optgroups'][$optGroupKey]['options'],
+                            $optGroupOptionValue
+                        );
+                    }
+                }
+
+                $options = $newOptions;
             }
 
-            $options = $newOptions;
+            // handle normal drop downs
+            else
+            {
+                foreach ($options as $option)
+                {
+                    $newOptions = $assignKey($newOptions, $option);
+                }
+
+                $options = $newOptions;
+            }
         }
 
         $this->options = $options;
@@ -127,19 +147,6 @@ class SelectElement extends CoreElement
     public function getPlaceholder()
     {
         return $this->placeholder;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getFieldPlaceholders()
-    {
-        $coreFieldPlaceholders = parent::getFieldPlaceholders();
-
-        // add options
-        $coreFieldPlaceholders['options'] = $this->getRenderedOptions();
-
-        return $coreFieldPlaceholders;
     }
 
     /**
@@ -237,6 +244,58 @@ class SelectElement extends CoreElement
     }
 
     /**
+     * @return string
+     */
+    public function renderErrorMessages()
+    {
+        $messages = parent::renderErrorMessages();
+
+        $messages = str_replace('rule-error-messages', 'rule-error-messages rule-error-messages-select', $messages);
+
+        return $messages;
+    }
+
+    /**
+     * @param array $options
+     *
+     * @return bool
+     */
+    protected function hasOptGroup(array $options)
+    {
+        return isset($options['optgroups']) === true;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getFieldPlaceholders()
+    {
+        $coreFieldPlaceholders = parent::getFieldPlaceholders();
+
+        // add options
+        $coreFieldPlaceholders['options'] = $this->getRenderedOptions($this->getOptions());
+
+        return $coreFieldPlaceholders;
+    }
+
+    /**
+     * @param $value
+     * @param $label
+     * @param $selectedValue
+     *
+     * @return string
+     */
+    protected function renderElementOptionsHtml($value, $label, $selectedValue = false)
+    {
+        $tmpl = $this->getElementOptionsHtml();
+        $tmpl = $this->replaceFieldPlaceholder('value', $value, $tmpl);
+        $tmpl = $this->replaceFieldPlaceholder('label', $label, $tmpl);
+        $tmpl = $this->replaceFieldPlaceholder('selected', $selectedValue === true ? ' selected' : null, $tmpl);
+
+        return $tmpl;
+    }
+
+    /**
      * @param array $renderedOptions
      *
      * @return array
@@ -256,6 +315,9 @@ class SelectElement extends CoreElement
             }
 
             array_unshift($renderedOptions, $this->renderElementOptionsHtml('', $optionLabel, $isSelected));
+
+            // reset placeholder
+            $this->setPlaceholder(null);
         }
 
         return $renderedOptions;
@@ -284,16 +346,31 @@ class SelectElement extends CoreElement
     }
 
     /**
+     * @param array $options
+     *
      * @return string
      */
-    protected function getRenderedOptions()
+    protected function getRenderedOptions(array $options)
     {
         $currentSelectedValue = $this->getValue();
-
         $renderedOptions = [];
-        $options = $this->getOptions();
 
-        // ----------------------------------
+        // render with optgroups
+        if ($this->hasOptGroup($options) === true)
+        {
+            // render placeholder
+            $renderedOptions = $this->renderPlaceholder($renderedOptions);
+
+            foreach ($options['optgroups'] as $optgroup)
+            {
+                // call yourself to render optgroup options
+                $renderedOptions[] = '<optgroup label="' . $optgroup['label'] . '">' . $this->getRenderedOptions($optgroup['options']) . '</optgroup>';
+            }
+
+            return join("\n", $renderedOptions);
+        }
+
+        // --------------------------------------
 
         // top split
         $topSplitKeys = $this->getTopSplitKeys();
@@ -330,7 +407,7 @@ class SelectElement extends CoreElement
             }
         }
 
-        // ----------------------------------
+        // --------------------------------------
 
         // sort
         $options = $this->sortOptionsByLabel($options);
@@ -348,7 +425,7 @@ class SelectElement extends CoreElement
             $renderedOptions[] = $this->renderElementOptionsHtml($value, $label, $isSelected);
         }
 
-        // ----------------------------------
+        // --------------------------------------
 
         // bottom split
         $bottomSplitKeys = $this->getBottomSplitKeys();
@@ -383,23 +460,11 @@ class SelectElement extends CoreElement
             }
         }
 
-        // ----------------------------------
+        // --------------------------------------
 
         // render default label if defined
         $renderedOptions = $this->renderPlaceholder($renderedOptions);
 
         return join("\n", $renderedOptions);
-    }
-
-    /**
-     * @return string
-     */
-    public function renderErrorMessages()
-    {
-        $messages = parent::renderErrorMessages();
-
-        $messages = str_replace('rule-error-messages', 'rule-error-messages rule-error-messages-select', $messages);
-
-        return $messages;
     }
 }
