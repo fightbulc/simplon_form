@@ -495,10 +495,10 @@ class Form
 
         $process =
             $this->hasRequestData() === true
-            && isset($this->requestData['hide-' . $_SESSION['csrf']['name']])
             && isset($_SESSION['csrf'])
             && isset($_SESSION['csrf']['name'])
-            && isset($_SESSION['csrf']['value']);
+            && isset($_SESSION['csrf']['value'])
+            && isset($this->requestData['hide-' . $_SESSION['csrf']['name']]);
 
         if ($process)
         {
