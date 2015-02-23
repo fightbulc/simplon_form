@@ -3,7 +3,6 @@
 namespace Simplon\Form\Elements;
 
 use Simplon\Form\Filters\Core\CoreFilterInterface;
-use Simplon\Form\Filters\Core\FilterInterface;
 use Simplon\Form\Rules\Core\CoreRuleInterface;
 
 /**
@@ -70,7 +69,7 @@ abstract class CoreElement implements CoreElementInterface
     protected $filters = [];
 
     /**
-     * @var FilterInterface[]
+     * @var CoreFilterInterface[]
      */
     protected $outputFilters = [];
 
@@ -362,11 +361,11 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
-     * @param FilterInterface $filter
+     * @param CoreFilterInterface $filter
      *
      * @return static
      */
-    public function addOutputFilter(FilterInterface $filter)
+    public function addOutputFilter(CoreFilterInterface $filter)
     {
         $this->outputFilters[] = $filter;
 

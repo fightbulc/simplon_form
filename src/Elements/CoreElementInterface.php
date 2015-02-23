@@ -2,7 +2,7 @@
 
 namespace Simplon\Form\Elements;
 
-use Simplon\Form\Filters\Core\FilterInterface;
+use Simplon\Form\Filters\Core\CoreFilterInterface;
 
 /**
  * Interface CoreElementInterface
@@ -85,14 +85,14 @@ interface CoreElementInterface
     public function processFilters();
 
     /**
-     * @param FilterInterface $filter
+     * @param CoreFilterInterface $filter
      *
      * @return static
      */
-    public function addOutputFilter(FilterInterface $filter);
+    public function addOutputFilter(CoreFilterInterface $filter);
 
     /**
-     * @return FilterInterface[]
+     * @return CoreFilterInterface[]
      */
     public function getOutputFilters();
 
@@ -166,4 +166,16 @@ interface CoreElementInterface
      * @return bool
      */
     public function isValid();
+
+    /**
+     * @return CoreFilterInterface[]
+     */
+    public function getFilters();
+
+    /**
+     * @param CoreFilterInterface $filter
+     *
+     * @return static
+     */
+    public function addFilter(CoreFilterInterface $filter);
 }
