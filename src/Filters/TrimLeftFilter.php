@@ -19,13 +19,9 @@ class TrimLeftFilter extends TrimFilter
     {
         if ($this->trimChars !== null)
         {
-            $elementValue = ltrim($elementValue, $this->trimChars);
-        }
-        else
-        {
-            $elementValue = ltrim($elementValue);
+            return ltrim($elementValue, $this->trimChars);
         }
 
-        return $elementValue;
+        return ltrim($elementValue);
     }
 }

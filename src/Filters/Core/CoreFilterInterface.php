@@ -2,18 +2,16 @@
 
 namespace Simplon\Form\Filters\Core;
 
-use Simplon\Form\Elements\CoreElementInterface;
-
 /**
  * Interface CoreFilterInterface
  * @package Simplon\Form\Filters
  */
-interface CoreFilterInterface extends FilterInterface
+interface CoreFilterInterface
 {
     /**
-     * @param CoreElementInterface $elementInstance
+     * @param mixed $elementValue
      *
-     * @return CoreElementInterface
+     * @return mixed
      */
-    public function processFilter(CoreElementInterface $elementInstance);
+    public function applyFilter($elementValue);
 }

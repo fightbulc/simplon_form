@@ -374,7 +374,7 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
-     * @return FilterInterface[]
+     * @return CoreFilterInterface[]
      */
     public function getOutputFilters()
     {
@@ -388,8 +388,8 @@ abstract class CoreElement implements CoreElementInterface
      */
     public function processOutputFilters($value)
     {
-        foreach ($this->outputFilters as $filter) {
-
+        foreach ($this->outputFilters as $filter)
+        {
             $value = $filter->applyFilter($value);
         }
 
@@ -433,10 +433,17 @@ abstract class CoreElement implements CoreElementInterface
 
         if (empty($filters) === false)
         {
+            // get value
+            $value = $this->getValue();
+
             foreach ($filters as $filterInstance)
             {
-                $filterInstance->processFilter($this);
+                // run value through filter
+                $value = $filterInstance->applyFilter($value);
             }
+
+            // set filtered value
+            $this->setPostValue($value);
         }
 
         return $this;

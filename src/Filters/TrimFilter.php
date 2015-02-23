@@ -30,13 +30,9 @@ class TrimFilter extends CoreFilter
     {
         if ($this->trimChars !== null)
         {
-            $elementValue = trim($elementValue, $this->trimChars);
-        }
-        else
-        {
-            $elementValue = trim($elementValue);
+            return trim($elementValue, $this->trimChars);
         }
 
-        return $elementValue;
+        return trim($elementValue);
     }
 }
