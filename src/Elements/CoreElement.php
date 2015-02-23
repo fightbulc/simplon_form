@@ -3,6 +3,7 @@
 namespace Simplon\Form\Elements;
 
 use Simplon\Form\Filters\Core\CoreFilterInterface;
+use Simplon\Form\Filters\Core\FilterInterface;
 use Simplon\Form\Rules\Core\CoreRuleInterface;
 
 /**
@@ -67,6 +68,11 @@ abstract class CoreElement implements CoreElementInterface
      * @var CoreFilterInterface[]
      */
     protected $filters = [];
+
+    /**
+     * @var FilterInterface[]
+     */
+    protected $outputFilters = [];
 
     /**
      * @var bool
@@ -356,6 +362,41 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
+     * @param FilterInterface $filter
+     *
+     * @return static
+     */
+    public function addOutputFilter(FilterInterface $filter)
+    {
+        $this->outputFilters[] = $filter;
+
+        return $this;
+    }
+
+    /**
+     * @return FilterInterface[]
+     */
+    public function getOutputFilters()
+    {
+        return $this->outputFilters;
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public function processOutputFilters($value)
+    {
+        foreach ($this->outputFilters as $filter) {
+
+            $value = $filter->applyFilter($value);
+        }
+
+        return $value;
+    }
+
+    /**
      * @return bool
      */
     public function hasPostValue()
@@ -531,7 +572,7 @@ abstract class CoreElement implements CoreElementInterface
             'id'          => $this->getAttrId(),
             'name'        => $this->getName(),
             'label'       => $this->getLabel(),
-            'value'       => $this->getValue(),
+            'value'       => $this->processOutputFilters($this->getValue()),
             'class'       => $this->getClassString(),
             'description' => $this->getDescription(),
         ];

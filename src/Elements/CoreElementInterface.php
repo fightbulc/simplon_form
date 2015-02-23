@@ -2,6 +2,8 @@
 
 namespace Simplon\Form\Elements;
 
+use Simplon\Form\Filters\Core\FilterInterface;
+
 /**
  * Interface CoreElementInterface
  * @package Simplon\Form\Elements
@@ -81,6 +83,26 @@ interface CoreElementInterface
     public function getPostValue();
 
     public function processFilters();
+
+    /**
+     * @param FilterInterface $filter
+     *
+     * @return static
+     */
+    public function addOutputFilter(FilterInterface $filter);
+
+    /**
+     * @return FilterInterface[]
+     */
+    public function getOutputFilters();
+
+    /**
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public function processOutputFilters($value);
+
 
     public function processRules();
 
