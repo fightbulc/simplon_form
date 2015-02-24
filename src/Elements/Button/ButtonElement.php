@@ -4,6 +4,11 @@ namespace Simplon\Form\Elements\Button;
 
 use Simplon\Form\Elements\CoreElement;
 
+/**
+ * ButtonElement
+ * @package Simplon\Form\Elements\Button
+ * @author Tino Ehrich (tino@bigpun.me)
+ */
 class ButtonElement extends CoreElement
 {
     /**

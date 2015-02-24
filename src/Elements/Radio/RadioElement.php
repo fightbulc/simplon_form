@@ -4,6 +4,11 @@ namespace Simplon\Form\Elements\Radio;
 
 use Simplon\Form\Elements\CoreElement;
 
+/**
+ * RadioElement
+ * @package Simplon\Form\Elements\Radio
+ * @author Tino Ehrich (tino@bigpun.me)
+ */
 class RadioElement extends CoreElement
 {
     /**

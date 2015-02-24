@@ -4,6 +4,11 @@ namespace Simplon\Form\Elements\Password;
 
 use Simplon\Form\Elements\TextSingleLine\TextSingleLineElement;
 
+/**
+ * PasswordElement
+ * @package Simplon\Form\Elements\Password
+ * @author Tino Ehrich (tino@bigpun.me)
+ */
 class PasswordElement extends TextSingleLineElement
 {
     /**

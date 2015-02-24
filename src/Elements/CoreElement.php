@@ -7,9 +7,8 @@ use Simplon\Form\Rules\Core\CoreRuleInterface;
 
 /**
  * CoreElement
- *
  * @package Simplon\Form\Elements
- * @author  Tino Ehrich (tino@bigpun.me)
+ * @author Tino Ehrich (tino@bigpun.me)
  */
 abstract class CoreElement implements CoreElementInterface
 {
@@ -17,6 +16,11 @@ abstract class CoreElement implements CoreElementInterface
      * @var string
      */
     protected $elementHtml = '<input type="text" class=":class" id=":id" name=":name" value=":value">';
+
+    /**
+     * @var string
+     */
+    protected $labelHtml = '<label class=":hasError" for=":id">:label</label>';
 
     /**
      * @var string
@@ -247,13 +251,31 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
+     * @param string $labelHtml
+     *
+     * @return static
+     */
+    public function setLabelHtml($labelHtml)
+    {
+        $this->labelHtml = $labelHtml;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabelHtml()
+    {
+        return (string)$this->labelHtml;
+    }
+
+    /**
      * @return string
      */
     public function renderLabel()
     {
-        $template = '<label for=":id">:label</label>';
-
-        return $this->parseFieldPlaceholders($template);
+        return $this->parseFieldPlaceholders($this->getLabelHtml());
     }
 
     /**
@@ -501,7 +523,7 @@ abstract class CoreElement implements CoreElementInterface
             'errorMessagesString' => join('', $this->getErrorMessages()),
         ];
 
-        $template = '<:containerWrapper class="rule-error-messages text-danger list-unstyled">:errorMessagesString</:containerWrapper>';
+        $template = '<:containerWrapper class="sf-field-errors">:errorMessagesString</:containerWrapper>';
 
         return $this->replaceFieldPlaceholderMany($placeholders, $template);
     }
@@ -581,6 +603,7 @@ abstract class CoreElement implements CoreElementInterface
             'value'       => $this->processOutputFilters($this->getValue()),
             'class'       => $this->getClassString(),
             'description' => $this->getDescription(),
+            'hasError'    => '',
         ];
     }
 
@@ -623,7 +646,7 @@ abstract class CoreElement implements CoreElementInterface
 
             if (is_array($value) === true)
             {
-                $value = null;
+//                $value = null;
             }
 
             $this->setPostValue($value);
@@ -650,18 +673,18 @@ abstract class CoreElement implements CoreElementInterface
         {
             case true:
                 // visual error indication
+                $this->setLabelHtml(str_replace(':hasError', 'has-error', $this->getLabelHtml()));
                 $this->setElementHtml(str_replace(':hasError', 'has-error', $this->getElementHtml()));
                 $isValid = false;
                 break;
 
             case false:
                 // visual success indication
+                $this->setLabelHtml(str_replace(':hasError', 'has-success', $this->getLabelHtml()));
                 $this->setElementHtml(str_replace(':hasError', 'has-success', $this->getElementHtml()));
                 break;
 
             default:
-                // remove visual error indication
-                $this->setElementHtml(str_replace(':hasError', '', $this->getElementHtml()));
         }
 
         return $isValid;

@@ -2,14 +2,14 @@
 
 namespace Simplon\Form\Filters;
 
-use Simplon\Form\Filters\Core\CoreFilter;
+use Simplon\Form\Filters\Core\CoreFilterInterface;
 
 /**
  * CaseTitleFilter
  * @package Simplon\Form\Filters
  * @author Tino Ehrich (tino@bigpun.me)
  */
-class CaseTitleFilter extends CoreFilter
+class CaseTitleFilter implements CoreFilterInterface
 {
     /**
      * @param string $elementValue

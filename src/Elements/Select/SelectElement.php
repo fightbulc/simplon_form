@@ -4,6 +4,11 @@ namespace Simplon\Form\Elements\Select;
 
 use Simplon\Form\Elements\CoreElement;
 
+/**
+ * SelectElement
+ * @package Simplon\Form\Elements\Select
+ * @author Tino Ehrich (tino@bigpun.me)
+ */
 class SelectElement extends CoreElement
 {
     /**
@@ -14,7 +19,7 @@ class SelectElement extends CoreElement
     /**
      * @var array
      */
-    protected $class = ['form-control'];
+    protected $class = [];
 
     /**
      * @var array

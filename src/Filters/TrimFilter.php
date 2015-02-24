@@ -2,14 +2,14 @@
 
 namespace Simplon\Form\Filters;
 
-use Simplon\Form\Filters\Core\CoreFilter;
+use Simplon\Form\Filters\Core\CoreFilterInterface;
 
 /**
  * TrimFilter
  * @package Simplon\Form\Filters
  * @author Tino Ehrich (tino@bigpun.me)
  */
-class TrimFilter extends CoreFilter
+class TrimFilter implements CoreFilterInterface
 {
     protected $trimChars = null;
 

@@ -5,6 +5,11 @@ namespace Simplon\Form\Elements\Checkbox;
 use Simplon\Form\Elements\CoreElement;
 use Simplon\Form\Elements\CoreElementInterface;
 
+/**
+ * CheckboxElement
+ * @package Simplon\Form\Elements\Checkbox
+ * @author Tino Ehrich (tino@bigpun.me)
+ */
 class CheckboxElement extends CoreElement
 {
     /**

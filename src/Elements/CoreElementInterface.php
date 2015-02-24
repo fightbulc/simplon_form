@@ -3,6 +3,7 @@
 namespace Simplon\Form\Elements;
 
 use Simplon\Form\Filters\Core\CoreFilterInterface;
+use Simplon\Form\Rules\Core\CoreRuleInterface;
 
 /**
  * Interface CoreElementInterface
@@ -178,4 +179,28 @@ interface CoreElementInterface
      * @return static
      */
     public function addFilter(CoreFilterInterface $filter);
+
+    /**
+     * @param mixed $value
+     *
+     * @return static
+     */
+    public function addClass($value);
+
+    /**
+     * @param CoreRuleInterface $rule
+     *
+     * @return static
+     */
+    public function addRule(CoreRuleInterface $rule);
+
+    /**
+     * @return CoreRuleInterface[]
+     */
+    public function getRules();
+
+    /**
+     * @return bool
+     */
+    public function hasPostValue();
 }

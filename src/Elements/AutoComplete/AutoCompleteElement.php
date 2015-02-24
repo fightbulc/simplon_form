@@ -4,6 +4,11 @@ namespace Simplon\Form\Elements\AutoComplete;
 
 use Simplon\Form\Elements\CoreElement;
 
+/**
+ * AutoCompleteElement
+ * @package Simplon\Form\Elements\AutoComplete
+ * @author Tino Ehrich (tino@bigpun.me)
+ */
 class AutoCompleteElement extends CoreElement
 {
     /**

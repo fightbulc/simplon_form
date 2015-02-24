@@ -2,14 +2,14 @@
 
 namespace Simplon\Form\Filters;
 
-use Simplon\Form\Filters\Core\CoreFilter;
+use Simplon\Form\Filters\Core\CoreFilterInterface;
 
 /**
  * XssFilter
  * @package Simplon\Form\Filters
  * @author Tino Ehrich (tino@bigpun.me)
  */
-class XssFilter extends CoreFilter
+class XssFilter implements CoreFilterInterface
 {
     /**
      * @param string $elementValue

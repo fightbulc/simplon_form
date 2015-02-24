@@ -4,6 +4,11 @@ namespace Simplon\Form\Elements\TextSingleLine;
 
 use Simplon\Form\Elements\CoreElement;
 
+/**
+ * TextSingleLineElement
+ * @package Simplon\Form\Elements\TextSingleLine
+ * @author Tino Ehrich (tino@bigpun.me)
+ */
 class TextSingleLineElement extends CoreElement
 {
     /**
@@ -14,7 +19,7 @@ class TextSingleLineElement extends CoreElement
     /**
      * @var array
      */
-    protected $class = ['form-control'];
+    protected $class = [];
 
     /**
      * @var string

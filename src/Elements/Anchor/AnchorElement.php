@@ -4,6 +4,11 @@ namespace Simplon\Form\Elements\Anchor;
 
 use Simplon\Form\Elements\CoreElement;
 
+/**
+ * AnchorElement
+ * @package Simplon\Form\Elements\Anchor
+ * @author Tino Ehrich (tino@bigpun.me)
+ */
 class AnchorElement extends CoreElement
 {
     /**
