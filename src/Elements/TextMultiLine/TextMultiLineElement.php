@@ -45,4 +45,15 @@ class TextMultiLineElement extends CoreElement
     {
         return $this->placeholder;
     }
+
+    /**
+     * @return array
+     */
+    protected function getFieldPlaceholders()
+    {
+        $placeholders = parent::getFieldPlaceholders();
+        $placeholders['placeholder'] = $this->getPlaceholder();
+
+        return $placeholders;
+    }
 }
