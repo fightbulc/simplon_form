@@ -462,6 +462,14 @@ class Form
     }
 
     /**
+     * @return string
+     */
+    private function getCsrfSessionKey()
+    {
+        return 'CSRF_'.$this->getId();
+    }
+
+    /**
      * @return void
      */
     private function handleCsrf()
@@ -473,7 +481,7 @@ class Form
         $this->renderCsrfTokens();
 
         // cache as session
-        $_SESSION['csrf'] = [
+        $_SESSION[$this->getCsrfSessionKey()] = [
             'name'  => $this->getCsrfName(),
             'value' => $this->getCsrfValue(),
         ];
@@ -495,15 +503,15 @@ class Form
 
         $process =
             $this->hasRequestData() === true
-            && isset($_SESSION['csrf'])
-            && isset($_SESSION['csrf']['name'])
-            && isset($_SESSION['csrf']['value'])
-            && isset($this->requestData['hide-' . $_SESSION['csrf']['name']]);
+            && isset($_SESSION[$this->getCsrfSessionKey()])
+            && isset($_SESSION[$this->getCsrfSessionKey()]['name'])
+            && isset($_SESSION[$this->getCsrfSessionKey()]['value'])
+            && isset($this->requestData['hide-' . $_SESSION[$this->getCsrfSessionKey()]['name']]);
 
         if ($process)
         {
             // test value
-            if ($_SESSION['csrf']['value'] === $this->requestData['hide-' . $_SESSION['csrf']['name']])
+            if ($_SESSION[$this->getCsrfSessionKey()]['value'] === $this->requestData['hide-' . $_SESSION[$this->getCsrfSessionKey()]['name']])
             {
                 $this->isValidCsrf = true;
             }
