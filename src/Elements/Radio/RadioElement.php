@@ -7,7 +7,7 @@ use Simplon\Form\Elements\CoreElement;
 /**
  * RadioElement
  * @package Simplon\Form\Elements\Radio
- * @author Tino Ehrich (tino@bigpun.me)
+ * @author  Tino Ehrich (tino@bigpun.me)
  */
 class RadioElement extends CoreElement
 {
@@ -19,7 +19,7 @@ class RadioElement extends CoreElement
     /**
      * @var string
      */
-    protected $elementItemHtml = '<label class="radio"><input type="radio" name=":name" id=":id_:value" value=":value" data-toggle="radio":checked> :label</label>';
+    protected $elementItemHtml = '<label class="radio"><input type="radio" name=":name" id=":id_:value" value=":value" data-toggle="radio" :checked :attrs> :label</label>';
 
     /**
      * @var bool
@@ -121,8 +121,8 @@ class RadioElement extends CoreElement
 
             if ($this->getValue() === $key)
             {
-                $active = ' active';
-                $checked = ' checked';
+                $active = 'active';
+                $checked = 'checked';
             }
 
             $placeholder = [
@@ -131,6 +131,7 @@ class RadioElement extends CoreElement
                 'label'   => $label,
                 'active'  => $active,
                 'checked' => $checked,
+                'attrs'   => $this->getAttributesString(),
             ];
 
             $rendered[] = $this->replaceFieldPlaceholderMany($placeholder, $tmpl);

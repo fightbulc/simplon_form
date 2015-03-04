@@ -14,7 +14,7 @@ class DateTimePickerElement extends TextSingleLineElement
     /**
      * @var string
      */
-    protected $elementInlineHtml = '<div id=":id" class="rd-inline"><input type="hidden" name=":name" id=":id_value" value=":value"></div>';
+    protected $elementInlineHtml = '<div id=":id" class="rd-inline"><input type="hidden" name=":name" id=":id_value" value=":value" :attrs></div>';
 
     /**
      * @var \DateTime

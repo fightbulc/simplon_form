@@ -14,7 +14,7 @@ class TextMultiLineElement extends CoreElement
     /**
      * @var string
      */
-    protected $elementHtml = '<div class=":hasError"><textarea name=":name" class=":class" id=":id" placeholder=":placeholder">:value</textarea></div>';
+    protected $elementHtml = '<div class=":hasError"><textarea name=":name" class=":class" id=":id" placeholder=":placeholder" :attrs>:value</textarea></div>';
 
     /**
      * @var array

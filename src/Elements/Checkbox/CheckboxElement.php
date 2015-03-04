@@ -8,7 +8,7 @@ use Simplon\Form\Elements\CoreElementInterface;
 /**
  * CheckboxElement
  * @package Simplon\Form\Elements\Checkbox
- * @author Tino Ehrich (tino@bigpun.me)
+ * @author  Tino Ehrich (tino@bigpun.me)
  */
 class CheckboxElement extends CoreElement
 {
@@ -20,7 +20,7 @@ class CheckboxElement extends CoreElement
     /**
      * @var string
      */
-    protected $elementItemHtml = '<label class="checkbox"><input type="checkbox" name=":id[]" value=":value" data-toggle="checkbox":checked>:label</label>';
+    protected $elementItemHtml = '<label class="checkbox"><input type="checkbox" name=":id[]" value=":value" data-toggle="checkbox" :checked :attrs>:label</label>';
 
     /**
      * @var bool
@@ -214,8 +214,8 @@ class CheckboxElement extends CoreElement
 
             if ($this->getOptionChecked($key) === true)
             {
-                $active = ' active';
-                $checked = ' checked';
+                $active = 'active';
+                $checked = 'checked';
             }
 
             $placeholder = [
@@ -224,6 +224,7 @@ class CheckboxElement extends CoreElement
                 'label'   => $label,
                 'active'  => $active,
                 'checked' => $checked,
+                'attrs'   => $this->getAttributesString(),
             ];
 
             $rendered[] = $this->replaceFieldPlaceholderMany($placeholder, $tmpl);

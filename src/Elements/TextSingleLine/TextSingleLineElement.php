@@ -14,7 +14,7 @@ class TextSingleLineElement extends CoreElement
     /**
      * @var string
      */
-    protected $elementHtml = '<div class=":hasError"><input type="text" class=":class" name=":name" id=":id" value=":value" placeholder=":placeholder"></div>';
+    protected $elementHtml = '<div class=":hasError"><input type="text" class=":class" name=":name" id=":id" value=":value" placeholder=":placeholder" :attrs></div>';
 
     /**
      * @var array

@@ -14,7 +14,7 @@ class AnchorElement extends CoreElement
     /**
      * @var string
      */
-    protected $elementHtml = '<a href=":url" class=":class" id=":id">:label</a>';
+    protected $elementHtml = '<a href=":url" class=":class" id=":id" :attrs>:label</a>';
 
     /**
      * @var string

@@ -203,4 +203,9 @@ interface CoreElementInterface
      * @return bool
      */
     public function hasPostValue();
+
+    /**
+     * @return array
+     */
+    public function getAttributes();
 }

@@ -8,14 +8,14 @@ use Simplon\Form\Rules\Core\CoreRuleInterface;
 /**
  * CoreElement
  * @package Simplon\Form\Elements
- * @author Tino Ehrich (tino@bigpun.me)
+ * @author  Tino Ehrich (tino@bigpun.me)
  */
 abstract class CoreElement implements CoreElementInterface
 {
     /**
      * @var string
      */
-    protected $elementHtml = '<input type="text" class=":class" id=":id" name=":name" value=":value">';
+    protected $elementHtml = '<input type="text" class=":class" id=":id" name=":name" value=":value" :attrs>';
 
     /**
      * @var string
@@ -61,6 +61,11 @@ abstract class CoreElement implements CoreElementInterface
      * @var array
      */
     protected $assetInlines = [];
+
+    /**
+     * @var array
+     */
+    protected $attributes = [];
 
     /**
      * @var CoreRuleInterface[]
@@ -316,6 +321,39 @@ abstract class CoreElement implements CoreElementInterface
     public function getClassString()
     {
         return join(' ', $this->class);
+    }
+
+    /**
+     * @param string $key
+     * @param string $val
+     *
+     * @return static
+     */
+    public function addAttribute($key, $val)
+    {
+        $this->attributes[$key] = $val;
+
+        return $this;
+    }
+
+    /**
+     * @param array $attrs
+     *
+     * @return static
+     */
+    public function setAttributes(array $attrs)
+    {
+        $this->attributes = $attrs;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 
     /**
@@ -592,6 +630,21 @@ abstract class CoreElement implements CoreElementInterface
     }
 
     /**
+     * @return string
+     */
+    protected function getAttributesString()
+    {
+        $renderedAttrs = [];
+
+        foreach ($this->getAttributes() as $k => $v)
+        {
+            $renderedAttrs[] = $k . '="' . $v . '"';
+        }
+
+        return join(' ', $renderedAttrs);
+    }
+
+    /**
      * @return array
      */
     protected function getFieldPlaceholders()
@@ -602,6 +655,7 @@ abstract class CoreElement implements CoreElementInterface
             'label'       => $this->getLabel(),
             'value'       => $this->processOutputFilters($this->getValue()),
             'class'       => $this->getClassString(),
+            'attrs'       => $this->getAttributesString(),
             'description' => $this->getDescription(),
             'hasError'    => '',
         ];

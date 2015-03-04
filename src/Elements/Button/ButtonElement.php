@@ -14,7 +14,7 @@ class ButtonElement extends CoreElement
     /**
      * @var string
      */
-    protected $elementHtml = '<button class=":class">:label</button>';
+    protected $elementHtml = '<button class=":class" :attrs>:label</button>';
 
     /**
      * @return array
