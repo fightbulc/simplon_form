@@ -424,6 +424,17 @@ class Form
     }
 
     /**
+     * @return bool
+     */
+    public function isSubmitted()
+    {
+        return
+            $this->hasRequestData() === true // any request data at all?
+            && isset($this->requestData['hide-' . $this->getId()]) // has this form been submitted?
+            && $this->isValidCsrf === true; // csrf must match
+    }
+
+    /**
      * @return array
      */
     protected function getRequestData()
@@ -609,17 +620,6 @@ class Form
     private function getCsrfValue()
     {
         return $this->csrfValue;
-    }
-
-    /**
-     * @return bool
-     */
-    private function isSubmitted()
-    {
-        return
-            $this->hasRequestData() === true // any request data at all?
-            && isset($this->requestData['hide-' . $this->getId()]) // has this form been submitted?
-            && $this->isValidCsrf === true; // csrf must match
     }
 
     /**
