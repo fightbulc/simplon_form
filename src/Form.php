@@ -88,6 +88,11 @@ class Form
     private $urlRootAssets;
 
     /**
+     * @var array
+     */
+    private $attributes = [];
+
+    /**
      * @param array $requestData
      */
     public function __construct($requestData = [])
@@ -105,6 +110,39 @@ class Form
         $this->addAssetFiles([
             'default.css',
         ]);
+    }
+
+    /**
+     * @param string $key
+     * @param string $val
+     *
+     * @return static
+     */
+    public function addAttribute($key, $val)
+    {
+        $this->attributes[$key] = $val;
+
+        return $this;
+    }
+
+    /**
+     * @param array $attrs
+     *
+     * @return static
+     */
+    public function setAttributes(array $attrs)
+    {
+        $this->attributes = $attrs;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 
     /**
@@ -331,6 +369,9 @@ class Form
             'enctype'        => 'multipart/form-data',
             'class'          => 'simplon-form',
         ];
+
+        // merge attributes with outter ones
+        $attributes = array_merge($attributes, $this->getAttributes());
 
         // set values
         $renderedAttributes = [];
