@@ -18,11 +18,18 @@ class RegExpRule extends CoreRule
     protected $keyMatch = 'regexp';
 
     /**
-     * @param string $matchValue
+     * @var string
      */
-    public function __construct($matchValue)
+    protected $negateResult = 'negate';
+
+    /**
+     * @param string $matchValue
+     * @param bool   $negateResult
+     */
+    public function __construct($matchValue, $negateResult = false)
     {
         $this->setConditions($this->keyMatch, $matchValue);
+        $this->setConditions($this->negateResult, $negateResult === true);
     }
 
     /**
@@ -32,16 +39,29 @@ class RegExpRule extends CoreRule
      */
     public function isValid(CoreElementInterface $elementInstance)
     {
-        $value = $elementInstance->getValue();
+        $value  = $elementInstance->getValue();
+        $result = preg_match($this->getRegExpValue(), $value) !== 0;
 
-        return preg_match($this->getRegExpValue(), $value) !== 0;
+        if ($this->getNegateResult() === true) {
+            return !$result;
+        }
+
+        return $result;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     protected function getRegExpValue()
     {
         return $this->getConditionsByKey($this->keyMatch);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function getNegateResult()
+    {
+        return $this->getConditionsByKey($this->negateResult);
     }
 }
