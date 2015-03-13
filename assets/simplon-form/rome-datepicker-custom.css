@@ -12,6 +12,7 @@
     padding: 10px;
     text-align: center;
     border-radius: 4px;
+    z-index: 999;
 }
 
 .rd-inline .rd-container
