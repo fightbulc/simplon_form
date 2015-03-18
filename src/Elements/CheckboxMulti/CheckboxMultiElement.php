@@ -1,16 +1,16 @@
 <?php
 
-namespace Simplon\Form\Elements\Checkbox;
+namespace Simplon\Form\Elements\CheckboxMulti;
 
 use Simplon\Form\Elements\CoreElement;
 use Simplon\Form\Elements\CoreElementInterface;
 
 /**
- * CheckboxElement
- * @package Simplon\Form\Elements\Checkbox
+ * CheckboxMultiElement
+ * @package Simplon\Form\Elements\CheckboxMulti
  * @author  Tino Ehrich (tino@bigpun.me)
  */
-class CheckboxElement extends CoreElement
+class CheckboxMultiElement extends CoreElement
 {
     /**
      * @var string
@@ -20,7 +20,7 @@ class CheckboxElement extends CoreElement
     /**
      * @var string
      */
-    protected $elementItemHtml = '<label class="checkbox"><input type="checkbox" name=":id[]" value=":value" data-toggle="checkbox" :checked :attrs>:label</label>';
+    protected $elementItemHtml = '<label class="checkbox"><input type="checkbox" name=":id[]" value=":value" :checked :attrs>:label</label>';
 
     /**
      * @var bool
@@ -56,7 +56,7 @@ class CheckboxElement extends CoreElement
     /**
      * @param bool $useKeys
      *
-     * @return CheckboxElement
+     * @return CheckboxMultiElement
      */
     public function setUseOptionKeys($useKeys)
     {
@@ -68,7 +68,7 @@ class CheckboxElement extends CoreElement
     /**
      * @param array $options
      *
-     * @return CheckboxElement
+     * @return CheckboxMultiElement
      */
     public function setOptions(array $options)
     {
@@ -162,7 +162,7 @@ class CheckboxElement extends CoreElement
     /**
      * @return bool
      */
-    public function hasCheckedOptions()
+    public function hasCheckedOption()
     {
         return count($this->getChecked()) > 0 ? true : false;
     }
@@ -195,6 +195,20 @@ class CheckboxElement extends CoreElement
         $elementHtml = $this->replaceFieldPlaceholder('items', $this->renderElementItemHtml(), $this->getElementHtml());
 
         return $this->parseFieldPlaceholders($elementHtml);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getFieldPlaceholders()
+    {
+        return [
+            'id'          => $this->getAttrId(),
+            'name'        => $this->getName(),
+            'class'       => $this->getClassString(),
+            'description' => $this->getDescription(),
+            'hasError'    => '',
+        ];
     }
 
     /**

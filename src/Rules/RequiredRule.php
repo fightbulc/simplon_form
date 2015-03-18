@@ -2,7 +2,8 @@
 
 namespace Simplon\Form\Rules;
 
-use Simplon\Form\Elements\Checkbox\CheckboxElement;
+use Simplon\Form\Elements\CheckboxMulti\CheckboxMultiElement;
+use Simplon\Form\Elements\CheckboxSingle\CheckboxSingleElement;
 use Simplon\Form\Elements\CoreElementInterface;
 use Simplon\Form\Rules\Core\CoreRule;
 
@@ -14,7 +15,7 @@ class RequiredRule extends CoreRule
     protected $errorMessage = '":label" is required';
 
     /**
-     * @param \Simplon\Form\Elements\CoreElementInterface $elementInstance
+     * @param CoreElementInterface $elementInstance
      *
      * @return bool
      */
@@ -23,9 +24,13 @@ class RequiredRule extends CoreRule
         // ----------------------------------
         // fields with inmutable values
 
-        if ($elementInstance instanceof CheckboxElement)
+        $isCheckbox =
+            $elementInstance instanceof CheckboxSingleElement
+            || $elementInstance instanceof CheckboxMultiElement;
+
+        if ($isCheckbox === true)
         {
-            if ($elementInstance->hasCheckedOptions() === false)
+            if ($elementInstance->hasCheckedOption() === false)
             {
                 return false;
             }

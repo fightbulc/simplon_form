@@ -4,6 +4,7 @@ namespace Simplon\Form\Renderer;
 
 use Simplon\Form\Renderer\Core\CoreFormRenderer;
 use Simplon\Phtml\Phtml;
+use Simplon\Phtml\PhtmlException;
 
 /**
  * PhtmlFormRenderer
@@ -17,7 +18,7 @@ class PhtmlFormRenderer extends CoreFormRenderer
      * @param array $customParams
      *
      * @return string
-     * @throws \Simplon\Phtml\PhtmlException
+     * @throws PhtmlException
      */
     public function render($pathTemplate, array $customParams = [])
     {

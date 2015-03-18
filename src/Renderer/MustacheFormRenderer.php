@@ -4,6 +4,7 @@ namespace Simplon\Form\Renderer;
 
 use Simplon\Form\Renderer\Core\CoreFormRenderer;
 use Simplon\Mustache\Mustache;
+use Simplon\Mustache\MustacheException;
 
 /**
  * MustacheFormRenderer
@@ -18,7 +19,7 @@ class MustacheFormRenderer extends CoreFormRenderer
      * @param array $customParsers
      *
      * @return string
-     * @throws \Simplon\Mustache\MustacheException
+     * @throws MustacheException
      */
     public function render($pathTemplate, array $customParams = [], array $customParsers = [])
     {
