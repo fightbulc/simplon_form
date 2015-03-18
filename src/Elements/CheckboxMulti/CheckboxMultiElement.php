@@ -3,7 +3,6 @@
 namespace Simplon\Form\Elements\CheckboxMulti;
 
 use Simplon\Form\Elements\CoreElement;
-use Simplon\Form\Elements\CoreElementInterface;
 
 /**
  * CheckboxMultiElement
@@ -20,7 +19,7 @@ class CheckboxMultiElement extends CoreElement
     /**
      * @var string
      */
-    protected $elementItemHtml = '<label class="checkbox"><input type="checkbox" name=":id[]" value=":value" :checked :attrs>:label</label>';
+    protected $elementItemHtml = '<div class="checkbox"><label><input type="checkbox" name=":id[]" value=":value" :checked :attrs>:label</label></div>';
 
     /**
      * @var bool
@@ -216,6 +215,8 @@ class CheckboxMultiElement extends CoreElement
         {
             $this->setPostValue([]);
         }
+
+        return $this;
     }
 
     /**
