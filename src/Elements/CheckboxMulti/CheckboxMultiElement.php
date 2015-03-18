@@ -168,9 +168,21 @@ class CheckboxMultiElement extends CoreElement
     }
 
     /**
+     * @param array $value
+     *
+     * @return static
+     */
+    public function setValue($value)
+    {
+        $this->setPreselectedOption($value);
+
+        return parent::setValue($value);
+    }
+
+    /**
      * @param null $postValue
      *
-     * @return CoreElementInterface
+     * @return static
      */
     public function setPostValue($postValue)
     {
@@ -183,6 +195,26 @@ class CheckboxMultiElement extends CoreElement
         if ($this->hasPostValue())
         {
             $this->setPreselectedOption($this->getPostValue());
+        }
+    }
+
+    /**
+     * @param array $requestData
+     *
+     * @return static
+     */
+    public function setPostValueByRequestData(array $requestData)
+    {
+        // any checkbox option selected?
+        if (isset($requestData[$this->id]))
+        {
+            return $this->setPostValue($requestData[$this->id]);
+        }
+
+        // if form has been submitted but no option has been selected
+        if(empty($requestData) === false)
+        {
+            $this->setPostValue([]);
         }
     }
 
@@ -205,6 +237,7 @@ class CheckboxMultiElement extends CoreElement
         return [
             'id'          => $this->getAttrId(),
             'name'        => $this->getName(),
+            'label'       => $this->getLabel(),
             'class'       => $this->getClassString(),
             'description' => $this->getDescription(),
             'hasError'    => '',
