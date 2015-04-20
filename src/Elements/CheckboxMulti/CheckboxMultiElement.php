@@ -98,15 +98,18 @@ class CheckboxMultiElement extends CoreElement
     }
 
     /**
-     * @param array $options
+     * @param array|null $options
      *
      * @return $this
      */
-    public function setPreselectedOption(array $options)
+    public function setPreselectedOption(array $options = null)
     {
-        foreach ($options as $key)
+        if($options !== null)
         {
-            $this->setOptionChecked($key, true);
+            foreach ($options as $key)
+            {
+                $this->setOptionChecked($key, true);
+            }
         }
 
         return $this;
