@@ -447,9 +447,19 @@ abstract class CoreElement implements CoreElementInterface
      */
     public function processOutputFilters($value)
     {
-        foreach ($this->outputFilters as $filter)
+        if (is_array($value) === true)
         {
-            $value = $filter->applyFilter($value);
+            foreach ($value as $k => $v)
+            {
+                $value[$k] = $this->processOutputFilters($v);
+            }
+        }
+        else
+        {
+            foreach ($this->outputFilters as $filter)
+            {
+                $value = $filter->applyFilter($value);
+            }
         }
 
         return $value;
