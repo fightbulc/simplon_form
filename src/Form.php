@@ -60,7 +60,7 @@ class Form
     /**
      * @var null|bool
      */
-    private $isValid = null;
+    protected $isValid = null;
 
     /**
      * @var CoreElementInterface[]
@@ -435,6 +435,14 @@ class Form
     }
 
     /**
+     * @return string
+     */
+    public function getId()
+    {
+        return (string)$this->id;
+    }
+
+    /**
      * @return array
      */
     protected function getRequestData()
@@ -445,7 +453,7 @@ class Form
     /**
      * @return bool
      */
-    private function hasRequestData()
+    protected function hasRequestData()
     {
         return empty($this->requestData) === false;
     }
@@ -455,7 +463,7 @@ class Form
      *
      * @return Form
      */
-    private function setRequestData(array $requestData)
+    protected function setRequestData(array $requestData)
     {
         $this->requestData = $requestData;
 
@@ -463,11 +471,21 @@ class Form
     }
 
     /**
-     * @return string
+     * @return void
      */
-    private function getId()
+    protected function handleCsrf()
     {
-        return (string)$this->id;
+        // validate csrf
+        $this->validateCsrfTokens();
+
+        // render tokens
+        $this->renderCsrfTokens();
+
+        // cache as session
+        $_SESSION[$this->getCsrfSessionKey()] = [
+            'name'  => $this->getCsrfName(),
+            'value' => $this->getCsrfValue(),
+        ];
     }
 
     /**
@@ -519,24 +537,6 @@ class Form
     private function getCsrfSessionKey()
     {
         return 'CSRF_'.$this->getId();
-    }
-
-    /**
-     * @return void
-     */
-    private function handleCsrf()
-    {
-        // validate csrf
-        $this->validateCsrfTokens();
-
-        // render tokens
-        $this->renderCsrfTokens();
-
-        // cache as session
-        $_SESSION[$this->getCsrfSessionKey()] = [
-            'name'  => $this->getCsrfName(),
-            'value' => $this->getCsrfValue(),
-        ];
     }
 
     /**
