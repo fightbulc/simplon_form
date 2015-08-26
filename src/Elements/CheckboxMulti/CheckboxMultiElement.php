@@ -19,7 +19,7 @@ class CheckboxMultiElement extends CoreElement
     /**
      * @var string
      */
-    protected $elementItemHtml = '<div class="checkbox"><label><input type="checkbox" name=":id[]" value=":value" :checked :attrs>:label</label></div>';
+    protected $elementItemHtml = '<div class="checkbox"><label for=":md5"><input type="checkbox" id=":md5" name=":id[]" value=":value" :checked :attrs>:label</label></div>';
 
     /**
      * @var bool
@@ -104,7 +104,7 @@ class CheckboxMultiElement extends CoreElement
      */
     public function setPreselectedOption(array $options = null)
     {
-        if($options !== null)
+        if ($options !== null)
         {
             foreach ($options as $key)
             {
@@ -214,7 +214,7 @@ class CheckboxMultiElement extends CoreElement
         }
 
         // if form has been submitted but no option has been selected
-        if(empty($requestData) === false)
+        if (empty($requestData) === false)
         {
             $this->setPostValue([]);
         }
@@ -269,6 +269,8 @@ class CheckboxMultiElement extends CoreElement
                 $checked = 'checked';
             }
 
+            $md5 = md5($this->getId() . $key);
+
             $placeholder = [
                 'id'      => $this->getId(),
                 'value'   => $key,
@@ -276,6 +278,7 @@ class CheckboxMultiElement extends CoreElement
                 'active'  => $active,
                 'checked' => $checked,
                 'attrs'   => $this->getAttributesString(),
+                'md5'     => $md5,
             ];
 
             $rendered[] = $this->replaceFieldPlaceholderMany($placeholder, $tmpl);
