@@ -1,14 +1,16 @@
 'use strict';
 
-var raf = require('raf');
 var calendar = require('./calendar');
 
 function inline (elem, calendarOptions) {
   var o = calendarOptions || {};
 
   o.appendTo = elem;
+  o.associated = elem;
 
-  return calendar(o);
+  var cal = calendar(o);
+  cal.show();
+  return cal;
 }
 
 module.exports = inline;

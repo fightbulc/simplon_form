@@ -1,39 +1,6 @@
-/**
- * rome - Customizable date (and time) picker. Opt-in UI, no jQuery!
- * @version v1.2.3
- * @link https://github.com/bevacqua/rome
- * @license MIT
- */
 .rd-container
 {
-    display: inline-block;
-    border: 1px solid #CCC;
-    background-color: #FFF;
-    padding: 10px;
-    text-align: center;
-    border-radius: 4px;
     z-index: 999;
-}
-
-.rd-inline .rd-container
-{
-    width: 100%;
-}
-
-.rd-container-attachment
-{
-    position: absolute;
-}
-
-.rd-month
-{
-    display: inline-block;
-    margin-right: 25px;
-}
-
-.rd-inline .rd-month
-{
-    width: 100%;
 }
 
 .rd-month-label
@@ -42,11 +9,6 @@
     background: #EEE;
     padding: 4px;
     margin-bottom: 4px;
-}
-
-.rd-month:last-child
-{
-    margin-right: 0;
 }
 
 .rd-back,
@@ -71,42 +33,17 @@
     right: 35px;
 }
 
-.rd-back[disabled],
-.rd-next[disabled]
-{
-    cursor: default;
-}
-
-.rd-back
-{
-    float: left;
-}
-
-.rd-next
-{
-    float: right;
-}
-
-.rd-back:before
-{
-    display: block;
-    content: '\2190';
-}
-
-.rd-next:before
-{
-    display: block;
-    content: '\2192';
-}
-
-.rd-days
-{
-    width: 100%;
-}
-
 .rd-day-head
 {
-    text-align: center;
+    padding: 10px;
+}
+
+.rd-day-disabled,
+.rd-day-disabled:hover
+{
+    background: none;
+    cursor: default;
+    color: #FFD9CC;
 }
 
 .rd-day-body
@@ -133,52 +70,3 @@
     border-radius: 3px;
 }
 
-.rd-day-prev-month,
-.rd-day-next-month
-{
-    color: #999;
-}
-
-.rd-day-disabled,
-.rd-day-disabled:hover
-{
-    background: none;
-    cursor: default;
-    color: #FFD9CC;
-}
-
-.rd-time
-{
-    position: relative;
-    display: inline-block;
-    margin-top: 5px;
-    width: 100%;
-}
-
-.rd-time-list
-{
-    display: none;
-    position: absolute;
-    overflow-y: scroll;
-    max-height: 160px;
-    left: 0;
-    right: 0;
-    background: #FFF;
-    color: #333;
-    z-index: 999;
-}
-
-.rd-time-selected
-{
-    padding: 5px;
-}
-
-.rd-time-option
-{
-    padding: 5px;
-}
-
-.rd-day-concealed
-{
-    visibility: hidden;
-}

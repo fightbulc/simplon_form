@@ -1,7 +1,7 @@
 'use strict';
 
-var emitter = require('contra.emitter');
-var raf = require('raf');
+var crossvent = require('crossvent');
+var emitter = require('contra/emitter');
 var dom = require('./dom');
 var text = require('./text');
 var parse = require('./parse');
@@ -9,13 +9,11 @@ var clone = require('./clone');
 var defaults = require('./defaults');
 var momentum = require('./momentum');
 var classes = require('./classes');
-var events = require('./events');
 var noop = require('./noop');
 var no;
 
 function calendar (calendarOptions) {
   var o;
-  var api = emitter({});
   var ref;
   var refCal;
   var container;
@@ -39,8 +37,12 @@ function calendar (calendarOptions) {
   var time;
   var timelist;
 
+  var api = emitter({
+    associated: calendarOptions.associated
+  });
+
   init();
-  raf(ready);
+  setTimeout(ready, 0);
 
   return api;
 
@@ -62,6 +64,7 @@ function calendar (calendarOptions) {
     ref = o.initialValue ? o.initialValue : momentum.moment();
     refCal = ref.clone();
 
+    api.back = subtractMonth;
     api.container = container;
     api.destroyed = false;
     api.destroy = destroy.bind(api, false);
@@ -70,6 +73,7 @@ function calendar (calendarOptions) {
     api.getDateString = getDateString;
     api.getMoment = getMoment;
     api.hide = hide;
+    api.next = addMonth;
     api.options = changeOptions;
     api.options.reset = resetOptions;
     api.refresh = refresh;
@@ -77,7 +81,6 @@ function calendar (calendarOptions) {
     api.setValue = setValue;
     api.show = show;
 
-    show();
     eventListening();
     ready();
 
@@ -89,7 +92,7 @@ function calendar (calendarOptions) {
   }
 
   function destroy (silent) {
-    if (container) {
+    if (container && container.parentNode) {
       container.parentNode.removeChild(container);
     }
 
@@ -98,6 +101,7 @@ function calendar (calendarOptions) {
     }
 
     var destroyed = api.emitterSnapshot('destroyed');
+    api.back = noop;
     api.destroyed = true;
     api.destroy = napi;
     api.emitValues = napi;
@@ -105,6 +109,7 @@ function calendar (calendarOptions) {
     api.getDateString = noop;
     api.getMoment = noop;
     api.hide = napi;
+    api.next = noop;
     api.options = napi;
     api.options.reset = napi;
     api.refresh = napi;
@@ -122,8 +127,8 @@ function calendar (calendarOptions) {
 
   function eventListening (remove) {
     var op = remove ? 'remove' : 'add';
-    if (o.autoHideOnBlur) { events[op](document.documentElement, 'focus', hideOnBlur, true); }
-    if (o.autoHideOnClick) { events[op](document, 'click', hideOnClick); }
+    if (o.autoHideOnBlur) { crossvent[op](document.documentElement, 'focus', hideOnBlur, true); }
+    if (o.autoHideOnClick) { crossvent[op](document, 'click', hideOnClick); }
   }
 
   function changeOptions (options) {
@@ -162,9 +167,9 @@ function calendar (calendarOptions) {
       renderMonth(i);
     }
 
-    events.add(back, 'click', subtractMonth);
-    events.add(next, 'click', addMonth);
-    events.add(datewrapper, 'click', pickDay);
+    crossvent.add(back, 'click', subtractMonth);
+    crossvent.add(next, 'click', addMonth);
+    crossvent.add(datewrapper, 'click', pickDay);
 
     function renderMonth (i) {
       var month = dom({ className: o.styles.month, parent: datewrapper });
@@ -199,9 +204,9 @@ function calendar (calendarOptions) {
     }
     var timewrapper = dom({ className: o.styles.time, parent: container });
     time = dom({ className: o.styles.selectedTime, parent: timewrapper, text: ref.format(o.timeFormat) });
-    events.add(time, 'click', toggleTimeList);
+    crossvent.add(time, 'click', toggleTimeList);
     timelist = dom({ className: o.styles.timeList, parent: timewrapper });
-    events.add(timelist, 'click', pickTime);
+    crossvent.add(timelist, 'click', pickTime);
     var next = momentum.moment('00:00:00', 'HH:mm:ss');
     var latest = next.clone().add(1, 'days');
     while (next.isBefore(latest)) {
@@ -249,7 +254,12 @@ function calendar (calendarOptions) {
   function showTimeList () { if (timelist) { timelist.style.display = 'block'; } }
   function hideTimeList () { if (timelist) { timelist.style.display = 'none'; } }
   function showCalendar () { container.style.display = 'inline-block'; api.emit('show'); }
-  function hideCalendar () { container.style.display = 'none'; api.emit('hide'); }
+  function hideCalendar () {
+    if (container.style.display !== 'none') {
+      container.style.display = 'none';
+      api.emit('hide');
+    }
+  }
 
   function show () {
     render();
@@ -261,7 +271,7 @@ function calendar (calendarOptions) {
 
   function hide () {
     hideTimeList();
-    raf(hideCalendar);
+    setTimeout(hideCalendar, 0);
     return api;
   }
 
@@ -270,7 +280,7 @@ function calendar (calendarOptions) {
 
     var pos = classes.contains(container, o.styles.positioned);
     if (pos) {
-      raf(hideCalendar);
+      setTimeout(hideCalendar, 0);
     }
     return api;
   }
@@ -313,6 +323,7 @@ function calendar (calendarOptions) {
     ref = bound || ref;
     if (bound) { refCal = bound.clone(); }
     update();
+    api.emit(op === 'add' ? 'next' : 'back', ref.month());
   }
 
   function update (silent) {
@@ -592,7 +603,7 @@ function calendar (calendarOptions) {
     ref.date(day); // must run after setting the month
     setTime(ref, inRange(ref) || ref);
     refCal = ref.clone();
-    if (o.autoClose) { hideConditionally(); }
+    if (o.autoClose === true) { hideConditionally(); }
     update();
   }
 
@@ -633,7 +644,7 @@ function calendar (calendarOptions) {
     refCal = ref.clone();
     emitValues();
     updateTime();
-    if (!o.date && o.autoClose) {
+    if ((!o.date && o.autoClose === true) || o.autoClose === 'time') {
       hideConditionally();
     } else {
       hideTimeList();

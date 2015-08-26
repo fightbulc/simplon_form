@@ -1,32 +1,35 @@
 'use strict';
 
+var crossvent = require('crossvent');
+var bullseye = require('bullseye');
 var throttle = require('./throttle');
-var raf = require('raf');
 var clone = require('./clone');
 var defaults = require('./defaults');
 var calendar = require('./calendar');
 var momentum = require('./momentum');
 var classes = require('./classes');
-var events = require('./events');
 
 function inputCalendar (input, calendarOptions) {
-  var o;
-  var api = calendar(calendarOptions);
+  var o = calendarOptions || {};
+
+  o.associated = input;
+
+  var api = calendar(o);
   var throttledTakeInput = throttle(takeInput, 30);
-  var throttledPosition = throttle(position, 30);
   var ignoreInvalidation;
   var ignoreShow;
+  var eye;
 
-  init(calendarOptions);
+  init(o);
 
   return api;
 
   function init (initOptions) {
-    o = defaults(initOptions || calendarOptions, api);
+    o = defaults(initOptions || o, api);
 
     classes.add(api.container, o.styles.positioned);
-    events.add(api.container, 'mousedown', containerMouseDown);
-    events.add(api.container, 'click', containerClick);
+    crossvent.add(api.container, 'mousedown', containerMouseDown);
+    crossvent.add(api.container, 'click', containerClick);
 
     api.getDate = unrequire(api.getDate);
     api.getDateString = unrequire(api.getDateString);
@@ -36,30 +39,30 @@ function inputCalendar (input, calendarOptions) {
       input.value = o.initialValue.format(o.inputFormat);
     }
 
+    eye = bullseye(api.container, input);
     api.on('data', updateInput);
-    api.on('show', throttledPosition);
+    api.on('show', eye.refresh);
 
     eventListening();
     throttledTakeInput();
-
-    api.hide();
   }
 
   function destroy () {
     eventListening(true);
+    eye.destroy();
+    eye = null;
   }
 
   function eventListening (remove) {
     var op = remove ? 'remove' : 'add';
-    events[op](input, 'click', show);
-    events[op](input, 'touchend', show);
-    events[op](input, 'focusin', show);
-    events[op](input, 'change', throttledTakeInput);
-    events[op](input, 'keypress', throttledTakeInput);
-    events[op](input, 'keydown', throttledTakeInput);
-    events[op](input, 'input', throttledTakeInput);
-    if (o.invalidate) { events[op](input, 'blur', invalidateInput); }
-    events[op](window, 'resize', throttledPosition);
+    crossvent[op](input, 'click', show);
+    crossvent[op](input, 'touchend', show);
+    crossvent[op](input, 'focusin', show);
+    crossvent[op](input, 'change', throttledTakeInput);
+    crossvent[op](input, 'keypress', throttledTakeInput);
+    crossvent[op](input, 'keydown', throttledTakeInput);
+    crossvent[op](input, 'input', throttledTakeInput);
+    if (o.invalidate) { crossvent[op](input, 'blur', invalidateInput); }
 
     if (remove) {
       api.once('ready', init);
@@ -78,7 +81,7 @@ function inputCalendar (input, calendarOptions) {
 
   function containerMouseDown () {
     ignoreInvalidation = true;
-    raf(unignore);
+    setTimeout(unignore, 0);
 
     function unignore () {
       ignoreInvalidation = false;
@@ -98,19 +101,12 @@ function inputCalendar (input, calendarOptions) {
     api.show();
   }
 
-  function position () {
-    var bounds = input.getBoundingClientRect();
-    var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
-    api.container.style.top  = bounds.top + scrollTop + input.offsetHeight + 'px';
-    api.container.style.left = bounds.left + 'px';
-  }
-
   function takeInput () {
     var value = input.value.trim();
     if (isEmpty()) {
       return;
     }
-    var date = momentum.moment(value, o.inputFormat);
+    var date = momentum.moment(value, o.inputFormat, o.strictParse);
     api.setValue(date);
   }
 

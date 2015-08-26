@@ -1,3 +1,55 @@
+# 2.1.22 Bumpy Road
+
+- Updated `bullseye@1.4.6`
+- Updated `crossvent@1.5.0`
+
+# 2.1.18 Aural Emission
+
+- Replaced `contra.emitter` with `contra@1.9.0/emitter`
+
+# 2.1.17 Bull Run
+
+- Updated `bullseye@1.4.3`
+
+# 2.1.14 We The People
+
+- Fixed regression caused by `2.1.10` where you could no longer enter a valid date typing manually
+
+# 2.1.13 Bugcatcher
+
+- Bumped `crossvent@1.2.0`, fixing a bug removing `focus` event listener
+
+# 2.1.12 Now is not the Time
+
+- Replaced use of `Date.now` with `new Date()` because browser support
+- Bumped `bullseye@1.0.5`
+- Bumped `crossvent@1.1.0`
+
+# 2.1.9 Eye of the Tiger
+
+- Extracted positioning API into `bullseye`
+- Fixed a bug where inline calendars couldn't be instantiated
+
+# 2.1.8 Cross Ventures
+
+- Replaced `./events` with `crossvent` for code reuse
+
+# 2.1.5 Rat's Nest
+
+- Fixed a bug where inline date pickers would blink for a brief moment on the screen, when initialized
+
+# 2.1.1 Life Raft
+
+- Removed dependency on `raf`
+
+# 2.1.0 Garage Band
+
+- Added the ability to set `autoClose` to `'time'`, which only automatically hides the calendar when and if a time is picked
+
+# 2.0.4 Strictosaur
+
+- Added `strictParse` option to avoid partial matches against `inputFormat`
+
 # 2.0.3 Full Throttle
 
 - Remove dependency on `lodash.throttle`
