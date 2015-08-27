@@ -19,7 +19,7 @@ class CheckboxMultiElement extends CoreElement
     /**
      * @var string
      */
-    protected $elementItemHtml = '<div class="checkbox"><label for=":md5"><input type="checkbox" id=":md5" name=":id[]" value=":value" :checked :attrs>:label</label></div>';
+    protected $elementItemHtml = '<div><label for=":md5" class="checkbox"><input type="checkbox" id=":md5" name=":id[]" value=":value" :checked :attrs>:label</label></div>';
 
     /**
      * @var bool
