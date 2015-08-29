@@ -15,7 +15,7 @@ class CheckboxSingleElement extends CoreElement
     /**
      * @var string
      */
-    protected $elementHtml = '<div class=":hasError"><label for=":id" class="checkbox"><input type="checkbox" id=":id" name=":id" value=":value" :checked :attrs>:label</label></div>';
+    protected $elementHtml = '<div class="checkbox :hasError"><label for=":id"><input type="checkbox" id=":id" name=":id" value=":value" :checked :attrs>:label</label></div>';
 
     /**
      * @var bool
