@@ -3,7 +3,7 @@
     z-index: 999;
     border: 1px solid #CCC;
     border-radius: 3px;
-    box-shadow: 0 0 5px #eee;
+    box-shadow: 0 0 10px #EEE;
 }
 
 .rd-month-label
@@ -45,7 +45,7 @@ th.rd-day-head
 {
     padding: 8px;
     text-align: center;
-    width: 30px;
+    width: 32px;
 }
 
 tr.rd-days-row:last-child td
@@ -76,8 +76,7 @@ td.rd-day-body:hover
 }
 
 .rd-day-selected,
-.rd-time-selected,
-.rd-time-option:hover
+.rd-time-selected
 {
     cursor: pointer;
     background-color: #CEF;
@@ -85,3 +84,30 @@ td.rd-day-body:hover
     border-radius: 3px;
 }
 
+.rd-time
+{
+    width: 328px;
+    font-size: 22px;
+}
+
+.rd-time-list
+{
+    position: relative;
+}
+
+.rd-time-option
+{
+    float: left;
+    width: 82px;
+    padding: 5px 0;
+    font-size: 16px;
+    background: #FFF;
+    border-bottom: 1px solid #EEE;
+}
+
+.rd-time-option:hover
+{
+    cursor: pointer;
+    color: #333;
+    background-color: #CFE;
+}
