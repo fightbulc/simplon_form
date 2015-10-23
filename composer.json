@@ -1,6 +1,6 @@
 {
   "name": "simplon/form",
-  "description": "Easy form building, validation and follow-up callbacks",
+  "description": "Data validation & flexible form rendering incl. semantic-ui structure.",
   "homepage": "https://github.com/fightbulc/simplon_form",
   "type": "library",
   "keywords": [
@@ -10,7 +10,8 @@
     "rules",
     "filters",
     "templates",
-    "phtml"
+    "phtml",
+    "semantic-ui"
   ],
   "license": "MIT",
   "authors": [
