@@ -1,34 +1,37 @@
 {
-    "name": "simplon/form",
-    "description": "Easy form building, validation and follow-up callbacks",
-    "homepage": "https://github.com/fightbulc/simplon_form",
-    "type": "library",
-    "keywords": [
-        "form",
-        "fields",
-        "validation",
-        "callbacks",
-        "flexibility",
-        "mustache",
-        "phtml"
-    ],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Tino Ehrich",
-            "email": "tino@bigpun.me",
-            "role": "developer"
-        }
-    ],
-    "require": {
-        "php": ">=5.4",
-        "simplon/mustache": "0.1.*",
-        "simplon/phtml": "0.1.*",
-        "Respect/Validation": "0.6.*"
-    },
-    "autoload": {
-        "psr-4": {
-            "Simplon\\Form\\": "src/"
-        }
+  "name": "simplon/form",
+  "description": "Easy form building, validation and follow-up callbacks",
+  "homepage": "https://github.com/fightbulc/simplon_form",
+  "type": "library",
+  "keywords": [
+    "form",
+    "fields",
+    "validation",
+    "rules",
+    "filters",
+    "templates",
+    "phtml"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tino Ehrich",
+      "email": "tino@bigpun.me",
+      "role": "developer"
     }
+  ],
+  "require": {
+    "php": ">=5.4",
+    "simplon/phtml": "0.1.*",
+    "simplon/component_form": "0.0.*",
+    "simplon/component_semanticui": "0.0.*"
+  },
+  "config": {
+    "component-dir": "assets/vendor"
+  },
+  "autoload": {
+    "psr-4": {
+      "Simplon\\Form\\": "src/"
+    }
+  }
 }
