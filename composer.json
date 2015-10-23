@@ -11,7 +11,8 @@
     "filters",
     "templates",
     "phtml",
-    "semantic-ui"
+    "semantic-ui",
+    "calendar"
   ],
   "license": "MIT",
   "authors": [
