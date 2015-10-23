@@ -25,7 +25,7 @@ class FormValidator
     /**
      * @var FormData[]
      */
-    private $data = [];
+    private $formData = [];
 
     /**
      * @var array
@@ -83,9 +83,9 @@ class FormValidator
     /**
      * @return FormData[]
      */
-    public function getData()
+    public function getFormData()
     {
-        return $this->data;
+        return $this->formData;
     }
 
     /**
@@ -93,21 +93,21 @@ class FormValidator
      *
      * @return FormValidator
      */
-    public function addData(FormData $data)
+    public function addFormData(FormData $data)
     {
-        $this->data[] = $data;
+        $this->formData[] = $data;
 
         return $this;
     }
 
     /**
-     * @param FormData[] $data
+     * @param FormData[] $formData
      *
      * @return FormValidator
      */
-    public function setData(array $data)
+    public function setFormData(array $formData)
     {
-        $this->data = $data;
+        $this->formData = $formData;
 
         return $this;
     }
@@ -133,7 +133,7 @@ class FormValidator
             throw new FormException('CSRF mismatch');
         }
 
-        foreach ($this->getData() as $data)
+        foreach ($this->getFormData() as $data)
         {
             foreach ($data->getFields() as $field)
             {
