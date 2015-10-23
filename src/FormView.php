@@ -3,7 +3,6 @@
 namespace Simplon\Form;
 
 use Simplon\Form\Security\Csrf;
-use Simplon\Form\View\Elements\CancelElement;
 use Simplon\Form\View\Elements\SubmitElement;
 use Simplon\Form\View\RenderHelper;
 use Simplon\Phtml\Phtml;
@@ -18,7 +17,7 @@ class FormView
     /**
      * @var string
      */
-    private $id;
+    private $scope;
 
     /**
      * @var string
@@ -41,11 +40,6 @@ class FormView
     private $submitElement;
 
     /**
-     * @var CancelElement
-     */
-    private $cancelElement;
-
-    /**
      * @var FormBlock[]
      */
     private $blocks;
@@ -58,24 +52,37 @@ class FormView
     /**
      * @var bool
      */
+    private $renderErrorMessage = true;
+
+    /**
+     * @var string
+     */
+    private $errorTitle = 'Looks like we are missing some information.';
+
+    /**
+     * @var string
+     */
+    private $errorMessage = 'Please have a look at the error messages below.';
+
+    /**
+     * @var bool
+     */
     private $hasErrors;
 
     /**
-     * FormView constructor.
-     *
-     * @param $id
+     * @param $scope
      */
-    public function __construct($id)
+    public function __construct($scope)
     {
-        $this->id = $id;
+        $this->scope = $scope;
     }
 
     /**
      * @return string
      */
-    public function getId()
+    public function getScope()
     {
-        return $this->id;
+        return $this->scope;
     }
 
     /**
@@ -135,6 +142,78 @@ class FormView
     }
 
     /**
+     * @param SubmitElement $element
+     *
+     * @return FormView
+     */
+    public function setSubmitElement(SubmitElement $element)
+    {
+        $this->submitElement = $element;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function shouldRenderErrorMessage()
+    {
+        return $this->renderErrorMessage;
+    }
+
+    /**
+     * @param boolean $renderErrorMessage
+     *
+     * @return FormView
+     */
+    public function setRenderErrorMessage($renderErrorMessage)
+    {
+        $this->renderErrorMessage = $renderErrorMessage === true;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getErrorTitle()
+    {
+        return $this->errorTitle;
+    }
+
+    /**
+     * @param string $errorTitle
+     *
+     * @return FormView
+     */
+    public function setErrorTitle($errorTitle)
+    {
+        $this->errorTitle = $errorTitle;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getErrorMessage()
+    {
+        return $this->errorMessage;
+    }
+
+    /**
+     * @param string $errorMessage
+     *
+     * @return FormView
+     */
+    public function setErrorMessage($errorMessage)
+    {
+        $this->errorMessage = $errorMessage;
+
+        return $this;
+    }
+
+    /**
      * @return Csrf
      */
     public function getCsrf()
@@ -150,46 +229,6 @@ class FormView
     public function setCsrf(Csrf $csrf)
     {
         $this->csrf = $csrf;
-
-        return $this;
-    }
-
-    /**
-     * @param SubmitElement $element
-     *
-     * @return FormView
-     */
-    public function setSubmitElement(SubmitElement $element)
-    {
-        $this->submitElement = $element;
-
-        return $this;
-    }
-
-    /**
-     * @return CancelElement|null
-     */
-    public function getCancelElement()
-    {
-        return $this->cancelElement;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasCancelElement()
-    {
-        return empty($this->cancelElement) === false;
-    }
-
-    /**
-     * @param CancelElement $element
-     *
-     * @return FormView
-     */
-    public function setCancelElement(CancelElement $element)
-    {
-        $this->cancelElement = $element;
 
         return $this;
     }
@@ -252,11 +291,14 @@ class FormView
         {
             foreach ($this->blocks as $block)
             {
-                foreach ($block->getElements() as $element)
+                foreach ($block->getRows() as $row)
                 {
-                    if ($element->getField()->hasErrors())
+                    foreach ($row->getElements() as $element)
                     {
-                        $this->hasErrors = true;
+                        if ($element->getField()->hasErrors())
+                        {
+                            $this->hasErrors = true;
+                        }
                     }
                 }
             }
@@ -277,7 +319,15 @@ class FormView
         $params = array_merge($params, ['formView' => $this]);
         $form = (new Phtml())->render($pathTemplate, $params);
 
-        $html = '<form {attrs}>{ident}{csrf}{form}</form>';
+        /** @noinspection HtmlUnknownAttribute */
+        $html = '<form {attrs}>{error}{scope}{csrf}{form}</form>';
+
+        $class = ['ui', 'form', 'large'];
+
+        if ($this->hasErrors())
+        {
+            $class[] = 'warning';
+        }
 
         $placeholders = [
             'attrs' => RenderHelper::attributes(
@@ -287,10 +337,12 @@ class FormView
                         'action'         => $this->getUrl(),
                         'method'         => $this->getMethod(),
                         'accept-charset' => $this->getAcceptCharset(),
+                        'class'          => $class,
                     ],
                 ]
             ),
-            'ident' => $this->renderIdElement(),
+            'error' => $this->shouldRenderErrorMessage() ? $this->renderErrorMessage() : null,
+            'scope' => $this->renderScopeElement(),
             'csrf'  => $this->renderCsrfElement(),
             'form'  => $form,
         ];
@@ -301,9 +353,30 @@ class FormView
     /**
      * @return string|null
      */
-    private function renderIdElement()
+    public function renderErrorMessage()
     {
-        return '<input type="hidden" name="form[' . $this->getId() . ']" value="1">';
+        if ($this->hasErrors())
+        {
+            return RenderHelper::placeholders(
+                '<div class="ui warning message">{title}{message}</div>',
+                [
+                    'title'   => $this->getErrorTitle() ? '<div class="header">' . $this->getErrorTitle() . '</div>' : null,
+                    'message' => $this->getErrorMessage() ? '<p>' . $this->getErrorMessage() . '</p>' : null,
+                ]
+            );
+
+
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string|null
+     */
+    private function renderScopeElement()
+    {
+        return '<input type="hidden" name="form[' . $this->getScope() . ']" value="1">';
     }
 
     /**

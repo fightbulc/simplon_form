@@ -2,7 +2,7 @@
 
 namespace Simplon\Form;
 
-use Simplon\Form\View\Elements\ElementInterface;
+use Simplon\Form\View\RenderHelper;
 
 /**
  * Class FormBlock
@@ -16,9 +16,14 @@ class FormBlock
     private $id;
 
     /**
-     * @var ElementInterface[]
+     * @var string
      */
-    private $elements;
+    private $header;
+
+    /**
+     * @var FormRow[]
+     */
+    private $rows;
 
     /**
      * @param string $id
@@ -37,38 +42,86 @@ class FormBlock
     }
 
     /**
-     * @return ElementInterface[]
+     * @return string
      */
-    public function getElements()
+    public function getHeader()
     {
-        return $this->elements;
+        return $this->header;
     }
 
     /**
-     * @param string $id
-     *
-     * @return ElementInterface
-     * @throws FormException
+     * @return bool
      */
-    public function getElement($id)
+    public function hasHeader()
     {
-        if (isset($this->elements[$id]))
-        {
-            return $this->elements[$id];
-        }
-
-        throw new FormException('Element with ID "' . $id . '" does not exist');
+        return empty($this->header) === false;
     }
 
     /**
-     * @param ElementInterface $element
+     * @param string $header
      *
      * @return FormBlock
      */
-    public function addElement(ElementInterface $element)
+    public function setHeader($header)
     {
-        $this->elements[$element->getField()->getId()] = $element;
+        $this->header = $header;
 
         return $this;
+    }
+
+    /**
+     * @return FormRow[]
+     */
+    public function getRows()
+    {
+        return $this->rows;
+    }
+
+    /**
+     * @param FormRow $row
+     *
+     * @return FormBlock
+     */
+    public function addRow(FormRow $row)
+    {
+        $this->rows[] = $row;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function renderBlock()
+    {
+        $html = '{header}{rows}';
+
+        $renderedRows = [];
+
+        foreach ($this->getRows() as $row)
+        {
+            $renderedRows[] = $row->render();
+        }
+
+        return RenderHelper::placeholders(
+            $html,
+            [
+                'header' => $this->renderHeader(),
+                'rows'   => join('', $renderedRows),
+            ]
+        );
+    }
+
+    /**
+     * @return null|string
+     */
+    private function renderHeader()
+    {
+        if ($this->hasHeader())
+        {
+            return '<h4 class="ui dividing header">' . $this->getHeader() . '</h4>';
+        }
+
+        return null;
     }
 }

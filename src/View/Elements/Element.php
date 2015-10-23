@@ -27,6 +27,11 @@ abstract class Element implements ElementInterface
     protected $label;
 
     /**
+     * @var string
+     */
+    protected $wide;
+
+    /**
      * @param Field $field
      */
     public function __construct(Field $field)
@@ -61,11 +66,31 @@ abstract class Element implements ElementInterface
     /**
      * @param string $label
      *
-     * @return Element
+     * @return static
      */
     public function setLabel($label)
     {
         $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWide()
+    {
+        return $this->wide;
+    }
+
+    /**
+     * @param string $wide
+     *
+     * @return Element
+     */
+    public function setWide($wide)
+    {
+        $this->wide = $wide;
 
         return $this;
     }
@@ -94,13 +119,13 @@ abstract class Element implements ElementInterface
 
             foreach ($this->getField()->getErrors() as $error)
             {
-                $errors[] = '<li>' . $error . '</li>';
+                $errors[] = '<div class="item">' . $error . '</div>';
             }
 
             /** @noinspection HtmlUnknownAttribute */
-            $html = '<div {attrs}><ul>' . join('', $errors) . '</ul></div>';
+            $html = '<div {attrs}>' . join('', $errors) . '</div>';
 
-            return RenderHelper::attributes($html, ['attrs' => ['class' => 'form-element-errors']]);
+            return RenderHelper::attributes($html, ['attrs' => ['class' => ['ui', 'list', 'error']]]);
         }
 
         return null;
@@ -114,15 +139,23 @@ abstract class Element implements ElementInterface
         /** @noinspection HtmlUnknownAttribute */
         $html = '<div {attrs-wrapper}>{label}{widget}{errors}</div>';
 
+        $class = ['field'];
+
+        if ($this->getWide())
+        {
+            $class[] = $this->getWide();
+            $class[] = 'wide';
+        }
+
         $attrs = [
             'attrs-wrapper' => [
-                'class' => ['form-element'],
+                'class' => $class,
             ],
         ];
 
         if ($this->getField()->hasErrors())
         {
-            $attrs['attrs-wrapper']['class'][] = 'has-errors';
+            $attrs['attrs-wrapper']['class'][] = 'error';
         }
 
         return RenderHelper::placeholders(

@@ -13,6 +13,11 @@ interface ElementInterface
     /**
      * @return string
      */
+    public function getWide();
+
+    /**
+     * @return string
+     */
     public function getWidgetHtml();
 
     /**

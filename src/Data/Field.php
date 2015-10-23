@@ -25,7 +25,7 @@ class Field
     /**
      * @var array
      */
-    private $options = [];
+    private $metas = [];
 
     /**
      * @var FilterInterface[]
@@ -88,27 +88,42 @@ class Field
     /**
      * @return array
      */
-    public function getOptions()
+    public function getMetas()
     {
-        return $this->options;
+        return $this->metas;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return mixed|null
+     */
+    public function getMeta($key)
+    {
+        if (empty($this->metas[$key]) === false)
+        {
+            return $this->metas[$key];
+        }
+
+        return null;
     }
 
     /**
      * @return bool
      */
-    public function hasOptions()
+    public function hasMetas()
     {
-        return empty($this->options) === false;
+        return empty($this->metas) === false;
     }
 
     /**
-     * @param array $options
+     * @param array $metas
      *
      * @return Field
      */
-    public function setOptions(array $options)
+    public function setMetas(array $metas)
     {
-        $this->options = $options;
+        $this->metas = $metas;
 
         return $this;
     }

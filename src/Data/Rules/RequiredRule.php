@@ -22,7 +22,7 @@ class RequiredRule extends Rule
      */
     public function isValid(Field $field)
     {
-        if ($field->getValue() === '')
+        if ($field->getValue() === '' || $field->getValue() === null)
         {
             throw new RuleException(
                 $this->getErrorMessage()

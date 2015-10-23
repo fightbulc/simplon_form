@@ -7,9 +7,9 @@
     "form",
     "fields",
     "validation",
-    "callbacks",
-    "flexibility",
-    "mustache",
+    "rules",
+    "filters",
+    "templates",
     "phtml"
   ],
   "license": "MIT",
@@ -22,7 +22,11 @@
   ],
   "require": {
     "php": ">=5.4",
-    "simplon/phtml": "0.1.*"
+    "simplon/phtml": "0.1.*",
+    "simplon/component_semanticui": "0.0.*"
+  },
+  "config": {
+    "component-dir": "assets/vendor"
   },
   "autoload": {
     "psr-4": {

@@ -26,6 +26,6 @@ class SubmitElement
      */
     public function renderElement()
     {
-        return '<div class="form-button input-submit"><input type="submit" name="form[submit]" value="' . $this->label . '"></div>';
+        return '<button class="ui button big" type="submit">' . $this->label . '</button>';
     }
 }
