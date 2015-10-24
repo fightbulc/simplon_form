@@ -334,6 +334,7 @@ class FormView
                 '{attrs}',
                 [
                     'attrs' => [
+                        'id'             => 'form-' . $this->getScope(),
                         'action'         => $this->getUrl(),
                         'method'         => $this->getMethod(),
                         'accept-charset' => $this->getAcceptCharset(),

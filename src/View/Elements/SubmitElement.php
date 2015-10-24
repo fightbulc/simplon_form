@@ -2,6 +2,8 @@
 
 namespace Simplon\Form\View\Elements;
 
+use Simplon\Form\View\RenderHelper;
+
 /**
  * Class SubmitElement
  * @package Simplon\Form\View\Elements
@@ -14,11 +16,18 @@ class SubmitElement
     private $label;
 
     /**
-     * @param string $label
+     * @var array
      */
-    public function __construct($label)
+    private $class = ['ui button big'];
+
+    /**
+     * @param string $label
+     * @param array $addToClass
+     */
+    public function __construct($label, array $addToClass = [])
     {
         $this->label = $label;
+        $this->class = array_merge($this->class, $addToClass);
     }
 
     /**
@@ -26,6 +35,19 @@ class SubmitElement
      */
     public function renderElement()
     {
-        return '<button class="ui button big" type="submit">' . $this->label . '</button>';
+        /** @noinspection HtmlUnknownAttribute */
+        $html = '<button {attrs}>{label}</button>';
+
+        $attrs = [
+            'attrs' => [
+                'class' => $this->class,
+                'type'  => 'submit',
+            ],
+        ];
+
+        return RenderHelper::placeholders(
+            RenderHelper::attributes($html, $attrs),
+            ['label' => $this->label]
+        );
     }
 }

@@ -23,12 +23,12 @@ class FormValidator
     private $scope;
 
     /**
-     * @var FormData[]
+     * @var FormFields[]
      */
-    private $formData = [];
+    private $formFields = [];
 
     /**
-     * @var array
+     * @var Field[]
      */
     private $errorFields = [];
 
@@ -36,6 +36,16 @@ class FormValidator
      * @var Csrf
      */
     private $csrf;
+
+    /**
+     * @var bool
+     */
+    private $hasBeenValidated = false;
+
+    /**
+     * @var bool|null
+     */
+    private $validationResult;
 
     /**
      * @param array $requestData
@@ -81,33 +91,33 @@ class FormValidator
     }
 
     /**
-     * @return FormData[]
+     * @return FormFields[]
      */
-    public function getFormData()
+    public function getFormFields()
     {
-        return $this->formData;
+        return $this->formFields;
     }
 
     /**
-     * @param FormData $data
+     * @param FormFields $fields
      *
      * @return FormValidator
      */
-    public function addFormData(FormData $data)
+    public function addFormFields(FormFields $fields)
     {
-        $this->formData[] = $data;
+        $this->formFields[] = $fields;
 
         return $this;
     }
 
     /**
-     * @param FormData[] $formData
+     * @param FormFields[] $formFields
      *
      * @return FormValidator
      */
-    public function setFormData(array $formData)
+    public function setFormFields(array $formFields)
     {
-        $this->formData = $formData;
+        $this->formFields = $formFields;
 
         return $this;
     }
@@ -118,49 +128,60 @@ class FormValidator
      */
     public function isValid()
     {
-        if ($this->hasRequestData() === false)
+        if ($this->hasBeenValidated() === false)
         {
-            return null;
-        }
+            $this->setHasBeenValidated();
 
-        if ($this->getScope() && $this->getRequestData($this->getScope()) === null)
-        {
-            return null;
-        }
-
-        if ($this->getCsrf() && $this->getCsrf()->isValid($this->requestData) === false)
-        {
-            throw new FormException('CSRF mismatch');
-        }
-
-        foreach ($this->getFormData() as $data)
-        {
-            foreach ($data->getFields() as $field)
+            if ($this->hasRequestData() === false)
             {
-                $field->setValue(
-                    $this->getRequestData($field->getId())
-                );
+                $this->setValidationResult(null);
 
-                foreach ($field->getRules() as $rule)
-                {
-                    try
-                    {
-                        $rule->isValid($field);
-                    }
-                    catch (RuleException $e)
-                    {
-                        $field->addError($e->getMessage());
-                    }
-                }
+                return null;
+            }
 
-                if ($field->hasErrors())
+            if ($this->getScope() && $this->getRequestData($this->getScope()) === null)
+            {
+                $this->setValidationResult(null);
+
+                return null;
+            }
+
+            if ($this->getCsrf() && $this->getCsrf()->isValid($this->requestData) === false)
+            {
+                throw new FormException('CSRF mismatch');
+            }
+
+            foreach ($this->getFormFields() as $data)
+            {
+                foreach ($data->getFields() as $field)
                 {
-                    $this->addErrorField($field);
+                    $field->setValue(
+                        $this->getRequestData($field->getId())
+                    );
+
+                    foreach ($field->getRules() as $rule)
+                    {
+                        try
+                        {
+                            $rule->isValid($field);
+                        }
+                        catch (RuleException $e)
+                        {
+                            $field->addError($e->getMessage());
+                        }
+                    }
+
+                    if ($field->hasErrors())
+                    {
+                        $this->addErrorField($field);
+                    }
                 }
             }
+
+            $this->setValidationResult($this->hasErrorFields() === false);
         }
 
-        return $this->hasErrorFields() === false;
+        return $this->getValidationResult();
     }
 
     /**
@@ -169,6 +190,29 @@ class FormValidator
     public function getErrorFields()
     {
         return $this->errorFields;
+    }
+
+    /**
+     * @return array
+     */
+    public function getErrorMessages()
+    {
+        $errors = [];
+
+        if ($this->hasErrorFields())
+        {
+            foreach ($this->errorFields as $field)
+            {
+                $errors[] = [
+                    'id'     => $field->getId(),
+                    'value'  => $field->getValue(),
+                    'errors' => $field->getErrors(),
+                ];
+            }
+
+        }
+
+        return $errors;
     }
 
     /**
@@ -220,5 +264,43 @@ class FormValidator
     private function getScope()
     {
         return $this->scope;
+    }
+
+    /**
+     * @return boolean
+     */
+    private function hasBeenValidated()
+    {
+        return $this->hasBeenValidated;
+    }
+
+    /**
+     * @return FormValidator
+     */
+    private function setHasBeenValidated()
+    {
+        $this->hasBeenValidated = true;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean|null
+     */
+    private function getValidationResult()
+    {
+        return $this->validationResult;
+    }
+
+    /**
+     * @param bool|null $result
+     *
+     * @return FormValidator
+     */
+    private function setValidationResult($result)
+    {
+        $this->validationResult = $result;
+
+        return $this;
     }
 }
