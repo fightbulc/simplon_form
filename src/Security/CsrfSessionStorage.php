@@ -10,7 +10,7 @@ class CsrfSessionStorage implements CsrfStorageInterface
 {
     public function __construct()
     {
-        if (!session_id())
+        if (empty(session_id()))
         {
             session_start();
         }
