@@ -169,6 +169,22 @@ abstract class Element implements ElementInterface
     }
 
     /**
+     * @return null
+     */
+    public function getAssets()
+    {
+        return null;
+    }
+
+    /**
+     * @return null
+     */
+    public function getCode()
+    {
+        return null;
+    }
+
+    /**
      * @return string
      */
     protected function renderElementId()

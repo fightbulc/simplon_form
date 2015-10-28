@@ -11,6 +11,16 @@ use Simplon\Form\Data\Field;
 interface ElementInterface
 {
     /**
+     * @return array|null
+     */
+    public function getAssets();
+
+    /**
+     * @return string|null
+     */
+    public function getCode();
+
+    /**
      * @return string
      */
     public function getWide();

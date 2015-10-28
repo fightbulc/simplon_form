@@ -70,6 +70,11 @@ class FormView
     private $hasErrors;
 
     /**
+     * @var string
+     */
+    private $componentDir = '../assets/vendor';
+
+    /**
      * @param $scope
      */
     public function __construct($scope)
@@ -234,6 +239,26 @@ class FormView
     }
 
     /**
+     * @return string
+     */
+    public function getComponentDir()
+    {
+        return trim($this->componentDir, '/');
+    }
+
+    /**
+     * @param string $componentDir
+     *
+     * @return FormView
+     */
+    public function setComponentDir($componentDir)
+    {
+        $this->componentDir = $componentDir;
+
+        return $this;
+    }
+
+    /**
      * @param string $id
      *
      * @return FormBlock
@@ -342,13 +367,23 @@ class FormView
                     ],
                 ]
             ),
+            'css'   => $this->buildFieldAssetsCss(),
             'error' => $this->shouldRenderErrorMessage() ? $this->renderErrorMessage() : null,
             'scope' => $this->renderScopeElement(),
             'csrf'  => $this->renderCsrfElement(),
             'form'  => $form,
+            'js'    => $this->buildFieldAssetsJs(),
         ];
 
         return RenderHelper::placeholders($html, $placeholders);
+    }
+
+    /**
+     * @return string
+     */
+    public function renderFieldAssets()
+    {
+        return $this->buildFieldAssetsCss() . $this->buildFieldAssetsJs() . $this->buildFieldCode();
     }
 
     /**
@@ -391,5 +426,83 @@ class FormView
         }
 
         return null;
+    }
+
+    /**
+     * @param string $fileType
+     * @param string $html
+     *
+     * @return string
+     */
+    private function buildFieldAssets($fileType, $html)
+    {
+        $assets = [];
+
+        foreach ($this->blocks as $block)
+        {
+            foreach ($block->getRows() as $row)
+            {
+                foreach ($row->getElements() as $element)
+                {
+                    if ($element->getAssets())
+                    {
+                        foreach ($element->getAssets() as $file)
+                        {
+                            if (strpos($file, $fileType) !== false)
+                            {
+                                $assets[] = RenderHelper::placeholders(
+                                    $html,
+                                    ['path' => $this->getComponentDir() . '/' . $file]
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return join('', $assets);
+    }
+
+    /**
+     * @return string
+     */
+    private function buildFieldAssetsCss()
+    {
+        /** @noinspection HtmlUnknownTarget */
+        return $this->buildFieldAssets('.css', '<link href="{path}" rel="stylesheet">');
+    }
+
+    /**
+     * @return string
+     */
+    private function buildFieldAssetsJs()
+    {
+        /** @noinspection HtmlUnknownTarget */
+        return $this->buildFieldAssets('.js', '<script src="{path}"></script>');
+    }
+
+    /**
+     * @return string
+     */
+    private function buildFieldCode()
+    {
+        $code = [];
+
+        foreach ($this->blocks as $block)
+        {
+            foreach ($block->getRows() as $row)
+            {
+                foreach ($row->getElements() as $element)
+                {
+                    if ($element->getCode())
+                    {
+                        $code[] = trim($element->getCode(), ';');
+                    }
+                }
+            }
+        }
+
+        return '<script type="application/javascript"> $(document).ready(function (){' . join(";\n", $code) . '}); </script>';
     }
 }

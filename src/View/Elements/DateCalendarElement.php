@@ -5,10 +5,10 @@ namespace Simplon\Form\View\Elements;
 use Simplon\Form\View\RenderHelper;
 
 /**
- * Class DateElement
+ * Class DateCalendarElement
  * @package Simplon\Form\View\Elements
  */
-class DateElement extends Element
+class DateCalendarElement extends Element
 {
     /**
      * @var string
@@ -120,5 +120,26 @@ class DateElement extends Element
         ];
 
         return RenderHelper::attributes($this->getWidgetHtml(), $attrs);
+    }
+
+    /**
+     * @return array
+     */
+    public function getAssets()
+    {
+        return [
+            'rome/2.1.x/rome.min.css',
+            'rome/rome.custom.min.css',
+            'momentjs/2.10.x/moment-with-locales.min.js',
+            'rome/2.1.x/rome.standalone.min.js',
+        ];
+    }
+
+    /**
+     * @return null
+     */
+    public function getCode()
+    {
+        return 'rome(document.getElementById("' . $this->renderElementId() . '"), {time: false})';
     }
 }

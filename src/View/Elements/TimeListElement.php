@@ -3,10 +3,10 @@
 namespace Simplon\Form\View\Elements;
 
 /**
- * Class TimeElement
+ * Class TimeListElement
  * @package Simplon\Form\View\Elements
  */
-class TimeElement extends DropDownElement
+class TimeListElement extends DropDownElement
 {
     /**
      * @var int
@@ -29,7 +29,7 @@ class TimeElement extends DropDownElement
     /**
      * @param int $interval
      *
-     * @return TimeElement
+     * @return TimeListElement
      */
     public function setInterval($interval)
     {
@@ -49,7 +49,7 @@ class TimeElement extends DropDownElement
     /**
      * @param boolean $isNone
      *
-     * @return TimeElement
+     * @return TimeListElement
      */
     public function isNone($isNone)
     {

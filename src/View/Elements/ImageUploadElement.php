@@ -2,6 +2,7 @@
 
 namespace Simplon\Form\View\Elements;
 
+use Simplon\Form\FormException;
 use Simplon\Form\View\RenderHelper;
 
 /**
@@ -24,6 +25,26 @@ class ImageUploadElement extends Element
      * @var string
      */
     private $removeLabel = 'Click to remove';
+
+    /**
+     * @var string
+     */
+    private $uploadUrl;
+
+    /**
+     * @var int
+     */
+    private $imageWidth = 1200;
+
+    /**
+     * @var int
+     */
+    private $thumbWidth = 600;
+
+    /**
+     * @var string
+     */
+    private $thumbContainer = '#thumb';
 
     /**
      * @return string
@@ -81,6 +102,118 @@ class ImageUploadElement extends Element
     public function setRemoveLabel($removeLabel)
     {
         $this->removeLabel = $removeLabel;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     * @throws FormException
+     */
+    public function getImageWidth()
+    {
+        $value = $this->imageWidth;
+
+        if ($value)
+        {
+            return $value;
+        }
+
+        throw new FormException('Missing image width');
+    }
+
+    /**
+     * @param int $imageWidth
+     *
+     * @return ImageUploadElement
+     */
+    public function setImageWidth($imageWidth)
+    {
+        $this->imageWidth = $imageWidth;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     * @throws FormException
+     */
+    public function getThumbContainer()
+    {
+        $value = $this->thumbContainer;
+
+        if ($value)
+        {
+            return $value;
+        }
+
+        throw new FormException('Missing thumb container reference');
+    }
+
+    /**
+     * @param string $thumbContainer
+     *
+     * @return ImageUploadElement
+     */
+    public function setThumbContainer($thumbContainer)
+    {
+        $this->thumbContainer = $thumbContainer;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     * @throws FormException
+     */
+    public function getThumbWidth()
+    {
+        $value = $this->thumbWidth;
+
+        if ($value)
+        {
+            return $value;
+        }
+
+        throw new FormException('Missing thumb width');
+    }
+
+    /**
+     * @param int $thumbWidth
+     *
+     * @return ImageUploadElement
+     */
+    public function setThumbWidth($thumbWidth)
+    {
+        $this->thumbWidth = $thumbWidth;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     * @throws FormException
+     */
+    public function getUploadUrl()
+    {
+        $value = $this->uploadUrl;
+
+        if ($value)
+        {
+            return $value;
+        }
+
+        throw new FormException('Missing upload-url');
+    }
+
+    /**
+     * @param string $uploadUrl
+     *
+     * @return ImageUploadElement
+     */
+    public function setUploadUrl($uploadUrl)
+    {
+        $this->uploadUrl = $uploadUrl;
 
         return $this;
     }
@@ -161,10 +294,10 @@ class ImageUploadElement extends Element
         $attrs = [
             'attrs-wrapper'        => [
                 'class'                => ['form-image-upload'],
-                'data-upload-url'      => 'http://open.dev/simplon_form/test/upload-test.php',
-                'data-image-width'     => 1200,
-                'data-thumb-width'     => 600,
-                'data-thumb-container' => '#thumbnail',
+                'data-upload-url'      => $this->getUploadUrl(),
+                'data-image-width'     => $this->getImageWidth(),
+                'data-thumb-width'     => $this->getThumbWidth(),
+                'data-thumb-container' => $this->getThumbContainer(),
                 'data-attach-label'    => $this->getAttachLabel(),
                 'data-replace-label'   => $this->getReplaceLabel(),
                 'data-remove-label'    => $this->getRemoveLabel(),
@@ -190,5 +323,24 @@ class ImageUploadElement extends Element
             RenderHelper::attributes($this->getWidgetHtml(), $attrs),
             ['label' => $label]
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function getAssets()
+    {
+        return [
+            'image-upload/bundle.min.css',
+            'image-upload/bundle.min.js',
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return '$(\'#' . $this->renderElementId() . '\').imageUpload()';
     }
 }

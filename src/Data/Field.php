@@ -23,6 +23,11 @@ class Field
     private $value;
 
     /**
+     * @var mixed
+     */
+    private $initialValue;
+
+    /**
      * @var array
      */
     private $metas = [];
@@ -63,6 +68,28 @@ class Field
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInitialValue()
+    {
+        return $this->initialValue;
+    }
+
+    /**
+     * @param mixed $initialValue
+     *
+     * @return Field
+     */
+    public function setInitialValue($initialValue)
+    {
+        $this->initialValue = $initialValue;
+
+        $this->setValue($initialValue);
+
+        return $this;
     }
 
     /**

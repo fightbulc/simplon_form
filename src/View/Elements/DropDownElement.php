@@ -27,6 +27,11 @@ class DropDownElement extends Element
     private $searchable = false;
 
     /**
+     * @var bool
+     */
+    private $allowAdditions = false;
+
+    /**
      * @return string
      */
     public function getPlaceholder()
@@ -37,7 +42,7 @@ class DropDownElement extends Element
     /**
      * @param string $placeholder
      *
-     * @return DropDownElement
+     * @return static
      */
     public function setPlaceholder($placeholder)
     {
@@ -57,7 +62,7 @@ class DropDownElement extends Element
     /**
      * @param boolean $multiple
      *
-     * @return DropDownElement
+     * @return static
      */
     public function isMultiple($multiple)
     {
@@ -77,11 +82,31 @@ class DropDownElement extends Element
     /**
      * @param boolean $searchable
      *
-     * @return DropDownElement
+     * @return static
      */
     public function isSearchable($searchable)
     {
         $this->searchable = $searchable === true;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getAllowAdditions()
+    {
+        return $this->allowAdditions;
+    }
+
+    /**
+     * @param boolean $allowAdditions
+     *
+     * @return static
+     */
+    public function allowAdditions($allowAdditions)
+    {
+        $this->allowAdditions = $allowAdditions === true;
 
         return $this;
     }
@@ -190,6 +215,16 @@ class DropDownElement extends Element
                 'options'     => $this->renderOptions(),
             ]
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        $allowAdditions = $this->getAllowAdditions() ? 'true' : 'false';
+
+        return '$(\'#' . $this->renderElementId() . '\').parent().dropdown({ allowAdditions: ' . $allowAdditions . ' })';
     }
 
     /**

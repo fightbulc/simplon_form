@@ -127,16 +127,22 @@ class CheckboxElement extends Element
         $attrs = [
             'attrs-wrapper' => [
                 'class' => ['ui fields', $this->getFormat()],
+                'id'    => $this->renderElementId(),
             ],
-            'attrs'         => $this->getWidgetAttributes(),
         ];
 
         return RenderHelper::placeholders(
             RenderHelper::attributes($this->getWidgetHtml(), $attrs),
-            [
-                'options' => $this->renderOptions(),
-            ]
+            ['options' => $this->renderOptions()]
         );
+    }
+
+    /**
+     * @return null
+     */
+    public function getCode()
+    {
+        return '$(\'#' . $this->renderElementId() . ' .ui.checkbox\').checkbox()';
     }
 
     /**
