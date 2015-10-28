@@ -188,18 +188,10 @@ class SearchElement extends Element
 
     /**
      * @return string
-     * @throws FormException
      */
     public function getSourceUrl()
     {
-        $value = $this->sourceUrl;
-
-        if ($value)
-        {
-            return $value;
-        }
-
-        throw new FormException('Missing search-url');
+        return $this->sourceUrl;
     }
 
     /**
@@ -347,9 +339,27 @@ class SearchElement extends Element
 
     /**
      * @return string
+     * @throws FormException
      */
     public function getCode()
     {
+        // source requirements
+        if ($this->getSourceUrl() === null && $this->getSourceLocal() === null)
+        {
+            throw new FormException('Missing search source');
+        }
+
+        // local search requirements
+        if ($this->getSourceUrl() === null)
+        {
+            $searchFields = $this->getSourceLocalSearchFields();
+
+            if ($searchFields === null)
+            {
+                throw new FormException('Missing search fields for your local source data');
+            }
+        }
+
         $code[] = '$(\'#' . $this->renderElementId() . '\').parent().find(\'.prompt\').on(\'blur\', function (){ if ($(this).val() === \'\') { $(this).parent().find(\'input[type=hidden]\').val(\'\') } })';
 
         if ($this->getSourceUrl())
@@ -358,7 +368,7 @@ class SearchElement extends Element
         }
         else
         {
-            $code[] = '$(\'#' . $this->renderElementId() . '\').parent().parent().search({ source: JSON.parse({sourceLocal}), searchFields: JSON.parse({searchFields}), fields: { results: \'{resultsRoot}\', title: \'{itemTitleAttr}\' }, maxResults: {maxResults}, minCharacters: {minChars}, onSelect: function (item) { var value = item.{itemTitleAttr}; if(item.{itemIdAttr}) { value = item.{itemIdAttr} + \',\' + item.{itemTitleAttr}; } $(this).find(\'input[type=hidden]\').val(value); } })';
+            $code[] = '$(\'#' . $this->renderElementId() . '\').parent().parent().search({ source: JSON.parse(\'{sourceLocal}\'), searchFields: JSON.parse(\'{searchFields}\'), fields: { title: \'{itemTitleAttr}\' }, maxResults: {maxResults}, minCharacters: {minChars}, onSelect: function (item) { var value = item.{itemTitleAttr}; if(item.{itemIdAttr}) { value = item.{itemIdAttr} + \',\' + item.{itemTitleAttr}; } $(this).find(\'input[type=hidden]\').val(value); } })';
         }
 
         return RenderHelper::placeholders(
