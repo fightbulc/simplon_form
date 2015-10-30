@@ -404,8 +404,8 @@ class TypeAheadElement extends Element
         $assets = [
             'handlebars/4.0.x/handlebars.min.js',
             'typeahead/0.11.x/typeahead.bundle.slice-fix.min.js',
-            'typeahead/typeahead.element.css',
-            'typeahead/typeahead.element.js',
+            'typeahead/typeahead.element.min.css',
+            'typeahead/typeahead.element.min.js',
         ];
 
         $sourceAssets = $this->getSource()->getAssets();
