@@ -51,4 +51,19 @@ class RenderHelper
 
         return $html;
     }
+
+    /**
+     * @param array $lines
+     *
+     * @return string
+     */
+    public static function codeLines(array $lines)
+    {
+        foreach ($lines as $index => $line)
+        {
+            $lines[$index] = trim($line, ';');
+        }
+
+        return join(";\n", $lines);
+    }
 }

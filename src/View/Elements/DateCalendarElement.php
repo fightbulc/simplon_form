@@ -26,7 +26,7 @@ class DateCalendarElement extends Element
     /**
      * @param string $placeholder
      *
-     * @return SearchElement
+     * @return TypeAheadElement
      */
     public function setPlaceholder($placeholder)
     {

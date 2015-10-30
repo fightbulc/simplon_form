@@ -11,6 +11,8 @@ use Simplon\Form\View\RenderHelper;
  */
 class DropDownElement extends Element
 {
+    const DELIMITER = ',';
+
     /**
      * @var string
      */
@@ -120,7 +122,7 @@ class DropDownElement extends Element
 
         if (is_array($fieldValue))
         {
-            $fieldValue = join(',', $fieldValue);
+            $fieldValue = join(self::DELIMITER, $fieldValue);
         }
 
         $base = [
@@ -224,7 +226,7 @@ class DropDownElement extends Element
     {
         $allowAdditions = $this->getAllowAdditions() ? 'true' : 'false';
 
-        return '$(\'#' . $this->renderElementId() . '\').parent().dropdown({ allowAdditions: ' . $allowAdditions . ' })';
+        return '$(\'#' . $this->renderElementId() . '\').parent().dropdown({ allowAdditions: ' . $allowAdditions . ', delimiter: "," })';
     }
 
     /**

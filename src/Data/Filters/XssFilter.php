@@ -15,6 +15,26 @@ class XssFilter implements FilterInterface
      */
     public function apply($value)
     {
+        if (is_array($value))
+        {
+            foreach ($value as $k => $v)
+            {
+                $value[$k] = $this->convert($v);
+            }
+
+            return $value;
+        }
+
+        return $this->convert($value);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return string
+     */
+    private function convert($value)
+    {
         $filters = [
             '\<script.*?\>'               => '', // <script...> ...
             '\w+\(.*?\)'                  => '', // methodName("params") | methodName(params)

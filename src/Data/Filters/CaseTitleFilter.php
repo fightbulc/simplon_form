@@ -18,9 +18,29 @@ class CaseTitleFilter implements FilterInterface
     {
         if (function_exists('mb_convert_case'))
         {
-            $value = mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
+            if (is_array($value))
+            {
+                foreach ($value as $k => $v)
+                {
+                    $value[$k] = $this->convert($v);
+                }
+
+                return $value;
+            }
+
+            return $this->convert($value);
         }
 
         return $value;
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return string
+     */
+    private function convert($value)
+    {
+        return mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
     }
 }

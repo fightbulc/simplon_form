@@ -13,13 +13,8 @@ class TrimLeftFilter extends TrimFilter
      *
      * @return string
      */
-    public function apply($value)
+    protected function convert($value)
     {
-        if (isset($this->trimChars))
-        {
-            return ltrim($value, $this->trimChars);
-        }
-
-        return ltrim($value);
+        return ltrim($value, $this->trimChars);
     }
 }

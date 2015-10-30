@@ -450,10 +450,14 @@ class FormView
                         {
                             if (strpos($file, $fileType) !== false)
                             {
-                                $assets[] = RenderHelper::placeholders(
-                                    $html,
-                                    ['path' => $this->getComponentDir() . '/' . $file]
-                                );
+                                $path = $this->getComponentDir() . '/' . $file;
+
+                                if (preg_match('/^(http|\/\/)/i', $file))
+                                {
+                                    $path = $file;
+                                }
+
+                                $assets[] = RenderHelper::placeholders($html, ['path' => $path]);
                             }
                         }
                     }
@@ -497,12 +501,13 @@ class FormView
                 {
                     if ($element->getCode())
                     {
-                        $code[] = trim($element->getCode(), ';');
+                        $code[] = "\n<!---- ELEMENT: " . $element->getField()->getId() . " //---->\n";
+                        $code[] = trim($element->getCode(), ';') . ";\n";
                     }
                 }
             }
         }
 
-        return '<script type="application/javascript"> $(document).ready(function (){' . join(";\n", $code) . '}); </script>';
+        return '<script type="application/javascript"> $(document).ready(function (){' . join("", $code) . '}); </script>';
     }
 }
