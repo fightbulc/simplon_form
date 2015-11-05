@@ -20,7 +20,7 @@ class UrlRule extends Rule
      *
      * @throws RuleException
      */
-    public function isValid(Field $field)
+    public function apply(Field $field)
     {
         if (filter_var($field->getValue(), FILTER_VALIDATE_URL) === false)
         {

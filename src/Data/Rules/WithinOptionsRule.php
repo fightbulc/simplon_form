@@ -20,7 +20,7 @@ class WithinOptionsRule extends Rule
      *
      * @throws RuleException
      */
-    public function isValid(Field $field)
+    public function apply(Field $field)
     {
         $options = $field->getMeta('options');
         $values = explode(',', $field->getValue());

@@ -15,5 +15,5 @@ interface RuleInterface
      *
      * @throws RuleException
      */
-    public function isValid(Field $field);
+    public function apply(Field $field);
 }

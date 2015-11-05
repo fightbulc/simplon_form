@@ -33,7 +33,7 @@ class MaxLengthRule extends Rule
      *
      * @throws RuleException
      */
-    public function isValid(Field $field)
+    public function apply(Field $field)
     {
         if (mb_strlen($field->getValue(), 'UTF-8') > $this->length)
         {

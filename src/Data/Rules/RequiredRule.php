@@ -20,7 +20,7 @@ class RequiredRule extends Rule
      *
      * @throws RuleException
      */
-    public function isValid(Field $field)
+    public function apply(Field $field)
     {
         if ($field->getValue() === '' || $field->getValue() === null)
         {

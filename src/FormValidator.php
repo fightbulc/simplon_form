@@ -163,7 +163,7 @@ class FormValidator
                     {
                         try
                         {
-                            $rule->isValid($field);
+                            $rule->apply($field);
                         }
                         catch (RuleException $e)
                         {

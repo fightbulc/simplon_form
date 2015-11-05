@@ -2,7 +2,10 @@
 
 namespace Simplon\Form\Data;
 
+use App\Components\Settings\Managers\UserDetails\UserDetailsFormFields;
 use Simplon\Form\Data\Filters\FilterInterface;
+use Simplon\Form\Data\Rules\FieldDependencyRule;
+use Simplon\Form\Data\Rules\IfFilledRule;
 use Simplon\Form\Data\Rules\RuleInterface;
 use Simplon\Form\FormException;
 
@@ -46,6 +49,11 @@ class Field
      * @var array
      */
     private $errors = [];
+
+    /**
+     * @var bool
+     */
+    private $arrangedRules = false;
 
     /**
      * @param string $id
@@ -200,6 +208,12 @@ class Field
      */
     public function getRules()
     {
+        if ($this->arrangedRules === false)
+        {
+            $this->rules = $this->arrangeRules($this->rules);
+            $this->arrangedRules = true;
+        }
+
         return $this->rules;
     }
 
@@ -219,6 +233,7 @@ class Field
     public function addRule(RuleInterface $rule)
     {
         $this->rules[] = $rule;
+        $this->arrangedRules = false;
 
         return $this;
     }
@@ -231,6 +246,7 @@ class Field
     public function setRules(array $rules)
     {
         $this->rules = $rules;
+        $this->arrangedRules = false;
 
         return $this;
     }
@@ -291,5 +307,36 @@ class Field
         }
 
         return $value;
+    }
+
+    /**
+     * @param RuleInterface[] $rules
+     *
+     * @return RuleInterface[]
+     */
+    private function arrangeRules(array $rules)
+    {
+        $arranged = [];
+
+        foreach ($rules as $rule)
+        {
+            // needs to be on top because other rules might throw an exception
+            if ($rule instanceof FieldDependencyRule)
+            {
+                array_unshift($arranged, $rule);
+                continue;
+            }
+
+            if ($rule instanceof IfFilledRule)
+            {
+                $rule->setFollowUpRules(
+                    $this->arrangeRules($rule->getFollowUpRules())
+                );
+            }
+
+            $arranged[] = $rule;
+        }
+
+        return $arranged;
     }
 }
