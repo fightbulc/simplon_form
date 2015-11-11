@@ -400,7 +400,7 @@ class SelectElement extends CoreElement
                 {
                     $isSelected = false;
 
-                    if ($currentSelectedValue !== '' && $value === $currentSelectedValue)
+                    if ($currentSelectedValue !== '' && $value == $currentSelectedValue)
                     {
                         $isSelected = true;
                     }
@@ -422,7 +422,7 @@ class SelectElement extends CoreElement
         {
             $isSelected = false;
 
-            if ($currentSelectedValue !== '' && $value === $currentSelectedValue)
+            if ($currentSelectedValue !== '' && $value == $currentSelectedValue)
             {
                 $isSelected = true;
             }
@@ -455,7 +455,7 @@ class SelectElement extends CoreElement
                 {
                     $isSelected = false;
 
-                    if ($currentSelectedValue !== '' && $value === $currentSelectedValue)
+                    if ($currentSelectedValue !== '' && $value == $currentSelectedValue)
                     {
                         $isSelected = true;
                     }
