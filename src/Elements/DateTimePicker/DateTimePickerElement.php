@@ -247,13 +247,13 @@ class DateTimePickerElement extends TextSingleLineElement
         }
 
         // load widget
-        $this->addAssetInline('rome(' . $this->getId() . ', {' . join(', ', $json) . '})');
+        $this->addAssetInline('rome(document.getElementById("' . $this->getId() . '"), {' . join(', ', $json) . '})');
 
         // handle inline
         if ($this->getUseInline() === true)
         {
             $this->elementHtml = $this->elementInlineHtml;
-            $this->addAssetInline('rome(' . $this->getId() . ').on("data", function (value) { document.getElementById("' . $this->getId() . '_value").value = value; })');
+            $this->addAssetInline('rome(document.getElementById("' . $this->getId() . '")).on("data", function (value) { document.getElementById("' . $this->getId() . '_value").value = value; })');
         }
     }
 
