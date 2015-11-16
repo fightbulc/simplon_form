@@ -243,7 +243,7 @@ class FormView
      */
     public function getComponentDir()
     {
-        return trim($this->componentDir, '/');
+        return rtrim($this->componentDir, '/');
     }
 
     /**
@@ -379,6 +379,30 @@ class FormView
     }
 
     /**
+     * @return array
+     */
+    public function getCssAssets()
+    {
+        return $this->buildFieldAssetPaths('.css');
+    }
+
+    /**
+     * @return array
+     */
+    public function getJsAssets()
+    {
+        return $this->buildFieldAssetPaths('.js');
+    }
+
+    /**
+     * @return string
+     */
+    public function getCodeAssets()
+    {
+        return $this->buildFieldCode();
+    }
+
+    /**
      * @return string
      */
     public function renderFieldAssets()
@@ -426,6 +450,38 @@ class FormView
         }
 
         return null;
+    }
+
+    /**
+     * @param string $fileType
+     *
+     * @return array
+     */
+    private function buildFieldAssetPaths($fileType)
+    {
+        $assets = [];
+
+        foreach ($this->blocks as $block)
+        {
+            foreach ($block->getRows() as $row)
+            {
+                foreach ($row->getElements() as $element)
+                {
+                    if ($element->getAssets())
+                    {
+                        foreach ($element->getAssets() as $file)
+                        {
+                            if (strpos($file, $fileType) !== false)
+                            {
+                                $assets[] = $this->getComponentDir() . '/' . $file;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $assets;
     }
 
     /**
