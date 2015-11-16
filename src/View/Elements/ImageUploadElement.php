@@ -47,6 +47,11 @@ class ImageUploadElement extends Element
     private $thumbContainer = '#thumb';
 
     /**
+     * @var string
+     */
+    private $urlResponseObject = 'response.url';
+
+    /**
      * @return string
      */
     public function getAttachLabel()
@@ -219,6 +224,34 @@ class ImageUploadElement extends Element
     }
 
     /**
+     * @return string
+     * @throws FormException
+     */
+    public function getUrlResponseObject()
+    {
+        $value = $this->urlResponseObject;
+
+        if ($value)
+        {
+            return $value;
+        }
+
+        throw new FormException('Missing url-response-object definition');
+    }
+
+    /**
+     * @param string $urlResponseObject
+     *
+     * @return ImageUploadElement
+     */
+    public function setUrlResponseObject($urlResponseObject)
+    {
+        $this->urlResponseObject = $urlResponseObject;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getWidgetAttributes()
@@ -341,6 +374,6 @@ class ImageUploadElement extends Element
      */
     public function getCode()
     {
-        return '$(\'#' . $this->renderElementId() . '\').imageUpload()';
+        return '$(\'#' . $this->renderElementId() . '\').imageUpload({getUrlResponseObject: function(response) { return ' . $this->getUrlResponseObject() . '; }})';
     }
 }
