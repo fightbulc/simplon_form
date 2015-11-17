@@ -132,6 +132,7 @@ class FormValidator
         {
             $this->setHasBeenValidated();
 
+            // nothing to check against
             if ($this->hasRequestData() === false)
             {
                 $this->setValidationResult(null);
@@ -139,6 +140,7 @@ class FormValidator
                 return null;
             }
 
+            // in case we require a scope and scope is not within request data
             if ($this->getScope() && $this->getRequestData($this->getScope()) === null)
             {
                 $this->setValidationResult(null);
@@ -146,14 +148,16 @@ class FormValidator
                 return null;
             }
 
+            // run check if CSRF is enabled
             if ($this->getCsrf() && $this->getCsrf()->isValid($this->requestData) === false)
             {
                 throw new FormException('CSRF mismatch');
             }
 
-            foreach ($this->getFormFields() as $data)
+            // validate all fields
+            foreach ($this->getFormFields() as $fields)
             {
-                foreach ($data->getFields() as $field)
+                foreach ($fields->getAll() as $field)
                 {
                     $field->setValue(
                         $this->getRequestData($field->getId())
