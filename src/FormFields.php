@@ -20,7 +20,7 @@ class FormFields
      *
      * @return bool
      */
-    public function hasField($id)
+    public function has($id)
     {
         return isset($this->fields[$id]);
     }
@@ -31,9 +31,9 @@ class FormFields
      * @return Field
      * @throws FormException
      */
-    public function getField($id)
+    public function get($id)
     {
-        if ($this->hasField($id))
+        if ($this->has($id))
         {
             return $this->fields[$id];
         }
@@ -47,7 +47,7 @@ class FormFields
      * @return FormFields
      * @throws FormException
      */
-    public function addField(Field $field)
+    public function add(Field $field)
     {
         if (isset($this->fields[$field->getId()]))
         {
@@ -65,11 +65,13 @@ class FormFields
      * @return FormFields
      * @throws FormException
      */
-    public function setFields(array $fields)
+    public function reset(array $fields)
     {
+        $this->fields = [];
+
         foreach ($fields as $field)
         {
-            $this->addField($field);
+            $this->add($field);
         }
 
         return $this;
@@ -78,7 +80,7 @@ class FormFields
     /**
      * @return Field[]
      */
-    public function getFields()
+    public function getAll()
     {
         return $this->fields;
     }
@@ -90,7 +92,7 @@ class FormFields
     {
         $result = [];
 
-        foreach ($this->getFields() as $field)
+        foreach ($this->getAll() as $field)
         {
             $result[$field->getId()] = $field->getValue();
         }
