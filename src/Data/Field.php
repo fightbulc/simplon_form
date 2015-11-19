@@ -2,12 +2,12 @@
 
 namespace Simplon\Form\Data;
 
-use App\Components\Settings\Managers\UserDetails\UserDetailsFormFields;
 use Simplon\Form\Data\Filters\FilterInterface;
 use Simplon\Form\Data\Rules\FieldDependencyRule;
 use Simplon\Form\Data\Rules\IfFilledRule;
 use Simplon\Form\Data\Rules\RuleInterface;
 use Simplon\Form\FormException;
+use Simplon\Form\View\Elements\Support\Meta\MetaInterface;
 
 /**
  * Class Field
@@ -33,7 +33,7 @@ class Field
     /**
      * @var array
      */
-    private $metas = [];
+    private $meta = [];
 
     /**
      * @var FilterInterface[]
@@ -121,44 +121,38 @@ class Field
     }
 
     /**
-     * @return array
-     */
-    public function getMetas()
-    {
-        return $this->metas;
-    }
-
-    /**
      * @param string $key
      *
-     * @return mixed|null
+     * @return null|mixed
      */
     public function getMeta($key)
     {
-        if (empty($this->metas[$key]) === false)
+        if (isset($this->meta[$key]))
         {
-            return $this->metas[$key];
+            return $this->meta[$key];
         }
 
         return null;
     }
 
     /**
+     * @param string $key
+     *
      * @return bool
      */
-    public function hasMetas()
+    public function hasMeta($key)
     {
-        return empty($this->metas) === false;
+        return empty($this->meta[$key]) === false;
     }
 
     /**
-     * @param array $metas
+     * @param MetaInterface $meta
      *
      * @return Field
      */
-    public function setMetas(array $metas)
+    public function addMeta(MetaInterface $meta)
     {
-        $this->metas = $metas;
+        $this->meta[$meta->getKey()] = $meta->getData();
 
         return $this;
     }

@@ -3,6 +3,8 @@
 namespace Simplon\Form\View\Elements;
 
 use Simplon\Form\FormException;
+use Simplon\Form\View\Elements\Support\CheckboxRadioMeta;
+use Simplon\Form\View\Elements\Support\RadioMeta;
 use Simplon\Form\View\RenderHelper;
 
 /**
@@ -146,12 +148,28 @@ class CheckboxElement extends Element
     }
 
     /**
+     * @return bool
+     */
+    private function hasOptions()
+    {
+        return $this->getField()->hasMeta('options');
+    }
+
+    /**
+     * @return null|array
+     */
+    private function getOptions()
+    {
+        return $this->getField()->getMeta('options');
+    }
+
+    /**
      * @return string
      * @throws FormException
      */
     private function renderOptions()
     {
-        if ($this->getField()->getMeta('options'))
+        if ($this->hasOptions())
         {
             $fieldValue = [];
             $renderedOptions = [];
@@ -171,7 +189,7 @@ class CheckboxElement extends Element
                 }
             }
 
-            foreach ($this->getField()->getMeta('options') as $option)
+            foreach ($this->getOptions() as $option)
             {
                 if (empty($option['label']))
                 {
@@ -215,6 +233,6 @@ class CheckboxElement extends Element
             return join('', $renderedOptions);
         }
 
-        throw new FormException('Missing field options. Set via "meta->options"');
+        throw new FormException('"'.$this->getField()->getId().'" missing field options. Set via "Field::addMeta(new OptionsMeta())"');
     }
 }

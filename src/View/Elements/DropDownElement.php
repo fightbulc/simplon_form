@@ -230,7 +230,15 @@ class DropDownElement extends Element
     }
 
     /**
-     * @return mixed|null
+     * @return bool
+     */
+    protected function hasOptions()
+    {
+        return $this->getField()->hasMeta('options');
+    }
+
+    /**
+     * @return null|array
      */
     protected function getOptions()
     {
@@ -243,7 +251,7 @@ class DropDownElement extends Element
      */
     private function renderOptions()
     {
-        if ($this->getOptions())
+        if ($this->hasOptions())
         {
             $renderedOptions = [];
 
@@ -256,11 +264,6 @@ class DropDownElement extends Element
                     'class'      => 'item',
                     'data-value' => $option['value'],
                 ];
-
-                if (empty($option['text']) === false)
-                {
-                    $attrs['data-text'] = $option['text'];
-                }
 
                 if (empty($option['label']))
                 {
@@ -280,6 +283,9 @@ class DropDownElement extends Element
             return join('', $renderedOptions);
         }
 
-        throw new FormException('Missing field options. Set via "meta->options"');
+        if ($this->getAllowAdditions() === false)
+        {
+            throw new FormException('"' . $this->getField()->getId() . '" missing field options. Set via "Field::addMetas(new OptionsMeta())"');
+        }
     }
 }
