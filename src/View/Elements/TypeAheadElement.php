@@ -333,7 +333,7 @@ class TypeAheadElement extends Element
 
         if (is_array($fieldValue))
         {
-            $fieldValue = join(self::VALUE_DELIMITER, $fieldValue);
+            $fieldValue = join(self::FIELD_DELIMITER, $fieldValue);
         }
 
         $base = [
@@ -534,7 +534,7 @@ class TypeAheadElement extends Element
 
             foreach ($fieldValues as $field)
             {
-                $items[] = RenderHelper::placeholders(
+                $items[$field['id']] = RenderHelper::placeholders(
                     '<div class="ui fluid selected-item"><a href="#" data-value="{raw}"><i class="delete icon"></i></a>{label}</div>',
                     $field
                 );
@@ -622,10 +622,9 @@ class TypeAheadElement extends Element
      */
     private function getMultiFieldValues()
     {
-        $fields = explode(self::FIELD_DELIMITER, $this->getField()->getValue());
         $values = [];
 
-        foreach ($fields as $field)
+        foreach ($this->getField()->getValue() as $field)
         {
             $result = $this->parseFieldValue($field);
 

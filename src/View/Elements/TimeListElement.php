@@ -67,6 +67,14 @@ class TimeListElement extends DropDownElement
     }
 
     /**
+     * @return bool
+     */
+    protected function hasOptions()
+    {
+        return true;
+    }
+
+    /**
      * @return mixed|null
      */
     protected function getOptions()

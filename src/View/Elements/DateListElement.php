@@ -105,6 +105,14 @@ class DateListElement extends DropDownElement
     }
 
     /**
+     * @return bool
+     */
+    protected function hasOptions()
+    {
+        return true;
+    }
+
+    /**
      * @return array
      */
     protected function getOptions()
