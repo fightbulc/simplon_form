@@ -213,7 +213,7 @@ class DropDownElement extends Element
         return RenderHelper::placeholders(
             RenderHelper::attributes($this->getWidgetHtml(), $attrs),
             [
-                'placeholder' => $this->getPlaceholder() ? '<div class="default text">' . $this->getPlaceholder() . '</div>' : null,
+                'placeholder' => $this->getPlaceholder() ? '<div class="default text">' . $this->getPlaceholder() . '</div>' : false,
                 'options'     => $this->renderOptions(),
             ]
         );

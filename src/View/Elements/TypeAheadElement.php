@@ -11,7 +11,8 @@ use Simplon\Form\View\RenderHelper;
  */
 class TypeAheadElement extends Element
 {
-    const DELIMITER = ':';
+    const VALUE_DELIMITER = ':';
+    const FIELD_DELIMITER = ',';
 
     /**
      * @var string
@@ -27,6 +28,11 @@ class TypeAheadElement extends Element
      * @var string
      */
     private $fieldValueLabel;
+
+    /**
+     * @var bool
+     */
+    private $multiple = false;
 
     /**
      * @var TypeaheadSourceInterface
@@ -51,7 +57,7 @@ class TypeAheadElement extends Element
     /**
      * @var int
      */
-    private $minChars = 1;
+    private $minChars = 3;
 
     /**
      * @var string
@@ -77,6 +83,26 @@ class TypeAheadElement extends Element
      * @var string
      */
     private $suggestionTemplate = '<div>{{{{labelAttr}}}}</div>';
+
+    /**
+     * @return boolean
+     */
+    public function hasMultiple()
+    {
+        return $this->multiple;
+    }
+
+    /**
+     * @param boolean $multiple
+     *
+     * @return static
+     */
+    public function isMultiple($multiple)
+    {
+        $this->multiple = $multiple === true;
+
+        return $this;
+    }
 
     /**
      * @return string
@@ -307,7 +333,7 @@ class TypeAheadElement extends Element
 
         if (is_array($fieldValue))
         {
-            $fieldValue = join(self::DELIMITER, $fieldValue);
+            $fieldValue = join(self::VALUE_DELIMITER, $fieldValue);
         }
 
         $base = [
@@ -370,7 +396,7 @@ class TypeAheadElement extends Element
     public function getWidgetHtml()
     {
         /** @noinspection HtmlUnknownAttribute */
-        return '<div {attrs-wrapper}><div {attrs-field-wrapper}><input {attrs-search-field}><i class="search icon"></i><input {attrs-field}></div></div>';
+        return '<div {attrs-wrapper}>{single-result-container}<div {attrs-field-wrapper}><input {attrs-search-field}><i class="search icon"></i><input {attrs-field}></div>{multi-result-container}</div>';
     }
 
     /**
@@ -387,13 +413,30 @@ class TypeAheadElement extends Element
             ],
             'attrs-search-field'  => [
                 'class'       => ['typeahead'],
-                'value'       => $this->getFieldValueLabel(),
                 'placeholder' => $this->getPlaceholder(),
             ],
             'attrs-field'         => $this->getWidgetAttributes(),
         ];
 
-        return RenderHelper::attributes($this->getWidgetHtml(), $attrs);
+        if ($this->getField()->getValue())
+        {
+            $class = 'has-single-result';
+
+            if ($this->hasMultiple())
+            {
+                $class = 'has-multi-result';
+            }
+
+            $attrs['attrs-wrapper']['class'][] = $class;
+        }
+
+        return RenderHelper::placeholders(
+            RenderHelper::attributes($this->getWidgetHtml(), $attrs),
+            [
+                'single-result-container' => $this->renderSingleResultContainer(),
+                'multi-result-container'  => $this->renderMultiResultContainer(),
+            ]
+        );
     }
 
     /**
@@ -424,16 +467,18 @@ class TypeAheadElement extends Element
     public function getCode()
     {
         $classNames = "{ dataset: 'ui segments', suggestion: 'ui segment' }";
-        $selector = "$('#{elementId}').parent().find('.typeahead')";
+        $typeaheadSelector = "$('#{elementId}').parent().find('.typeahead')";
 
         $code = RenderHelper::codeLines([
-            "var selector = $selector",
-            "selector.typeahead({hint: {hint}, highlight: {highlight}, classNames: {classNames}, minLength: {minChars}}, {name: 'typeahead-{elementId}', source: {source}, display: '{labelAttr}', templates: { {templates} } })",
-            "selector.bind('typeahead:select', typeaheadElement.select('{labelAttr}', '{idAttr}', '{delimiter}'))",
-            "selector.bind('typeahead:asyncrequest', typeaheadElement.active)",
-            "selector.bind('typeahead:asyncreceive', typeaheadElement.idle)",
-            "selector.bind('typeahead:asynccancel', typeaheadElement.idle)",
-            "selector.bind('typeahead:close', typeaheadElement.close)",
+            "var typeaheadSelector = $typeaheadSelector",
+            "typeaheadSelector.typeahead({hint: {hint}, highlight: {highlight}, classNames: {classNames}, minLength: {minChars}}, {name: 'typeahead-{elementId}', source: {source}, display: '{labelAttr}', templates: { {templates} } })",
+            "typeaheadSelector.bind('typeahead:select', typeaheadElement.select('{labelAttr}', '{idAttr}', '{delimiter}'))",
+            "typeaheadSelector.bind('typeahead:asyncrequest', typeaheadElement.active)",
+            "typeaheadSelector.bind('typeahead:asyncreceive', typeaheadElement.idle)",
+            "typeaheadSelector.bind('typeahead:asynccancel', typeaheadElement.idle)",
+            "typeaheadSelector.bind('typeahead:close', typeaheadElement.close)",
+            "$('#{elementId}').parent().parent().on('click', '.single-result-container a', typeaheadElement.removeResult)",
+            "$('#{elementId}').parent().parent().on('click', '.multi-result-container a', typeaheadElement.removeResult)",
         ]);
 
         $code = RenderHelper::placeholders($code, [
@@ -446,7 +491,7 @@ class TypeAheadElement extends Element
             'source'     => $this->getSource()->renderSource(),
             'idAttr'     => $this->getSource()->getIdAttr(),
             'labelAttr'  => $this->getSource()->getLabelAttr(),
-            'delimiter'  => self::DELIMITER,
+            'delimiter'  => self::VALUE_DELIMITER,
         ]);
 
         $sourceCode = $this->getSource()->getCode();
@@ -457,6 +502,51 @@ class TypeAheadElement extends Element
         }
 
         return $code;
+    }
+
+    /**
+     * @return null|string
+     */
+    private function renderSingleResultContainer()
+    {
+        if ($this->hasMultiple())
+        {
+            return null;
+        }
+
+        return RenderHelper::placeholders(
+            '<div class="single-result-container">{item}</div>',
+            [
+                'item' => '<div class="ui fluid selected-item"><a href="#"><i class="delete icon"></i></a>' . $this->getFieldValueLabel() . '</div>',
+            ]
+        );
+    }
+
+    /**
+     * @return null|string
+     */
+    private function renderMultiResultContainer()
+    {
+        if ($this->hasMultiple())
+        {
+            $items = [];
+            $fieldValues = $this->getMultiFieldValues();
+
+            foreach ($fieldValues as $field)
+            {
+                $items[] = RenderHelper::placeholders(
+                    '<div class="ui fluid selected-item"><a href="#" data-value="{raw}"><i class="delete icon"></i></a>{label}</div>',
+                    $field
+                );
+            }
+
+            return RenderHelper::placeholders(
+                '<div class="multi-result-container">{items}</div>',
+                ['items' => join('', $items)]
+            );
+        }
+
+        return null;
     }
 
     /**
@@ -493,22 +583,62 @@ class TypeAheadElement extends Element
     {
         if ($this->fieldValueLabel === null)
         {
-            $this->parseFieldValue();
+            $result = $this->parseFieldValue(
+                $this->getField()->getValue()
+            );
+
+            if ($result)
+            {
+                $this->fieldValueId = $result['id'];
+                $this->fieldValueLabel = $result['label'];
+            }
         }
 
         return $this->fieldValueLabel;
     }
 
     /**
-     * @return void
+     * @param string $value
+     *
+     * @return array|null
      */
-    private function parseFieldValue()
+    private function parseFieldValue($value)
     {
-        if ($this->getField()->getValue() && strpos($this->getField()->getValue(), self::DELIMITER) !== false)
+        if ($value && strpos($value, self::VALUE_DELIMITER) !== false)
         {
-            $parts = explode(self::DELIMITER, $this->getField()->getValue());
-            $this->fieldValueId = array_shift($parts);
-            $this->fieldValueLabel = join(self::DELIMITER, $parts);
+            $parts = explode(self::VALUE_DELIMITER, $value);
+
+            return [
+                'id'    => array_shift($parts),
+                'label' => join(self::VALUE_DELIMITER, $parts),
+            ];
         }
+
+        return null;
+    }
+
+    /**
+     * @return array
+     */
+    private function getMultiFieldValues()
+    {
+        $fields = explode(self::FIELD_DELIMITER, $this->getField()->getValue());
+        $values = [];
+
+        foreach ($fields as $field)
+        {
+            $result = $this->parseFieldValue($field);
+
+            if ($result)
+            {
+                $values[] = [
+                    'raw'   => $field,
+                    'id'    => $result['id'],
+                    'label' => $result['label'],
+                ];
+            }
+        }
+
+        return $values;
     }
 }
