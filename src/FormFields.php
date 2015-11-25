@@ -5,10 +5,10 @@ namespace Simplon\Form;
 use Simplon\Form\Data\Field;
 
 /**
- * Class Form
+ * Class FormFields
  * @package Simplon\Form
  */
-class Form
+class FormFields
 {
     /**
      * @var Field[]
@@ -44,7 +44,7 @@ class Form
     /**
      * @param Field $field
      *
-     * @return Form
+     * @return FormFields
      * @throws FormException
      */
     public function add(Field $field)
@@ -62,7 +62,7 @@ class Form
     /**
      * @param Field[] $fields
      *
-     * @return Form
+     * @return FormFields
      * @throws FormException
      */
     public function reset(array $fields)

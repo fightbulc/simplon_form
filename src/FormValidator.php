@@ -23,7 +23,7 @@ class FormValidator
     private $scope;
 
     /**
-     * @var Form[]
+     * @var FormFields[]
      */
     private $formFields = [];
 
@@ -91,7 +91,7 @@ class FormValidator
     }
 
     /**
-     * @return Form[]
+     * @return FormFields[]
      */
     public function getForm()
     {
@@ -99,11 +99,11 @@ class FormValidator
     }
 
     /**
-     * @param Form $fields
+     * @param FormFields $fields
      *
      * @return FormValidator
      */
-    public function addForm(Form $fields)
+    public function addForm(FormFields $fields)
     {
         $this->formFields[] = $fields;
 
@@ -111,7 +111,7 @@ class FormValidator
     }
 
     /**
-     * @param Form[] $formFields
+     * @param FormFields[] $formFields
      *
      * @return FormValidator
      */
