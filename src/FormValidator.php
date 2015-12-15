@@ -25,7 +25,7 @@ class FormValidator
     /**
      * @var FormFields[]
      */
-    private $formFields = [];
+    private $fields = [];
 
     /**
      * @var Field[]
@@ -93,9 +93,9 @@ class FormValidator
     /**
      * @return FormFields[]
      */
-    public function getForm()
+    public function getFields()
     {
-        return $this->formFields;
+        return $this->fields;
     }
 
     /**
@@ -103,9 +103,9 @@ class FormValidator
      *
      * @return FormValidator
      */
-    public function addForm(FormFields $fields)
+    public function addFields(FormFields $fields)
     {
-        $this->formFields[] = $fields;
+        $this->fields[] = $fields;
 
         return $this;
     }
@@ -117,7 +117,7 @@ class FormValidator
      */
     public function setForm(array $formFields)
     {
-        $this->formFields = $formFields;
+        $this->fields = $formFields;
 
         return $this;
     }
@@ -155,7 +155,7 @@ class FormValidator
             }
 
             // validate all fields
-            foreach ($this->getForm() as $fields)
+            foreach ($this->getFields() as $fields)
             {
                 foreach ($fields->getAll() as $field)
                 {
