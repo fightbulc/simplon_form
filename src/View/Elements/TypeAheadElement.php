@@ -624,17 +624,20 @@ class TypeAheadElement extends Element
     {
         $values = [];
 
-        foreach ($this->getField()->getValue() as $field)
+        if($this->getField()->getValue())
         {
-            $result = $this->parseFieldValue($field);
-
-            if ($result)
+            foreach ($this->getField()->getValue() as $field)
             {
-                $values[] = [
-                    'raw'   => $field,
-                    'id'    => $result['id'],
-                    'label' => $result['label'],
-                ];
+                $result = $this->parseFieldValue($field);
+
+                if ($result)
+                {
+                    $values[] = [
+                        'raw'   => $field,
+                        'id'    => $result['id'],
+                        'label' => $result['label'],
+                    ];
+                }
             }
         }
 
