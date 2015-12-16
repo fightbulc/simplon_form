@@ -62,7 +62,7 @@ class Field
      */
     public function __construct($id)
     {
-        if (preg_match('/^[a-zA-Z_-]+$/u', $id) === 0)
+        if (preg_match('/^[0-9a-zA-Z_-]+$/u', $id) === 0)
         {
             throw new FormException('ID "' . $id . '" has invalid characters. Please use only [a-zA-Z_-]');
         }
