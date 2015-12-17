@@ -157,7 +157,7 @@ class FormValidator
             // validate all fields
             foreach ($this->getFields() as $fields)
             {
-                foreach ($fields->getAll() as $field)
+                foreach ($fields->getAllFields() as $field)
                 {
                     $field->setValue(
                         $this->getRequestData($field->getId())

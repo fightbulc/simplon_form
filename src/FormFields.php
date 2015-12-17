@@ -80,19 +80,34 @@ class FormFields
     /**
      * @return Field[]
      */
-    public function getAll()
+    public function getAllFields()
     {
         return $this->fields;
     }
 
     /**
+     * @param string $id
+     *
+     * @return mixed
+     */
+    public function getData($id)
+    {
+        if ($this->has($id))
+        {
+            return $this->get($id)->getValue();
+        }
+
+        return null;
+    }
+
+    /**
      * @return array
      */
-    public function getData()
+    public function getAllData()
     {
         $result = [];
 
-        foreach ($this->getAll() as $field)
+        foreach ($this->getAllFields() as $field)
         {
             $result[$field->getId()] = $field->getValue();
         }
