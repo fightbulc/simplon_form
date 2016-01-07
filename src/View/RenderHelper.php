@@ -30,7 +30,7 @@ class RenderHelper
                 $renderedAttrs[] = $key . '="' . $value . '"';
             }
 
-            $html = preg_replace('/\{' . $group . '\}/ui', join(' ', $renderedAttrs), $html);
+            $html = str_replace('{' . $group . '}', join(' ', $renderedAttrs), $html);
         }
 
         return $html;
@@ -46,7 +46,7 @@ class RenderHelper
     {
         foreach ($placeholders as $key => $value)
         {
-            $html = preg_replace('/\{' . $key . '\}/ui', $value, $html);
+            $html = str_replace('{' . $key . '}', $value, $html);
         }
 
         return $html;
