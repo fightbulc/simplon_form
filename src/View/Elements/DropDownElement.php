@@ -226,7 +226,7 @@ class DropDownElement extends Element
     {
         $allowAdditions = $this->getAllowAdditions() ? 'true' : 'false';
 
-        return '$(\'#' . $this->renderElementId() . '\').parent().dropdown({ allowAdditions: ' . $allowAdditions . ', delimiter: ",", action: "combo" })';
+        return '$(\'#' . $this->renderElementId() . '\').parent().parent().dropdown({ allowAdditions: ' . $allowAdditions . ', delimiter: ",", action: "combo" })';
     }
 
     /**
