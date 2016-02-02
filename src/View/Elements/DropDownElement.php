@@ -225,8 +225,17 @@ class DropDownElement extends Element
     public function getCode()
     {
         $allowAdditions = $this->getAllowAdditions() ? 'true' : 'false';
+        $selector = '$(\'#' . $this->renderElementId() . '\').parent()';
 
-        return '$(\'#' . $this->renderElementId() . '\').parent().parent().dropdown({ allowAdditions: ' . $allowAdditions . ', delimiter: ",", action: "combo" })';
+        // TOOD:
+        // somehow for single-select items we need to get the field object
+        // else the value will be set within the actual field label
+        if ($this->hasMultiple() === false)
+        {
+            $selector .= '.parent()';
+        }
+
+        return $selector . '.dropdown({ allowAdditions: ' . $allowAdditions . ', delimiter: ",", action: "combo" })';
     }
 
     /**
