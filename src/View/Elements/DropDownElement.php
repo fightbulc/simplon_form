@@ -227,7 +227,7 @@ class DropDownElement extends Element
         $allowAdditions = $this->getAllowAdditions() ? 'true' : 'false';
         $selector = '$(\'#' . $this->renderElementId() . '\').parent()';
 
-        return $selector . '.dropdown({ allowAdditions: ' . $allowAdditions . ' })';
+        return $selector . '.dropdown({ allowAdditions: ' . $allowAdditions . ', forceSelection: false })';
     }
 
     /**
