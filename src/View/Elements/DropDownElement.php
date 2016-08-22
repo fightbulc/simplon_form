@@ -227,14 +227,6 @@ class DropDownElement extends Element
         $allowAdditions = $this->getAllowAdditions() ? 'true' : 'false';
         $selector = '$(\'#' . $this->renderElementId() . '\').parent()';
 
-        // TOOD:
-        // somehow for single-select items we need to get the field object
-        // else the value will be set within the actual field label
-        //        if ($this->hasMultiple() === false)
-        //        {
-        //            $selector .= '.parent()';
-        //        }
-
         return $selector . '.dropdown({ allowAdditions: ' . $allowAdditions . ' })';
     }
 
