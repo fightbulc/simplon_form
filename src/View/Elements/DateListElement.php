@@ -47,7 +47,7 @@ class DateListElement extends DropDownElement
     /**
      * @param boolean $isNone
      *
-     * @return TimeListElement
+     * @return DateListElement
      */
     public function isNone($isNone)
     {
