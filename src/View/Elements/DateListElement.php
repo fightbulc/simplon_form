@@ -97,14 +97,6 @@ class DateListElement extends DropDownElement
     }
 
     /**
-     * @return boolean
-     */
-    public function hasSearchable()
-    {
-        return true;
-    }
-
-    /**
      * @return bool
      */
     protected function hasOptions()

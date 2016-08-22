@@ -59,14 +59,6 @@ class TimeListElement extends DropDownElement
     }
 
     /**
-     * @return boolean
-     */
-    public function hasSearchable()
-    {
-        return true;
-    }
-
-    /**
      * @return bool
      */
     protected function hasOptions()
