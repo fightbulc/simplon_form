@@ -18,7 +18,7 @@ class SubmitElement
     /**
      * @var array
      */
-    private $class = ['ui big primary button'];
+    private $class = ['ui primary button'];
 
     /**
      * @param string $label
