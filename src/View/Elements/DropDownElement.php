@@ -224,10 +224,14 @@ class DropDownElement extends Element
      */
     public function getCode()
     {
-        $allowAdditions = $this->getAllowAdditions() ? 'true' : 'false';
         $selector = '$(\'#' . $this->renderElementId() . '\').parent()';
 
-        return $selector . '.dropdown({ allowAdditions: ' . $allowAdditions . ', forceSelection: false })';
+        $options = [
+            "allowAdditions" => $this->getAllowAdditions(),
+            "forceSelection" => false,
+        ];
+
+        return $selector . '.dropdown(' . json_encode($options) . ')';
     }
 
     /**
