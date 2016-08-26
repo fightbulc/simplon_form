@@ -3,6 +3,7 @@
 namespace Simplon\Form\View\Elements;
 
 use Simplon\Form\Data\Field;
+use Simplon\Form\Data\Rules\RequiredRule;
 use Simplon\Form\View\RenderHelper;
 
 /**
@@ -140,6 +141,11 @@ abstract class Element implements ElementInterface
         $html = '<div {attrs-wrapper}>{label}{widget}{errors}</div>';
 
         $class = ['field'];
+
+        if($this->getField()->hasRules())
+        {
+            $class[] = 'required';
+        }
 
         if ($this->getWide())
         {
