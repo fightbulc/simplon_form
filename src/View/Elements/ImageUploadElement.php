@@ -32,6 +32,11 @@ class ImageUploadElement extends Element
     private $uploadUrl;
 
     /**
+     * @var array
+     */
+    private $uploadMetaData = [];
+
+    /**
      * @var int
      */
     private $imageWidth = 1200;
@@ -196,6 +201,26 @@ class ImageUploadElement extends Element
     }
 
     /**
+     * @return array
+     */
+    public function getUploadMetaData()
+    {
+        return $this->uploadMetaData;
+    }
+
+    /**
+     * @param array $uploadMetaData
+     *
+     * @return ImageUploadElement
+     */
+    public function setUploadMetaData(array $uploadMetaData)
+    {
+        $this->uploadMetaData = $uploadMetaData;
+
+        return $this;
+    }
+
+    /**
      * @return string
      * @throws FormException
      */
@@ -326,14 +351,15 @@ class ImageUploadElement extends Element
     {
         $attrs = [
             'attrs-wrapper'        => [
-                'class'                => ['form-image-upload'],
-                'data-upload-url'      => $this->getUploadUrl(),
-                'data-image-width'     => $this->getImageWidth(),
-                'data-thumb-width'     => $this->getThumbWidth(),
-                'data-thumb-container' => $this->getThumbContainer(),
-                'data-attach-label'    => $this->getAttachLabel(),
-                'data-replace-label'   => $this->getReplaceLabel(),
-                'data-remove-label'    => $this->getRemoveLabel(),
+                'class'                 => ['form-image-upload'],
+                'data-upload-url'       => $this->getUploadUrl(),
+                'data-upload-meta-data' => urlencode(json_encode($this->getUploadMetaData())),
+                'data-image-width'      => $this->getImageWidth(),
+                'data-thumb-width'      => $this->getThumbWidth(),
+                'data-thumb-container'  => $this->getThumbContainer(),
+                'data-attach-label'     => $this->getAttachLabel(),
+                'data-replace-label'    => $this->getReplaceLabel(),
+                'data-remove-label'     => $this->getRemoveLabel(),
             ],
             'attrs-button-wrapper' => [
                 'class'    => ['ui vertical large fluid button'],
