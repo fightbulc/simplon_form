@@ -115,7 +115,7 @@ class FormValidator
      *
      * @return FormValidator
      */
-    public function setForm(array $formFields)
+    public function setFormFields(array $formFields)
     {
         $this->fields = $formFields;
 
