@@ -54,8 +54,10 @@ class FormValidator
     {
         if (empty($requestData['form']) === false)
         {
-            $this->requestData = $requestData['form'];
+            $requestData = $requestData['form'];
         }
+
+        $this->requestData = $requestData;
     }
 
     /**
