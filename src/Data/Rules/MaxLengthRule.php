@@ -2,10 +2,9 @@
 
 namespace Simplon\Form\Data\Rules;
 
-use Simplon\Form\Data\Field;
+use Simplon\Form\Data\FormField;
 
 /**
- * Class MaxLengthRule
  * @package Simplon\Form\Data\Rules
  */
 class MaxLengthRule extends Rule
@@ -14,26 +13,25 @@ class MaxLengthRule extends Rule
      * @var string
      */
     protected $errorMessage = 'Allows at most {length} characters';
-
     /**
      * @var int
      */
     private $length;
 
     /**
-     * @param $length
+     * @param int $length
      */
-    public function __construct($length)
+    public function __construct(int $length)
     {
         $this->length = $length;
     }
 
     /**
-     * @param Field $field
+     * @param FormField $field
      *
      * @throws RuleException
      */
-    public function apply(Field $field)
+    public function apply(FormField $field)
     {
         if (mb_strlen($field->getValue(), 'UTF-8') > $this->length)
         {

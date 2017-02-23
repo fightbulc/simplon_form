@@ -3,7 +3,6 @@
 namespace Simplon\Form\View\Elements;
 
 /**
- * Class RadioElement
  * @package Simplon\Form\View\Elements
  */
 class RadioElement extends CheckboxElement
@@ -11,7 +10,7 @@ class RadioElement extends CheckboxElement
     /**
      * @return string
      */
-    public function getElementType()
+    public function getElementType(): string
     {
         return self::TYPE_RADIO;
     }

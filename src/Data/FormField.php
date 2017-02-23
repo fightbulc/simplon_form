@@ -6,50 +6,42 @@ use Simplon\Form\Data\Filters\FilterInterface;
 use Simplon\Form\Data\Rules\FieldDependencyRule;
 use Simplon\Form\Data\Rules\IfFilledRule;
 use Simplon\Form\Data\Rules\RuleInterface;
-use Simplon\Form\FormException;
+use Simplon\Form\FormError;
 use Simplon\Form\View\Elements\Support\Meta\MetaInterface;
 
 /**
- * Class Field
  * @package Simplon\Form\Data
  */
-class Field
+class FormField
 {
     /**
      * @var string
      */
     private $id;
-
     /**
      * @var mixed
      */
     private $value;
-
     /**
      * @var mixed
      */
     private $initialValue;
-
     /**
      * @var array
      */
     private $meta = [];
-
     /**
      * @var FilterInterface[]
      */
     private $filters = [];
-
     /**
      * @var RuleInterface[]
      */
     private $rules = [];
-
     /**
      * @var array
      */
     private $errors = [];
-
     /**
      * @var bool
      */
@@ -58,13 +50,13 @@ class Field
     /**
      * @param string $id
      *
-     * @throws FormException
+     * @throws FormError
      */
     public function __construct($id)
     {
         if (preg_match('/^[0-9a-zA-Z_-]+$/u', $id) === 0)
         {
-            throw new FormException('ID "' . $id . '" has invalid characters. Please use only [a-zA-Z_-]');
+            throw new FormError('ID "' . $id . '" has invalid characters. Please use only [a-zA-Z_-]');
         }
 
         $this->id = $id;
@@ -89,7 +81,7 @@ class Field
     /**
      * @param mixed $initialValue
      *
-     * @return Field
+     * @return FormField
      */
     public function setInitialValue($initialValue)
     {
@@ -111,7 +103,7 @@ class Field
     /**
      * @param mixed $value
      *
-     * @return Field
+     * @return FormField
      */
     public function setValue($value)
     {
@@ -148,7 +140,7 @@ class Field
     /**
      * @param MetaInterface $meta
      *
-     * @return Field
+     * @return FormField
      */
     public function addMeta(MetaInterface $meta)
     {
@@ -176,7 +168,7 @@ class Field
     /**
      * @param FilterInterface $filter
      *
-     * @return Field
+     * @return FormField
      */
     public function addFilter(FilterInterface $filter)
     {
@@ -188,7 +180,7 @@ class Field
     /**
      * @param FilterInterface[] $filters
      *
-     * @return Field
+     * @return FormField
      */
     public function setFilters(array $filters)
     {
@@ -222,7 +214,7 @@ class Field
     /**
      * @param RuleInterface $rule
      *
-     * @return Field
+     * @return FormField
      */
     public function addRule(RuleInterface $rule)
     {
@@ -235,7 +227,7 @@ class Field
     /**
      * @param RuleInterface[] $rules
      *
-     * @return Field
+     * @return FormField
      */
     public function setRules(array $rules)
     {
@@ -264,7 +256,7 @@ class Field
     /**
      * @param string $error
      *
-     * @return Field
+     * @return FormField
      */
     public function addError($error)
     {
@@ -276,7 +268,7 @@ class Field
     /**
      * @param array $errors
      *
-     * @return Field
+     * @return FormField
      */
     public function setErrors(array $errors)
     {

@@ -2,16 +2,15 @@
 
 namespace Simplon\Form;
 
-use Simplon\Form\Data\Field;
+use Simplon\Form\Data\FormField;
 
 /**
- * Class FormFields
  * @package Simplon\Form
  */
 class FormFields
 {
     /**
-     * @var Field[]
+     * @var FormField[]
      */
     private $fields = [];
 
@@ -20,7 +19,7 @@ class FormFields
      *
      * @return bool
      */
-    public function has($id)
+    public function has(string $id): bool
     {
         return isset($this->fields[$id]);
     }
@@ -28,30 +27,30 @@ class FormFields
     /**
      * @param string $id
      *
-     * @return Field
-     * @throws FormException
+     * @return FormField
+     * @throws FormError
      */
-    public function get($id)
+    public function get(string $id): FormField
     {
         if ($this->has($id))
         {
             return $this->fields[$id];
         }
 
-        throw new FormException('Field with ID "' . $id . '" does not exist');
+        throw new FormError('FormField with ID "' . $id . '" does not exist');
     }
 
     /**
-     * @param Field $field
+     * @param FormField $field
      *
      * @return FormFields
-     * @throws FormException
+     * @throws FormError
      */
-    public function add(Field $field)
+    public function add(FormField $field): self
     {
         if (isset($this->fields[$field->getId()]))
         {
-            throw new FormException('Field ID "' . $field->getId() . '" exists already');
+            throw new FormError('FormField ID "' . $field->getId() . '" exists already');
         }
 
         $this->fields[$field->getId()] = $field;
@@ -60,12 +59,12 @@ class FormFields
     }
 
     /**
-     * @param Field[] $fields
+     * @param FormField[] $fields
      *
      * @return FormFields
-     * @throws FormException
+     * @throws FormError
      */
-    public function reset(array $fields)
+    public function reset(array $fields): self
     {
         $this->fields = [];
 
@@ -78,9 +77,9 @@ class FormFields
     }
 
     /**
-     * @return Field[]
+     * @return FormField[]
      */
-    public function getAllFields()
+    public function getAll(): array
     {
         return $this->fields;
     }
@@ -88,9 +87,10 @@ class FormFields
     /**
      * @param string $id
      *
-     * @return mixed
+     * @return mixed|null
+     * @throws FormError
      */
-    public function getData($id)
+    public function getData(string $id)
     {
         if ($this->has($id))
         {
@@ -103,15 +103,33 @@ class FormFields
     /**
      * @return array
      */
-    public function getAllData()
+    public function getAllData(): array
     {
         $result = [];
 
-        foreach ($this->getAllFields() as $field)
+        foreach ($this->getAll() as $field)
         {
             $result[$field->getId()] = $field->getValue();
         }
 
         return $result;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return FormFields
+     */
+    public function applyInitialData(array $data): self
+    {
+        foreach ($this->getAll() as $field)
+        {
+            if (isset($data[$field->getId()]))
+            {
+                $field->setInitialValue($data[$field->getId()]);
+            }
+        }
+
+        return $this;
     }
 }

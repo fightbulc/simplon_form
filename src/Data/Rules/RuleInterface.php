@@ -2,18 +2,17 @@
 
 namespace Simplon\Form\Data\Rules;
 
-use Simplon\Form\Data\Field;
+use Simplon\Form\Data\FormField;
 
 /**
- * Interface RuleInterface
  * @package Simplon\Form\Data\Rules
  */
 interface RuleInterface
 {
     /**
-     * @param Field $field
+     * @param FormField $field
      *
      * @throws RuleException
      */
-    public function apply(Field $field);
+    public function apply(FormField $field);
 }

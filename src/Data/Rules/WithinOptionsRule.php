@@ -2,10 +2,9 @@
 
 namespace Simplon\Form\Data\Rules;
 
-use Simplon\Form\Data\Field;
+use Simplon\Form\Data\FormField;
 
 /**
- * Class WithinOptionsRule
  * @package Simplon\Form\Data\Rules
  */
 class WithinOptionsRule extends Rule
@@ -16,11 +15,11 @@ class WithinOptionsRule extends Rule
     protected $errorMessage = 'Given option is invalid';
 
     /**
-     * @param Field $field
+     * @param FormField $field
      *
      * @throws RuleException
      */
-    public function apply(Field $field)
+    public function apply(FormField $field)
     {
         $options = $field->getMeta('options');
         $values = explode(',', $field->getValue());

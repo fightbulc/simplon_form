@@ -1,34 +1,29 @@
 <?php
 
-namespace Simplon\Form;
-
-use Simplon\Form\View\RenderHelper;
+namespace Simplon\Form\View;
 
 /**
- * Class FormBlock
- * @package Simplon\Form
+ * @package Simplon\Form\View
  */
-class FormBlock
+class FormViewBlock
 {
     /**
      * @var string
      */
     private $id;
-
     /**
-     * @var string
+     * @var string|null
      */
     private $header;
-
     /**
-     * @var FormRow[]
+     * @var FormViewRow[]
      */
     private $rows;
 
     /**
      * @param string $id
      */
-    public function __construct($id)
+    public function __construct(string $id)
     {
         $this->id = $id;
     }
@@ -36,15 +31,15 @@ class FormBlock
     /**
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getHeader()
+    public function getHeader(): ?string
     {
         return $this->header;
     }
@@ -52,7 +47,7 @@ class FormBlock
     /**
      * @return bool
      */
-    public function hasHeader()
+    public function hasHeader(): bool
     {
         return empty($this->header) === false;
     }
@@ -60,9 +55,9 @@ class FormBlock
     /**
      * @param string $header
      *
-     * @return FormBlock
+     * @return FormViewBlock
      */
-    public function setHeader($header)
+    public function setHeader(string $header): self
     {
         $this->header = $header;
 
@@ -70,19 +65,19 @@ class FormBlock
     }
 
     /**
-     * @return FormRow[]
+     * @return FormViewRow[]
      */
-    public function getRows()
+    public function getRows(): array
     {
         return $this->rows;
     }
 
     /**
-     * @param FormRow $row
+     * @param FormViewRow $row
      *
-     * @return FormBlock
+     * @return FormViewBlock
      */
-    public function addRow(FormRow $row)
+    public function addRow(FormViewRow $row): self
     {
         $this->rows[] = $row;
 
@@ -92,7 +87,7 @@ class FormBlock
     /**
      * @return string
      */
-    public function renderBlock()
+    public function renderBlock(): string
     {
         $html = '{header}{rows}';
 
@@ -115,7 +110,7 @@ class FormBlock
     /**
      * @return null|string
      */
-    private function renderHeader()
+    private function renderHeader(): ?string
     {
         if ($this->hasHeader())
         {

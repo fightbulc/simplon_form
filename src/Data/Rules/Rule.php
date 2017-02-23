@@ -3,7 +3,6 @@
 namespace Simplon\Form\Data\Rules;
 
 /**
- * Class Rule
  * @package Simplon\Form\Data\Rules
  */
 abstract class Rule implements RuleInterface
@@ -12,7 +11,6 @@ abstract class Rule implements RuleInterface
      * @var string
      */
     protected $errorMessage;
-
     /**
      * @var array
      */
@@ -21,7 +19,7 @@ abstract class Rule implements RuleInterface
     /**
      * @return string
      */
-    protected function getErrorMessage()
+    protected function getErrorMessage(): string
     {
         $message = $this->errorMessage;
 
@@ -42,7 +40,7 @@ abstract class Rule implements RuleInterface
      *
      * @return static
      */
-    protected function setErrorMessage($message, array $params = [])
+    protected function setErrorMessage(string $message, array $params = [])
     {
         $this->errorMessage = $message;
         $this->errorParams = $params;

@@ -5,7 +5,6 @@ namespace Simplon\Form\View\Elements;
 use Simplon\Form\View\RenderHelper;
 
 /**
- * Class InputTextElement
  * @package Simplon\Form\View\Elements
  */
 class InputTextElement extends Element
@@ -18,7 +17,7 @@ class InputTextElement extends Element
     /**
      * @return string|null
      */
-    public function getPlaceholder()
+    public function getPlaceholder(): ?string
     {
         return $this->placeholder;
     }
@@ -28,7 +27,7 @@ class InputTextElement extends Element
      *
      * @return static
      */
-    public function setPlaceholder($placeholder)
+    public function setPlaceholder(string $placeholder)
     {
         $this->placeholder = $placeholder;
 
@@ -38,7 +37,7 @@ class InputTextElement extends Element
     /**
      * @return array
      */
-    public function getWidgetAttributes()
+    public function getWidgetAttributes(): array
     {
         $base = [
             'type'        => 'text',
@@ -74,14 +73,14 @@ class InputTextElement extends Element
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function renderLabel()
+    public function renderLabel(): ?string
     {
         if ($this->hasLabel())
         {
             /** @noinspection HtmlUnknownAttribute */
-            $html = '<label {attrs}>' . $this->getLabel() . '</label>';
+            $html = '<label {attrs}>' . $this->getLabel() . $this->renderDescription('&nbsp;') . '</label>';
 
             $attrs = [
                 'attrs' => [
@@ -98,7 +97,7 @@ class InputTextElement extends Element
     /**
      * @return string
      */
-    public function getWidgetHtml()
+    public function getWidgetHtml(): string
     {
         /** @noinspection HtmlUnknownAttribute */
         return '<input {attrs-field}>';
@@ -107,7 +106,7 @@ class InputTextElement extends Element
     /**
      * @return string
      */
-    public function renderWidget()
+    public function renderWidget(): string
     {
         $attrs = [
             'attrs-field' => $this->getWidgetAttributes(),

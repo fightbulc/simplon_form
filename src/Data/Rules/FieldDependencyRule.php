@@ -2,38 +2,36 @@
 
 namespace Simplon\Form\Data\Rules;
 
-use Simplon\Form\Data\Field;
+use Simplon\Form\Data\FormField;
 
 /**
- * Class FieldDependencyRule
  * @package Simplon\Form\Data\Rules
  */
 class FieldDependencyRule extends Rule
 {
     /**
-     * @var Field
+     * @var FormField
      */
     private $depField;
-
     /**
      * @var RuleInterface[]
      */
     private $depFieldRules;
 
     /**
-     * @param Field $depField
+     * @param FormField $depField
      * @param RuleInterface[] $depFieldRules
      */
-    public function __construct(Field $depField, array $depFieldRules)
+    public function __construct(FormField $depField, array $depFieldRules)
     {
         $this->depField = $depField;
         $this->depFieldRules = $depFieldRules;
     }
 
     /**
-     * @param Field $field
+     * @param FormField $field
      */
-    public function apply(Field $field)
+    public function apply(FormField $field)
     {
         $this->depField->setRules($this->depFieldRules);
     }

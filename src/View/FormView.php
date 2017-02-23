@@ -1,99 +1,92 @@
 <?php
 
-namespace Simplon\Form;
+namespace Simplon\Form\View;
 
+use Simplon\Form\FormError;
 use Simplon\Form\Security\Csrf;
+use Simplon\Form\View\Elements\ElementInterface;
 use Simplon\Form\View\Elements\SubmitElement;
-use Simplon\Form\View\RenderHelper;
 use Simplon\Phtml\Phtml;
 use Simplon\Phtml\PhtmlException;
 
 /**
- * Class FormView
- * @package Simplon\Form
+ * @package Simplon\Form\View
  */
 class FormView
 {
     /**
-     * @var string
+     * @var null|string
      */
     private $scope;
-
     /**
      * @var string
      */
     private $url;
-
     /**
      * @var string
      */
     private $method = 'POST';
-
     /**
      * @var string
      */
     private $acceptCharset = 'utf-8';
-
     /**
      * @var SubmitElement
      */
     private $submitElement;
-
     /**
-     * @var FormBlock[]
+     * @var ElementInterface[]
+     */
+    private $elements;
+    /**
+     * @var FormViewBlock[]
      */
     private $blocks;
-
     /**
-     * @var Csrf
+     * @var null|Csrf
      */
     private $csrf;
-
     /**
      * @var bool
      */
-    private $renderErrorMessage = true;
-
+    private $autoRenderErrorMessage = false;
     /**
      * @var string
      */
     private $errorTitle = 'Looks like we are missing some information.';
-
     /**
      * @var string
      */
     private $errorMessage = 'Please have a look at the error messages below.';
-
     /**
      * @var bool
      */
     private $hasErrors;
-
     /**
      * @var string
      */
-    private $componentDir = '../assets/vendor';
+    private $componentDir = '/assets/vendor';
 
     /**
-     * @param $scope
+     * @param null|string $scope
      */
-    public function __construct($scope)
+    public function __construct(?string $scope = null)
     {
         $this->scope = $scope;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getScope()
+    public function getScope(): ?string
     {
         return $this->scope;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->url;
     }
@@ -103,7 +96,7 @@ class FormView
      *
      * @return FormView
      */
-    public function setUrl($url)
+    public function setUrl(string $url): self
     {
         $this->url = $url;
 
@@ -113,7 +106,7 @@ class FormView
     /**
      * @return string
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
@@ -123,7 +116,7 @@ class FormView
      *
      * @return FormView
      */
-    public function setMethod($method)
+    public function setMethod(string $method): self
     {
         $this->method = $method;
 
@@ -133,7 +126,7 @@ class FormView
     /**
      * @return string
      */
-    public function getAcceptCharset()
+    public function getAcceptCharset(): string
     {
         return $this->acceptCharset;
     }
@@ -141,8 +134,13 @@ class FormView
     /**
      * @return SubmitElement
      */
-    public function getSubmitElement()
+    public function getSubmitElement(): SubmitElement
     {
+        if (!$this->submitElement)
+        {
+            $this->submitElement = new SubmitElement('Submit');
+        }
+
         return $this->submitElement;
     }
 
@@ -151,7 +149,7 @@ class FormView
      *
      * @return FormView
      */
-    public function setSubmitElement(SubmitElement $element)
+    public function setSubmitElement(SubmitElement $element): self
     {
         $this->submitElement = $element;
 
@@ -159,21 +157,21 @@ class FormView
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function shouldRenderErrorMessage()
+    public function shouldAutoRenderErrorMessage(): bool
     {
-        return $this->renderErrorMessage;
+        return $this->autoRenderErrorMessage;
     }
 
     /**
-     * @param boolean $renderErrorMessage
+     * @param bool $autoRenderErrorMessage
      *
      * @return FormView
      */
-    public function setRenderErrorMessage($renderErrorMessage)
+    public function setAutoRenderErrorMessage(bool $autoRenderErrorMessage): self
     {
-        $this->renderErrorMessage = $renderErrorMessage === true;
+        $this->autoRenderErrorMessage = $autoRenderErrorMessage === true;
 
         return $this;
     }
@@ -181,7 +179,7 @@ class FormView
     /**
      * @return string
      */
-    public function getErrorTitle()
+    public function getErrorTitle(): string
     {
         return $this->errorTitle;
     }
@@ -191,7 +189,7 @@ class FormView
      *
      * @return FormView
      */
-    public function setErrorTitle($errorTitle)
+    public function setErrorTitle(string $errorTitle): self
     {
         $this->errorTitle = $errorTitle;
 
@@ -201,7 +199,7 @@ class FormView
     /**
      * @return string
      */
-    public function getErrorMessage()
+    public function getErrorMessage(): string
     {
         return $this->errorMessage;
     }
@@ -211,7 +209,7 @@ class FormView
      *
      * @return FormView
      */
-    public function setErrorMessage($errorMessage)
+    public function setErrorMessage(string $errorMessage): self
     {
         $this->errorMessage = $errorMessage;
 
@@ -219,9 +217,9 @@ class FormView
     }
 
     /**
-     * @return Csrf
+     * @return null|Csrf
      */
-    public function getCsrf()
+    public function getCsrf(): ?Csrf
     {
         return $this->csrf;
     }
@@ -231,7 +229,7 @@ class FormView
      *
      * @return FormView
      */
-    public function setCsrf(Csrf $csrf)
+    public function setCsrf(Csrf $csrf): self
     {
         $this->csrf = $csrf;
 
@@ -241,7 +239,7 @@ class FormView
     /**
      * @return string
      */
-    public function getComponentDir()
+    public function getComponentDir(): string
     {
         return rtrim($this->componentDir, '/');
     }
@@ -251,7 +249,7 @@ class FormView
      *
      * @return FormView
      */
-    public function setComponentDir($componentDir)
+    public function setComponentDir(string $componentDir): self
     {
         $this->componentDir = $componentDir;
 
@@ -259,45 +257,117 @@ class FormView
     }
 
     /**
+     * @return ElementInterface[]
+     */
+    public function getElements(): array
+    {
+        return $this->elements;
+    }
+
+    /**
      * @param string $id
      *
-     * @return FormBlock
-     * @throws FormException
+     * @return null|ElementInterface
      */
-    public function getBlock($id)
+    public function getElement(string $id): ?ElementInterface
+    {
+        foreach ($this->elements as $element)
+        {
+            if ($id === $element->getField()->getId())
+            {
+                return $element;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param ElementInterface $element
+     *
+     * @return FormView
+     */
+    public function addElement(ElementInterface $element): self
+    {
+        $this->elements[] = $element;
+
+        return $this;
+    }
+
+    /**
+     * @param ElementInterface[] $elements
+     *
+     * @return FormView
+     */
+    public function setElements(array $elements): self
+    {
+        $this->elements = $elements;
+
+        return $this;
+    }
+
+    /**
+     * @return FormViewBlock[]
+     */
+    public function getBlocks(): array
+    {
+        return $this->blocks;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return FormViewBlock
+     * @throws FormError
+     */
+    public function getBlock(string $id): FormViewBlock
     {
         if (isset($this->blocks[$id]))
         {
             return $this->blocks[$id];
         }
 
-        throw new FormException('Requested FormElement "' . $id . '" does not exist');
+        throw new FormError('Requested FormElement "' . $id . '" does not exist');
     }
 
     /**
-     * @param FormBlock $block
+     * @param FormViewBlock $block
      *
      * @return FormView
-     * @throws FormException
+     * @throws FormError
      */
-    public function addBlock(FormBlock $block)
+    public function addBlock(FormViewBlock $block): self
     {
         if (isset($this->blocks[$block->getId()]))
         {
-            throw new FormException('FormBlock "' . $block->getId() . '" has already been set');
+            throw new FormError('FormViewBlock "' . $block->getId() . '" has already been set');
         }
 
         $this->blocks[$block->getId()] = $block;
+
+        // add elements
+
+        foreach ($this->blocks as $block)
+        {
+            foreach ($block->getRows() as $row)
+            {
+                foreach ($row->getElements() as $element)
+                {
+                    $this->addElement($element);
+                }
+            }
+        }
 
         return $this;
     }
 
     /**
-     * @param FormBlock[] $blocks
+     * @param FormViewBlock[] $blocks
      *
      * @return FormView
+     * @throws FormError
      */
-    public function setBlocks(array $blocks)
+    public function setBlocks(array $blocks): self
     {
         foreach ($blocks as $block)
         {
@@ -310,26 +380,20 @@ class FormView
     /**
      * @return bool
      */
-    public function hasErrors()
+    public function hasErrors(): bool
     {
         if ($this->hasErrors === null)
         {
-            foreach ($this->blocks as $block)
+            foreach ($this->getElements() as $element)
             {
-                foreach ($block->getRows() as $row)
+                if ($element->getField()->hasErrors())
                 {
-                    foreach ($row->getElements() as $element)
-                    {
-                        if ($element->getField()->hasErrors())
-                        {
-                            $this->hasErrors = true;
-                        }
-                    }
+                    return true;
                 }
             }
         }
 
-        return $this->hasErrors;
+        return false;
     }
 
     /**
@@ -339,7 +403,7 @@ class FormView
      * @return string
      * @throws PhtmlException
      */
-    public function render($pathTemplate, array $params = [])
+    public function render(string $pathTemplate, array $params = []): string
     {
         $params = array_merge($params, ['formView' => $this]);
         $form = (new Phtml())->render($pathTemplate, $params);
@@ -368,7 +432,7 @@ class FormView
                 ]
             ),
             'css'   => $this->buildFieldAssetsCss(),
-            'error' => $this->shouldRenderErrorMessage() ? $this->renderErrorMessage() : null,
+            'error' => $this->shouldAutoRenderErrorMessage() ? $this->renderErrorMessage() : null,
             'scope' => $this->renderScopeElement(),
             'csrf'  => $this->renderCsrfElement(),
             'form'  => $form,
@@ -381,7 +445,7 @@ class FormView
     /**
      * @return array
      */
-    public function getCssAssets()
+    public function getCssAssets(): array
     {
         return $this->buildFieldAssetPaths('.css');
     }
@@ -389,7 +453,7 @@ class FormView
     /**
      * @return array
      */
-    public function getJsAssets()
+    public function getJsAssets(): array
     {
         return $this->buildFieldAssetPaths('.js');
     }
@@ -397,7 +461,7 @@ class FormView
     /**
      * @return string
      */
-    public function getCodeAssets()
+    public function getCodeAssets(): string
     {
         return $this->buildFieldCode();
     }
@@ -405,15 +469,15 @@ class FormView
     /**
      * @return string
      */
-    public function renderFieldAssets()
+    public function renderFieldAssets(): string
     {
         return $this->buildFieldAssetsCss() . $this->buildFieldAssetsJs() . $this->buildFieldCode();
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
-    public function renderErrorMessage()
+    public function renderErrorMessage(): ?string
     {
         if ($this->hasErrors())
         {
@@ -424,25 +488,23 @@ class FormView
                     'message' => $this->getErrorMessage() ? '<p>' . $this->getErrorMessage() . '</p>' : null,
                 ]
             );
-
-
         }
 
         return null;
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    private function renderScopeElement()
+    private function renderScopeElement(): string
     {
         return '<input type="hidden" name="form[' . $this->getScope() . ']" value="1">';
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
-    private function renderCsrfElement()
+    private function renderCsrfElement(): ?string
     {
         if ($this->getCsrf())
         {
@@ -457,25 +519,19 @@ class FormView
      *
      * @return array
      */
-    private function buildFieldAssetPaths($fileType)
+    private function buildFieldAssetPaths(string $fileType): array
     {
         $assets = [];
 
-        foreach ($this->blocks as $block)
+        foreach ($this->getElements() as $element)
         {
-            foreach ($block->getRows() as $row)
+            if ($element->getAssets())
             {
-                foreach ($row->getElements() as $element)
+                foreach ($element->getAssets() as $file)
                 {
-                    if ($element->getAssets())
+                    if (strpos($file, $fileType) !== false)
                     {
-                        foreach ($element->getAssets() as $file)
-                        {
-                            if (strpos($file, $fileType) !== false)
-                            {
-                                $assets[] = $this->getComponentDir() . '/' . $file;
-                            }
-                        }
+                        $assets[] = $this->getComponentDir() . '/' . $file;
                     }
                 }
             }
@@ -490,32 +546,26 @@ class FormView
      *
      * @return string
      */
-    private function buildFieldAssets($fileType, $html)
+    private function buildFieldAssets(string $fileType, string $html): string
     {
         $assets = [];
 
-        foreach ($this->blocks as $block)
+        foreach ($this->getElements() as $element)
         {
-            foreach ($block->getRows() as $row)
+            if ($element->getAssets())
             {
-                foreach ($row->getElements() as $element)
+                foreach ($element->getAssets() as $file)
                 {
-                    if ($element->getAssets())
+                    if (strpos($file, $fileType) !== false)
                     {
-                        foreach ($element->getAssets() as $file)
+                        $path = $this->getComponentDir() . '/' . $file;
+
+                        if (preg_match('/^(http|\/\/)/i', $file))
                         {
-                            if (strpos($file, $fileType) !== false)
-                            {
-                                $path = $this->getComponentDir() . '/' . $file;
-
-                                if (preg_match('/^(http|\/\/)/i', $file))
-                                {
-                                    $path = $file;
-                                }
-
-                                $assets[] = RenderHelper::placeholders($html, ['path' => $path]);
-                            }
+                            $path = $file;
                         }
+
+                        $assets[] = RenderHelper::placeholders($html, ['path' => $path]);
                     }
                 }
             }
@@ -527,7 +577,7 @@ class FormView
     /**
      * @return string
      */
-    private function buildFieldAssetsCss()
+    private function buildFieldAssetsCss(): string
     {
         /** @noinspection HtmlUnknownTarget */
         return $this->buildFieldAssets('.css', '<link href="{path}" rel="stylesheet">');
@@ -536,7 +586,7 @@ class FormView
     /**
      * @return string
      */
-    private function buildFieldAssetsJs()
+    private function buildFieldAssetsJs(): string
     {
         /** @noinspection HtmlUnknownTarget */
         return $this->buildFieldAssets('.js', '<script src="{path}"></script>');
@@ -545,25 +595,21 @@ class FormView
     /**
      * @return string
      */
-    private function buildFieldCode()
+    private function buildFieldCode(): string
     {
-        $code = [];
+        $code = [
+            '$(\'i.field-description\').popup({hoverable : true, on: \'click\'})'
+        ];
 
-        foreach ($this->blocks as $block)
+        foreach ($this->getElements() as $element)
         {
-            foreach ($block->getRows() as $row)
+            if ($element->getCode())
             {
-                foreach ($row->getElements() as $element)
-                {
-                    if ($element->getCode())
-                    {
-                        $code[] = "\n<!---- ELEMENT: " . $element->getField()->getId() . " //---->\n";
-                        $code[] = trim($element->getCode(), ';') . ";\n";
-                    }
-                }
+                $code[] = "\n<!---- ELEMENT: " . $element->getField()->getId() . " //---->\n";
+                $code[] = trim($element->getCode(), ';') . ";\n";
             }
         }
 
-        return '<script type="application/javascript"> $(document).ready(function (){' . join("", $code) . '}); </script>';
+        return '<script type="application/javascript">$(document).ready(function (){' . join("", $code) . '});</script>';
     }
 }

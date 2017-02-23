@@ -2,10 +2,9 @@
 
 namespace Simplon\Form\Data\Rules;
 
-use Simplon\Form\Data\Field;
+use Simplon\Form\Data\FormField;
 
 /**
- * Class CallbackRule
  * @package Simplon\Form\Data\Rules
  */
 class CallbackRule extends Rule
@@ -14,7 +13,6 @@ class CallbackRule extends Rule
      * @var \Closure
      */
     private $callback;
-
     /**
      * @var string
      */
@@ -24,18 +22,18 @@ class CallbackRule extends Rule
      * @param \Closure $callback
      * @param string $errorMessage
      */
-    public function __construct(\Closure $callback, $errorMessage)
+    public function __construct(\Closure $callback, string $errorMessage)
     {
         $this->callback = $callback;
         $this->errorMessage = $errorMessage;
     }
 
     /**
-     * @param Field $field
+     * @param FormField $field
      *
      * @throws RuleException
      */
-    public function apply(Field $field)
+    public function apply(FormField $field)
     {
         $response = call_user_func_array($this->callback, [$field]);
 

@@ -2,10 +2,9 @@
 
 namespace Simplon\Form\Data\Rules;
 
-use Simplon\Form\Data\Field;
+use Simplon\Form\Data\FormField;
 
 /**
- * Class IfFilledRule
  * @package Simplon\Form\Data\Rules
  */
 class IfFilledRule extends Rule
@@ -24,9 +23,11 @@ class IfFilledRule extends Rule
     }
 
     /**
-     * @param Field $field
+     * @param FormField $field
+     *
+     * @throws RuleException
      */
-    public function apply(Field $field)
+    public function apply(FormField $field)
     {
         if ($field->getValue() !== '')
         {
@@ -40,7 +41,7 @@ class IfFilledRule extends Rule
     /**
      * @return RuleInterface[]
      */
-    public function getFollowUpRules()
+    public function getFollowUpRules(): array
     {
         return $this->followUpRules;
     }
@@ -50,7 +51,7 @@ class IfFilledRule extends Rule
      *
      * @return IfFilledRule
      */
-    public function setFollowUpRules(array $rules)
+    public function setFollowUpRules(array $rules): IfFilledRule
     {
         $this->followUpRules = $rules;
 

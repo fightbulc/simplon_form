@@ -3,7 +3,6 @@
 namespace Simplon\Form\Data\Filters;
 
 /**
- * Class CaseLowerFilter
  * @package Simplon\Form\Data\Filters
  */
 class CaseLowerFilter implements FilterInterface

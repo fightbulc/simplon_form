@@ -3,7 +3,6 @@
 namespace Simplon\Form\View\Elements\Support\Meta;
 
 /**
- * Class OptionsMeta
  * @package Simplon\Form\View\Elements\Support\Meta
  */
 class OptionsMeta implements MetaInterface
@@ -16,7 +15,7 @@ class OptionsMeta implements MetaInterface
     /**
      * @return string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return 'options';
     }
@@ -24,18 +23,18 @@ class OptionsMeta implements MetaInterface
     /**
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         return $this->data;
     }
 
     /**
      * @param string $value
-     * @param string $label
+     * @param null|string $label
      *
      * @return static
      */
-    public function add($value, $label = null)
+    public function add(string $value, ?string $label = null)
     {
         $this->data[] = [
             'value' => $value,

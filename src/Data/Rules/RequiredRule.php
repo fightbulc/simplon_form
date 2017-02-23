@@ -2,7 +2,7 @@
 
 namespace Simplon\Form\Data\Rules;
 
-use Simplon\Form\Data\Field;
+use Simplon\Form\Data\FormField;
 
 /**
  * Class RequiredRule
@@ -16,11 +16,11 @@ class RequiredRule extends Rule
     protected $errorMessage = 'Field is required';
 
     /**
-     * @param Field $field
+     * @param FormField $field
      *
      * @throws RuleException
      */
-    public function apply(Field $field)
+    public function apply(FormField $field)
     {
         if ($field->getValue() === '' || $field->getValue() === null)
         {

@@ -2,10 +2,9 @@
 
 namespace Simplon\Form\Data\Rules;
 
-use Simplon\Form\Data\Field;
+use Simplon\Form\Data\FormField;
 
 /**
- * Class EmailRule
  * @package Simplon\Form\Data\Rules
  */
 class EmailRule extends Rule
@@ -16,11 +15,11 @@ class EmailRule extends Rule
     protected $errorMessage = 'Invalid email address';
 
     /**
-     * @param Field $field
+     * @param FormField $field
      *
      * @throws RuleException
      */
-    public function apply(Field $field)
+    public function apply(FormField $field)
     {
         if (filter_var($field->getValue(), FILTER_VALIDATE_EMAIL) === false)
         {

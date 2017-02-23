@@ -3,7 +3,6 @@
 namespace Simplon\Form\View\Elements;
 
 /**
- * Class TimeListElement
  * @package Simplon\Form\View\Elements
  */
 class TimeListElement extends DropDownElement
@@ -12,7 +11,6 @@ class TimeListElement extends DropDownElement
      * @var int
      */
     private $interval = 15;
-
     /**
      * @var bool
      */
@@ -21,7 +19,7 @@ class TimeListElement extends DropDownElement
     /**
      * @return int
      */
-    public function getInterval()
+    public function getInterval(): int
     {
         return $this->interval;
     }
@@ -31,7 +29,7 @@ class TimeListElement extends DropDownElement
      *
      * @return TimeListElement
      */
-    public function setInterval($interval)
+    public function setInterval(int $interval): self
     {
         $this->interval = $interval;
 
@@ -39,19 +37,19 @@ class TimeListElement extends DropDownElement
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function hasNone()
+    public function hasNone(): bool
     {
         return $this->isNone;
     }
 
     /**
-     * @param boolean $isNone
+     * @param bool $isNone
      *
      * @return TimeListElement
      */
-    public function isNone($isNone)
+    public function isNone(bool $isNone): self
     {
         $this->isNone = $isNone === true;
 
@@ -61,15 +59,15 @@ class TimeListElement extends DropDownElement
     /**
      * @return bool
      */
-    protected function hasOptions()
+    protected function hasOptions(): bool
     {
         return true;
     }
 
     /**
-     * @return mixed|null
+     * @return array|null
      */
-    protected function getOptions()
+    protected function getOptions(): ?array
     {
         $options = [];
 
