@@ -5,7 +5,7 @@ namespace Simplon\Form\View\Elements\Support\DropDownApi;
 /**
  * @package Simplon\Form\View\Elements\Support\DropDownApi
  */
-interface DropDownApiInterface
+interface DropDownApiJsInterface
 {
     /**
      * @return string
@@ -20,15 +20,15 @@ interface DropDownApiInterface
     /**
      * @return null|string
      */
-    public function getBeforeXHR(): ?string;
+    public function renderBeforeXHRJsString(): ?string;
 
     /**
      * @return string
      */
-    public function getBeforeSend(): string;
+    public function renderBeforeSendJsString(): string;
 
     /**
-     * @return DropDownApiResponseInterface
+     * @return DropDownApiResponseDataInterface
      */
-    public function getOnResponse(): DropDownApiResponseInterface;
+    public function getOnResponse(): DropDownApiResponseDataInterface;
 }

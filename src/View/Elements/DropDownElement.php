@@ -292,11 +292,6 @@ class DropDownElement extends Element
             return join('', $renderedOptions);
         }
 
-        if ($this->getAllowAdditions() === false)
-        {
-//            throw new FormError('"' . $this->getField()->getId() . '" missing field options. Set via "FormField::addMetas(new OptionsMeta())"');
-        }
-
         return null;
     }
 }

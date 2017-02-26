@@ -4,8 +4,8 @@ namespace Simplon\Form\View\Elements;
 
 use Simplon\Form\Data\FormField;
 use Simplon\Form\FormError;
-use Simplon\Form\View\Elements\Support\DropDownApi\DropDownApiInterface;
-use Simplon\Form\View\Elements\Support\DropDownApi\DropDownApiResults;
+use Simplon\Form\View\Elements\Support\DropDownApi\Data\DropDownApiData;
+use Simplon\Form\View\Elements\Support\DropDownApi\DropDownApiJsInterface;
 use Simplon\Form\View\RenderHelper;
 
 /**
@@ -14,15 +14,15 @@ use Simplon\Form\View\RenderHelper;
 class DropDownApiElement extends DropDownElement
 {
     /**
-     * @var DropDownApiInterface
+     * @var DropDownApiJsInterface
      */
     private $interface;
 
     /**
      * @param FormField $field
-     * @param DropDownApiInterface $interface
+     * @param DropDownApiJsInterface $interface
      */
-    public function __construct(FormField $field, DropDownApiInterface $interface)
+    public function __construct(FormField $field, DropDownApiJsInterface $interface)
     {
         parent::__construct($field);
         $this->interface = $interface;
@@ -97,18 +97,18 @@ class DropDownApiElement extends DropDownElement
             'url'    => $this->getInterface()->getUrl(),
         ];
 
-        $translateResponse = '$.each(result.' . $this->getInterface()->getOnResponse()->getResultItemsKey() . ', function(index, item) { var label = \'' . $this->getInterface()->getOnResponse()->getLabel() . '; var remoteID = ' . $this->getInterface()->getOnResponse()->getRemoteId() . '; response.results.push({ "name": label, "value": encodeURIComponent(JSON.stringify({label: label, remote_id: remoteID})) }); });';
-
         $functions = [
-            'beforeXHR: function(xhr) { ' . $this->getInterface()->getBeforeXHR() . ' return xhr; }',
-            'beforeSend: function(settings) { if(settings.urlData.query !== \'\') { ' . $this->getInterface()->getBeforeSend() . ' return settings; } return false; }',
-            'onResponse: function(result) { var response = { results:[] }; ' . $translateResponse . ' return response; }',
+            $this->renderBeforeXHR(),
+            $this->renderBeforeSend(),
+            $this->renderOnResponse(),
         ];
 
-        $lines = [];
-        $lines[] = $selector . '.dropdown({' . trim(json_encode($options), '{}') . ', "apiSettings": { ' . trim(json_encode($apiSettings), '{}') . ', ' . implode(', ', $functions) . '}})';
-
-        return implode(";\n", $lines);
+        return
+            $selector
+            . '.dropdown({'
+            . trim(json_encode($options), '{}') . ', '
+            . '"apiSettings": { ' . trim(json_encode($apiSettings), '{}') . ', ' . implode(",", $functions) . '}'
+            . '})';
     }
 
     /**
@@ -120,7 +120,7 @@ class DropDownApiElement extends DropDownElement
 
         if (!empty($this->getField()->getValue()))
         {
-            $results = new DropDownApiResults($this->getField()->getValue());
+            $results = (new DropDownApiData())->fromForm($this->getField()->getValue());
 
             foreach ($results as $item)
             {
@@ -131,7 +131,7 @@ class DropDownApiElement extends DropDownElement
                     return $this->renderTextWidget($item->getLabel(), false);
                 }
 
-                $options[] = '<a class="ui label transition visible" data-value="' . $item->getRaw() . '" style="display: inline-block !important;">' . $item->getLabel() . '<i class="delete icon"></i></a>';
+                $options[] = '<a class="ui label transition visible" data-value="' . $item->getEncodedJson() . '" style="display: inline-block !important;">' . $item->getLabel() . '<i class="delete icon"></i></a>';
             }
         }
 
@@ -139,10 +139,57 @@ class DropDownApiElement extends DropDownElement
     }
 
     /**
-     * @return DropDownApiInterface
+     * @return DropDownApiJsInterface
      */
-    protected function getInterface(): DropDownApiInterface
+    protected function getInterface(): DropDownApiJsInterface
     {
         return $this->interface;
+    }
+
+    /**
+     * @return string
+     */
+    private function renderBeforeXHR(): string
+    {
+        $beforeXHRJsString = null;
+
+        if (!empty($this->getInterface()->renderBeforeXHRJsString()))
+        {
+            $beforeXHRJsString = rtrim($this->getInterface()->renderBeforeXHRJsString(), ';') . '; ';
+        }
+
+        return 'beforeXHR: function(xhr) { ' . $beforeXHRJsString . 'return xhr; }';
+    }
+
+    /**
+     * @return string
+     */
+    private function renderBeforeSend(): string
+    {
+        return
+            'beforeSend: function(settings) { if(settings.urlData.query !== \'\') { '
+            . rtrim($this->getInterface()->renderBeforeSendJsString(), ';') . ';'
+            . 'return settings; } return false; }';
+    }
+
+    /**
+     * @return string
+     */
+    private function renderOnResponse(): string
+    {
+        $responseJs = $this->getInterface()->getOnResponse();
+
+        $responseParams = [
+            'var label = ' . $responseJs->renderLabelJsString(),
+            'var name = ' . $responseJs->renderNameJsString(),
+            'var remoteID = ' . $responseJs->renderRemoteIdJsString(),
+            'var meta = ' . $responseJs->renderMetaJsString(),
+            'response.results.push({ "name": label, "value": encodeURIComponent(JSON.stringify({ label: label, name: name, remoteID: remoteID, meta: meta })) })',
+        ];
+
+        return
+            'onResponse: function(result) { var response = { results:[] }; '
+            . "$.each(result." . $responseJs->renderResultObjectJsString() . ", function(index, item) {\n" . implode(";", $responseParams) . "\n});"
+            . ' return response; }';
     }
 }
