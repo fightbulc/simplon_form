@@ -45,6 +45,10 @@ class DateCalendarElement extends Element
      * @var bool
      */
     private $isRangeStart = true;
+    /**
+     * @var string
+     */
+    private $format = 'DD.MM.YYYY';
 
     /**
      * @return null|string
@@ -195,6 +199,26 @@ class DateCalendarElement extends Element
     }
 
     /**
+     * @return string
+     */
+    public function getFormat(): string
+    {
+        return $this->format;
+    }
+
+    /**
+     * @param string $format
+     *
+     * @return DateCalendarElement
+     */
+    public function setFormat(string $format): DateCalendarElement
+    {
+        $this->format = $format;
+
+        return $this;
+    }
+
+    /**
      * @return null|string
      */
     public function renderLabel():?string
@@ -303,6 +327,7 @@ class DateCalendarElement extends Element
         return [
             'semantic-calendar/0.0.x/calendar.min.css',
             'semantic-calendar/0.0.x/calendar.min.js',
+            'momentjs/2.17.x/moment-with-locales.min.js',
         ];
     }
 
@@ -316,7 +341,7 @@ class DateCalendarElement extends Element
         ];
 
         $functions = [
-            'onChange: function (date, text) { $(this).find(\'input\').val(text); }',
+            'formatter: { date: function(date, settings) { if(!date) return ""; return moment(date).format("' . $this->getFormat() . '"); }}',
         ];
 
         if ($this->getType())
@@ -340,6 +365,11 @@ class DateCalendarElement extends Element
             $functions[] = $typeRange . 'Calendar: $(\'#' . $this->getRangeElementId() . '\')';
         }
 
-        return '$("#' . $this->renderElementId() . '").parent().parent().calendar({' . trim(json_encode($options), '{}') . ', ' . implode(', ', $functions) . '})';
+        $code = [
+            '$("#' . $this->renderElementId() . '").parent().parent().calendar({' . trim(json_encode($options), '{}') . ', ' . implode(', ', $functions) . '})',
+            'moment.locale("en")',
+        ];
+
+        return implode(";\n", $code);
     }
 }
