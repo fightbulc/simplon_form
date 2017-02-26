@@ -11,6 +11,103 @@ use Simplon\Form\View\Elements\Support\DropDownApi\DropDownApiResponseInterface;
 class AlgoliaPlacesApi implements DropDownApiInterface
 {
     /**
+     * @var string
+     */
+    private $apiKey;
+    /**
+     * @var string
+     */
+    private $appId;
+    /**
+     * @var string
+     */
+    private $language = 'en';
+    /**
+     * @var string
+     */
+    private $type = 'city';
+
+    /**
+     * @return string
+     */
+    public function getApiKey(): string
+    {
+        return $this->apiKey;
+    }
+
+    /**
+     * @param string $apiKey
+     *
+     * @return AlgoliaPlacesApi
+     */
+    public function setApiKey(string $apiKey): AlgoliaPlacesApi
+    {
+        $this->apiKey = $apiKey;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppId(): string
+    {
+        return $this->appId;
+    }
+
+    /**
+     * @param string $appId
+     *
+     * @return AlgoliaPlacesApi
+     */
+    public function setAppId(string $appId): AlgoliaPlacesApi
+    {
+        $this->appId = $appId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLanguage(): string
+    {
+        return $this->language;
+    }
+
+    /**
+     * @param string $language
+     *
+     * @return AlgoliaPlacesApi
+     */
+    public function setLanguage(string $language): AlgoliaPlacesApi
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return AlgoliaPlacesApi
+     */
+    public function setType(string $type): AlgoliaPlacesApi
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getMethod(): string
@@ -31,7 +128,12 @@ class AlgoliaPlacesApi implements DropDownApiInterface
      */
     public function getBeforeXHR(): ?string
     {
-        return "xhr.setRequestHeader('X-Algolia-API-Key', algolia.key); xhr.setRequestHeader ('X-Algolia-Application-Id', algolia.id);";
+        if ($this->apiKey && $this->appId)
+        {
+            return "xhr.setRequestHeader('X-Algolia-API-Key', " . $this->getApiKey() . "); xhr.setRequestHeader ('X-Algolia-Application-Id', " . $this->getAppId() . ");";
+        }
+
+        return null;
     }
 
     /**
@@ -39,7 +141,7 @@ class AlgoliaPlacesApi implements DropDownApiInterface
      */
     public function getBeforeSend(): string
     {
-        return "settings.data = JSON.stringify({query: settings.urlData.query, type: \"city\", language: \"en\" });";
+        return "settings.data = JSON.stringify({query: settings.urlData.query, type: \"" . $this->getType() . "\", language: \"" . $this->getLanguage() . "\" });";
     }
 
     /**

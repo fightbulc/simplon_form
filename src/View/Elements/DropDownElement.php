@@ -128,12 +128,55 @@ class DropDownElement extends Element
     }
 
     /**
+     * @param string $text
+     * @param bool $isDefault
+     *
+     * @return string
+     */
+    public function renderTextWidget(string $text, bool $isDefault = true): string
+    {
+        return '<div class="' . ($isDefault ? 'default' : null) . ' text">' . $text . '</div>';
+    }
+
+    /**
      * @return string
      */
     public function getWidgetHtml(): string
     {
         /** @noinspection HtmlUnknownAttribute */
-        return '<div {attrs-wrapper}><input {attrs-field}><i class="dropdown icon"></i>{placeholder}<div class="menu">{options}</div><input type="text" class="search"></div>';
+        return '<div {attrs-wrapper}><input {attrs-field}><i class="dropdown icon"></i>{placeholder}<div class="menu">{options}</div></div>';
+    }
+
+    /**
+     * @return string
+     * @throws FormError
+     */
+    public function renderWidget(): string
+    {
+        $attrs = [
+            'attrs-wrapper' => [
+                'class' => ['ui fluid selection dropdown'],
+            ],
+            'attrs-field'   => $this->getWidgetAttributes(),
+        ];
+
+        if ($this->isMultiple())
+        {
+            $attrs['attrs-wrapper']['class'][] = 'multiple';
+        }
+
+        if ($this->isSearchable())
+        {
+            $attrs['attrs-wrapper']['class'][] = 'search';
+        }
+
+        return RenderHelper::placeholders(
+            RenderHelper::attributes($this->getWidgetHtml(), $attrs),
+            [
+                'placeholder' => !empty($this->getPlaceholder()) ? $this->renderTextWidget($this->getPlaceholder()) : null,
+                'options'     => $this->renderOptions(),
+            ]
+        );
     }
 
     /**
@@ -178,38 +221,6 @@ class DropDownElement extends Element
         }
 
         return $base;
-    }
-
-    /**
-     * @return string
-     * @throws FormError
-     */
-    public function renderWidget(): string
-    {
-        $attrs = [
-            'attrs-wrapper' => [
-                'class' => ['ui fluid selection dropdown'],
-            ],
-            'attrs-field'   => $this->getWidgetAttributes(),
-        ];
-
-        if ($this->isMultiple())
-        {
-            $attrs['attrs-wrapper']['class'][] = 'multiple';
-        }
-
-        if ($this->isSearchable())
-        {
-            $attrs['attrs-wrapper']['class'][] = 'search';
-        }
-
-        return RenderHelper::placeholders(
-            RenderHelper::attributes($this->getWidgetHtml(), $attrs),
-            [
-                'placeholder' => $this->getPlaceholder() ? '<div class="default text">' . $this->getPlaceholder() . '</div>' : false,
-                'options'     => $this->renderOptions(),
-            ]
-        );
     }
 
     /**
@@ -283,7 +294,7 @@ class DropDownElement extends Element
 
         if ($this->getAllowAdditions() === false)
         {
-            throw new FormError('"' . $this->getField()->getId() . '" missing field options. Set via "FormField::addMetas(new OptionsMeta())"');
+//            throw new FormError('"' . $this->getField()->getId() . '" missing field options. Set via "FormField::addMetas(new OptionsMeta())"');
         }
 
         return null;

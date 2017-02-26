@@ -15,10 +15,10 @@ interface DropDownApiResponseInterface
     /**
      * @return string
      */
-    public function renderName(): string;
+    public function getLabel(): string;
 
     /**
      * @return string
      */
-    public function renderValue(): string;
+    public function getRemoteId(): string;
 }

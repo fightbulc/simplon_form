@@ -20,15 +20,15 @@ class AlgoliaPlacesApiResponse implements DropDownApiResponseInterface
     /**
      * @return string
      */
-    public function renderName(): string
+    public function getLabel(): string
     {
-        return "<i class=\"flag '+ item.country_code + '\"></i>' + item.locale_names[0] + ', ' + item.country'";
+        return "<i class=\"flag '+ item.country_code + '\"></i>' + item.locale_names[0] + ', ' + item.country";
     }
 
     /**
      * @return string
      */
-    public function renderValue(): string
+    public function getRemoteId(): string
     {
         return "item.objectID";
     }
