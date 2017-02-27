@@ -3,7 +3,7 @@
 `Simplon/Forms` helps to deal with the hustles of building a form, rendering and/or validating it.
 It includes a couple widgets by leveraging the fantastic `Semantic UI` library. 
  
-## Quick example 
+## Introduction 
  
 Follow the example below to get an idea:
 
