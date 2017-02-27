@@ -45,6 +45,16 @@ class AlgoliaPlacesApiJs implements DropDownApiJsInterface
     private $onResponseHandler;
 
     /**
+     * @param null|string $apiKey
+     * @param null|string $appId
+     */
+    public function __construct(?string $apiKey = null, ?string $appId = null)
+    {
+        $this->apiKey = $apiKey;
+        $this->appId = $appId;
+    }
+
+    /**
      * @return string
      */
     public function getApiKey(): string
@@ -53,35 +63,11 @@ class AlgoliaPlacesApiJs implements DropDownApiJsInterface
     }
 
     /**
-     * @param string $apiKey
-     *
-     * @return AlgoliaPlacesApiJs
-     */
-    public function setApiKey(string $apiKey): AlgoliaPlacesApiJs
-    {
-        $this->apiKey = $apiKey;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getAppId(): string
     {
         return $this->appId;
-    }
-
-    /**
-     * @param string $appId
-     *
-     * @return AlgoliaPlacesApiJs
-     */
-    public function setAppId(string $appId): AlgoliaPlacesApiJs
-    {
-        $this->appId = $appId;
-
-        return $this;
     }
 
     /**
@@ -179,24 +165,24 @@ class AlgoliaPlacesApiJs implements DropDownApiJsInterface
     {
         if ($this->apiKey && $this->appId)
         {
-            return "xhr.setRequestHeader('X-Algolia-API-Key', " . $this->getApiKey() . "); xhr.setRequestHeader ('X-Algolia-Application-Id', " . $this->getAppId() . ")";
+            return 'xhr.setRequestHeader("X-Algolia-API-Key", "' . $this->getApiKey() . '"); xhr.setRequestHeader ("X-Algolia-Application-Id", "' . $this->getAppId() . '")';
         }
 
         return null;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function renderBeforeSendJsString(): string
+    public function renderBeforeSendJsString(): ?string
     {
         return
-            "settings.data = JSON.stringify({"
-            . "query: settings.urlData.query.replace(/str\./, 'straße')," // updated for German address handling
-            . "language: \"" . $this->getLanguage() . "\","
-            . "type: \"" . $this->getType() . "\","
-            . "countries: " . json_encode($this->getCountries())
-            . "})";
+            'settings.data = JSON.stringify({'
+            . 'query: settings.urlData.query.replace(/str\./, "straße"),' // updated for German address handling
+            . 'language: "' . $this->getLanguage() . '",'
+            . 'type: "' . $this->getType() . '",'
+            . 'countries: ' . json_encode($this->getCountries())
+            . '})';
     }
 
     /**

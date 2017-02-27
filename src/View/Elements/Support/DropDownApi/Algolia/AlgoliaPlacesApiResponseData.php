@@ -42,9 +42,9 @@ class AlgoliaPlacesApiResponseData implements DropDownApiResponseDataInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function renderMetaJsString(): string
+    public function renderMetaJsString(): ?string
     {
         return '{geo: item._geoloc}';
     }

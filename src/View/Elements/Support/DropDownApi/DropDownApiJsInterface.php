@@ -23,9 +23,9 @@ interface DropDownApiJsInterface
     public function renderBeforeXHRJsString(): ?string;
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function renderBeforeSendJsString(): string;
+    public function renderBeforeSendJsString(): ?string;
 
     /**
      * @return DropDownApiResponseDataInterface

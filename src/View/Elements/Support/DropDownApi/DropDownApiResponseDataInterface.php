@@ -28,7 +28,7 @@ interface DropDownApiResponseDataInterface
     public function renderRemoteIdJsString(): string;
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function renderMetaJsString(): string;
+    public function renderMetaJsString(): ?string;
 }

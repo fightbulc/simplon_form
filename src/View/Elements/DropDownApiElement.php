@@ -4,7 +4,7 @@ namespace Simplon\Form\View\Elements;
 
 use Simplon\Form\Data\FormField;
 use Simplon\Form\FormError;
-use Simplon\Form\View\Elements\Support\DropDownApi\Data\DropDownApiData;
+use Simplon\Form\View\Elements\Support\DropDownApi\DropDownApiData;
 use Simplon\Form\View\Elements\Support\DropDownApi\DropDownApiJsInterface;
 use Simplon\Form\View\RenderHelper;
 
@@ -166,10 +166,14 @@ class DropDownApiElement extends DropDownElement
      */
     private function renderBeforeSend(): string
     {
-        return
-            'beforeSend: function(settings) { if(settings.urlData.query !== \'\') { '
-            . rtrim($this->getInterface()->renderBeforeSendJsString(), ';') . ';'
-            . 'return settings; } return false; }';
+        $beforeSend = null;
+
+        if ($this->getInterface()->renderBeforeSendJsString())
+        {
+            $beforeSend = rtrim($this->getInterface()->renderBeforeSendJsString(), ';') . ';';
+        }
+
+        return 'beforeSend: function(settings) { if(settings.urlData.query !== \'\') { ' . $beforeSend . 'return settings; } return false; }';
     }
 
     /**
@@ -183,7 +187,7 @@ class DropDownApiElement extends DropDownElement
             'var label = ' . $responseJs->renderLabelJsString(),
             'var name = ' . $responseJs->renderNameJsString(),
             'var remoteID = ' . $responseJs->renderRemoteIdJsString(),
-            'var meta = ' . $responseJs->renderMetaJsString(),
+            'var meta = ' . ($responseJs->renderMetaJsString() ?? 'null'),
             'response.results.push({ "name": label, "value": encodeURIComponent(JSON.stringify({ label: label, name: name, remoteID: remoteID, meta: meta })) })',
         ];
 

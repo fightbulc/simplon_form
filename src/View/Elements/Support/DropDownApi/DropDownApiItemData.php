@@ -1,9 +1,9 @@
 <?php
 
-namespace Simplon\Form\View\Elements\Support\DropDownApi\Data;
+namespace Simplon\Form\View\Elements\Support\DropDownApi;
 
 /**
- * @package Simplon\Form\View\Elements\Support\DropDownApi\Data
+ * @package Simplon\Form\View\Elements\Support\DropDownApi
  */
 class DropDownApiItemData
 {
