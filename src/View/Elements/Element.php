@@ -29,6 +29,10 @@ abstract class Element implements ElementInterface
     /**
      * @var null|string
      */
+    protected $descriptionColor;
+    /**
+     * @var null|string
+     */
     protected $wide;
 
     /**
@@ -93,12 +97,14 @@ abstract class Element implements ElementInterface
 
     /**
      * @param string $description
+     * @param string $color
      *
      * @return static
      */
-    public function setDescription(string $description)
+    public function setDescription(string $description, string $color = 'grey')
     {
         $this->description = $description;
+        $this->descriptionColor = $color;
 
         return $this;
     }
@@ -177,7 +183,7 @@ abstract class Element implements ElementInterface
 
             $attrs = [
                 'attrs' => [
-                    'class'        => ['field-description', 'help', 'circle', 'icon'],
+                    'class'        => ['field-description', $this->descriptionColor, 'info', 'circle', 'icon'],
                     'data-content' => $this->getDescription(),
                 ],
             ];

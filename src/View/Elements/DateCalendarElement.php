@@ -3,6 +3,7 @@
 namespace Simplon\Form\View\Elements;
 
 use Moment\Moment;
+use Simplon\Form\Data\FormField;
 use Simplon\Form\View\RenderHelper;
 
 /**
@@ -38,44 +39,56 @@ class DateCalendarElement extends Element
      */
     private $maxDate;
     /**
-     * @var null|string
+     * @var null|DateCalendarElement
      */
-    private $rangeElementId;
+    private $rangeStartElement;
     /**
-     * @var bool
+     * @var null|DateCalendarElement
      */
-    private $isRangeStart = true;
+    private $rangeEndElement;
     /**
      * @var string
      */
     private $format = 'DD.MM.YYYY';
 
     /**
-     * @return null|string
+     * @param FormField $field
+     * @param null|DateCalendarElement $rangeStartElement
      */
-    public function getRangeElementId(): ?string
+    public function __construct(FormField $field, ?DateCalendarElement $rangeStartElement = null)
     {
-        return $this->rangeElementId;
+        parent::__construct($field);
+
+        if($rangeStartElement)
+        {
+            $this->rangeStartElement = $rangeStartElement->setRangeEndElement($this);
+        }
     }
 
     /**
-     * @return bool
+     * @return null|DateCalendarElement
      */
-    public function isRangeStart(): bool
+    public function getRangeStartElement(): ?DateCalendarElement
     {
-        return $this->isRangeStart;
+        return $this->rangeStartElement;
     }
 
     /**
-     * @param string $rangeElementId
-     * @param bool $isStart
+     * @return null|DateCalendarElement
+     */
+    public function getRangeEndElement()
+    {
+        return $this->rangeEndElement;
+    }
+
+    /**
+     * @param DateCalendarElement $rangeEndElement
      *
      * @return DateCalendarElement
      */
-    public function setRangeElementId(string $rangeElementId, bool $isStart = true): self
+    public function setRangeEndElement(DateCalendarElement $rangeEndElement)
     {
-        $this->rangeElementId = $rangeElementId;
-        $this->isRangeStart = $isStart === true;
+        $this->rangeEndElement = $rangeEndElement;
 
         return $this;
     }
@@ -359,10 +372,14 @@ class DateCalendarElement extends Element
             $functions[] = 'maxDate: new Date(' . $this->getMaxDate()->format('Y') . ', ' . ((int)$this->getMaxDate()->format('m') - 1) . ', ' . $this->getMaxDate()->format('d') . ')';
         }
 
-        if ($this->getRangeElementId())
+        if ($this->getRangeStartElement())
         {
-            $typeRange = $this->isRangeStart() ? 'start' : 'end';
-            $functions[] = $typeRange . 'Calendar: $(\'#' . $this->getRangeElementId() . '\')';
+            $functions[] = 'startCalendar: $(\'#' . $this->getRangeStartElement()->renderElementId() . '\').parent().parent()';
+        }
+
+        if ($this->getRangeEndElement())
+        {
+            $functions[] = 'endCalendar: $(\'#' . $this->getRangeEndElement()->renderElementId() . '\').parent().parent()';
         }
 
         $code = [
