@@ -597,9 +597,7 @@ class FormView
      */
     private function buildFieldCode(): string
     {
-        $code = [
-            '$(\'i.field-description\').popup({hoverable : true, position: "right center"})'
-        ];
+        $code = [];
 
         foreach ($this->getElements() as $element)
         {
