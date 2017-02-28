@@ -11,6 +11,10 @@ use Simplon\Form\View\RenderHelper;
 abstract class Element implements ElementInterface
 {
     /**
+     * @var string
+     */
+    protected $language = 'en';
+    /**
      * @var FormField
      */
     protected $field;
@@ -41,6 +45,26 @@ abstract class Element implements ElementInterface
     public function __construct(FormField $field)
     {
         $this->field = $field;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLanguage(): string
+    {
+        return $this->language;
+    }
+
+    /**
+     * @param string $language
+     *
+     * @return Element
+     */
+    public function setLanguage(string $language): Element
+    {
+        $this->language = $language;
+
+        return $this;
     }
 
     /**

@@ -15,6 +15,7 @@ class DateCalendarElement extends Element
     const TYPE_YEAR = 'year';
     const TYPE_DATE = 'date';
     const TYPE_TIME = 'time';
+
     const ALLOWED_TYPES = [
         self::TYPE_MONTH,
         self::TYPE_YEAR,
@@ -27,7 +28,7 @@ class DateCalendarElement extends Element
      */
     private $placeholder = 'Select';
     /**
-     * @var null|string
+     * @var string
      */
     private $type;
     /**
@@ -49,7 +50,15 @@ class DateCalendarElement extends Element
     /**
      * @var string
      */
-    private $format = 'DD.MM.YYYY';
+    private $dateFormat = 'DD.MM.YYYY';
+    /**
+     * @var string
+     */
+    private $timeFormat = 'HH:mm';
+    /**
+     * @var string
+     */
+    private $dateTimeFormat = 'DD.MM.YYYY HH:mm';
 
     /**
      * @param FormField $field
@@ -59,7 +68,7 @@ class DateCalendarElement extends Element
     {
         parent::__construct($field);
 
-        if($rangeStartElement)
+        if ($rangeStartElement)
         {
             $this->rangeStartElement = $rangeStartElement->setRangeEndElement($this);
         }
@@ -104,17 +113,7 @@ class DateCalendarElement extends Element
     /**
      * @return DateCalendarElement
      */
-    public function isDateTime(): self
-    {
-        $this->type = null;
-
-        return $this;
-    }
-
-    /**
-     * @return DateCalendarElement
-     */
-    public function isMonthOnly(): self
+    public function monthOnly(): self
     {
         $this->type = self::TYPE_MONTH;
 
@@ -124,7 +123,7 @@ class DateCalendarElement extends Element
     /**
      * @return DateCalendarElement
      */
-    public function isYearOnly(): self
+    public function yearOnly(): self
     {
         $this->type = self::TYPE_YEAR;
 
@@ -134,7 +133,7 @@ class DateCalendarElement extends Element
     /**
      * @return DateCalendarElement
      */
-    public function isDateOnly(): self
+    public function dateOnly(): self
     {
         $this->type = self::TYPE_DATE;
 
@@ -144,7 +143,7 @@ class DateCalendarElement extends Element
     /**
      * @return DateCalendarElement
      */
-    public function isTimeOnly(): self
+    public function timeOnly(): self
     {
         $this->type = self::TYPE_TIME;
 
@@ -214,19 +213,59 @@ class DateCalendarElement extends Element
     /**
      * @return string
      */
-    public function getFormat(): string
+    public function getDateFormat(): string
     {
-        return $this->format;
+        return $this->dateFormat;
     }
 
     /**
-     * @param string $format
+     * @param string $dateFormat
      *
      * @return DateCalendarElement
      */
-    public function setFormat(string $format): DateCalendarElement
+    public function setDateFormat(string $dateFormat): DateCalendarElement
     {
-        $this->format = $format;
+        $this->dateFormat = $dateFormat;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTimeFormat(): string
+    {
+        return $this->timeFormat;
+    }
+
+    /**
+     * @param string $timeFormat
+     *
+     * @return DateCalendarElement
+     */
+    public function setTimeFormat(string $timeFormat): DateCalendarElement
+    {
+        $this->timeFormat = $timeFormat;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDateTimeFormat(): string
+    {
+        return $this->dateTimeFormat;
+    }
+
+    /**
+     * @param string $dateTimeFormat
+     *
+     * @return DateCalendarElement
+     */
+    public function setDateTimeFormat(string $dateTimeFormat): DateCalendarElement
+    {
+        $this->dateTimeFormat = $dateTimeFormat;
 
         return $this;
     }
@@ -259,7 +298,7 @@ class DateCalendarElement extends Element
     public function getWidgetHtml(): string
     {
         /** @noinspection HtmlUnknownAttribute */
-        return '<div {attrs-wrapper}><div {attrs-field-wrapper}><i {attrs-icon}></i><input {attrs-field}></div></div>';
+        return '<div {attrs-wrapper}><div {attrs-field-wrapper}><i {attrs-icon}></i><input {attrs-field}><input {attrs-helper-field}></div></div>';
     }
 
     /**
@@ -270,7 +309,6 @@ class DateCalendarElement extends Element
         $base = [
             'type'        => 'text',
             'id'          => $this->renderElementId(),
-            'name'        => $this->renderElementName(),
             'value'       => $this->getField()->getValue(),
             'placeholder' => $this->getPlaceholder(),
         ];
@@ -315,7 +353,12 @@ class DateCalendarElement extends Element
             'attrs-icon'          => [
                 'class' => ['icon'],
             ],
-            'attrs-field'         => $this->getWidgetAttributes(),
+            'attrs-field'         => [
+                'type'  => 'hidden',
+                'name'  => $this->renderElementName(),
+                'value' => $this->getField()->getValue(),
+            ],
+            'attrs-helper-field'  => $this->getWidgetAttributes(),
         ];
 
         if (!$this->getType() || in_array($this->getType(), [self::TYPE_DATE]))
@@ -351,16 +394,22 @@ class DateCalendarElement extends Element
     {
         $options = [
             'firstDayOfWeek' => 1,
-        ];
-
-        $functions = [
-            'formatter: { date: function(date, settings) { if(!date) return ""; return moment(date).format("' . $this->getFormat() . '"); }}',
+            'ampm'           => false,
+            'selector'       => [
+                'input' => 'input[type=text]',
+            ],
         ];
 
         if ($this->getType())
         {
             $options['type'] = $this->getType();
         }
+
+        $functions = [
+            $this->getFormatterFunction(),
+            $this->getParserFunction(),
+            $this->getOnChangeFunction(),
+        ];
 
         if ($this->getMinDate())
         {
@@ -383,10 +432,69 @@ class DateCalendarElement extends Element
         }
 
         $code = [
-            '$("#' . $this->renderElementId() . '").parent().parent().calendar({' . trim(json_encode($options), '{}') . ', ' . implode(', ', $functions) . '})',
-            'moment.locale("en")',
+            'moment.locale("' . $this->getLanguage() . '")',
+            '$("#' . $this->renderElementId() . '").parent().parent().calendar({' . substr(json_encode($options), 1, -1) . ', ' . implode(', ', $functions) . '})',
         ];
 
         return implode(";\n", $code);
+    }
+
+    /**
+     * @return string
+     */
+    private function getFormatterFunction(): string
+    {
+        $objs = [
+            'date: function(date, settings) { if(!date) return ""; return moment(date).format("' . $this->getDateFormat() . '"); }',
+            'time: function(date, settings) { if(!date) return ""; return moment(date).format("' . $this->getTimeFormat() . '"); }',
+            'dateTime: function(date, settings) { if(!date) return ""; return moment(date).format("' . $this->getDateTimeFormat() . '"); }',
+        ];
+
+        return 'formatter: { ' . implode(",\n", $objs) . ' }';
+    }
+
+    /**
+     * @return string
+     */
+    private function getParserFunction(): string
+    {
+        $objs = [
+            'date: function(text, settings) { var m = moment(text, "' . $this->getMomentDateFormat() . '"); return m.toDate(); }',
+        ];
+
+        return 'parser: { ' . implode(",\n", $objs) . ' }';
+    }
+
+    /**
+     * @return string
+     */
+    private function getOnChangeFunction(): string
+    {
+        $lines = [
+            'var m = moment(date)',
+            '$(this).find("input[type=hidden]").val(text === "" ? "" : m.format("' . $this->getMomentDateFormat() . '"))', // set saving time
+        ];
+
+        return 'onChange: function(date, text) { ' . implode(";\n", $lines) . '; }';
+    }
+
+    /**
+     * @return string
+     */
+    private function getMomentDateFormat(): string
+    {
+        switch ($this->getType())
+        {
+            case self::TYPE_TIME:
+                $format = 'HH:mm';
+                break;
+            case self::TYPE_DATE:
+                $format = 'YYYY-MM-DD';
+                break;
+            default:
+                $format = 'YYYY-MM-DD\THH:mm:ss';
+        }
+
+        return $format;
     }
 }

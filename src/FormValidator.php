@@ -96,19 +96,22 @@ class FormValidator
      */
     public function addFields(FormFields $fields): self
     {
-        $this->fields[] = $fields;
+        $this->fields[] = $this->applyRequestData($fields);
 
         return $this;
     }
 
     /**
-     * @param FormFields[] $formFields
+     * @param FormFields[] $fields
      *
      * @return FormValidator
      */
-    public function setFields(array $formFields): self
+    public function setFields(array $fields): self
     {
-        $this->fields = $formFields;
+        foreach ($fields as $item)
+        {
+            $this->addFields($item);
+        }
 
         return $this;
     }
@@ -139,7 +142,7 @@ class FormValidator
      */
     public function validate(): self
     {
-        if($this->hasBeenSubmitted())
+        if ($this->hasBeenSubmitted())
         {
             // run check if CSRF is enabled
             if ($this->getCsrf() && $this->getCsrf()->isValid($this->requestData) === false)
@@ -152,10 +155,6 @@ class FormValidator
             {
                 foreach ($fields->getAll() as $field)
                 {
-                    $field->setValue(
-                        $this->getRequestData($field->getId())
-                    );
-
                     foreach ($field->getRules() as $rule)
                     {
                         try
@@ -228,6 +227,26 @@ class FormValidator
         }
 
         return $errors;
+    }
+
+    /**
+     * @param FormFields $fields
+     *
+     * @return FormFields
+     */
+    private function applyRequestData(FormFields $fields): FormFields
+    {
+        if ($this->hasBeenSubmitted())
+        {
+            foreach ($fields->getAll() as $field)
+            {
+                $field->setValue(
+                    $this->getRequestData($field->getId())
+                );
+            }
+        }
+
+        return $fields;
     }
 
     /**
