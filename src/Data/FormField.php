@@ -46,6 +46,10 @@ class FormField
      * @var bool
      */
     private $arrangedRules = false;
+    /**
+     * @var bool
+     */
+    private $hasCloneData = false;
 
     /**
      * @param string $id
@@ -273,6 +277,26 @@ class FormField
     public function setErrors(array $errors)
     {
         $this->errors = $errors;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasCloneData(): bool
+    {
+        return $this->hasCloneData;
+    }
+
+    /**
+     * @param bool $hasData
+     *
+     * @return FormField
+     */
+    public function setHasCloneData(bool $hasData): FormField
+    {
+        $this->hasCloneData = $hasData === true;
 
         return $this;
     }

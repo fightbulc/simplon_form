@@ -10,15 +10,15 @@ class FormViewBlock
     /**
      * @var string
      */
-    private $id;
+    protected $id;
     /**
      * @var string|null
      */
-    private $header;
+    protected $header;
     /**
      * @var FormViewRow[]
      */
-    private $rows;
+    protected $rows;
 
     /**
      * @param string $id
@@ -102,7 +102,7 @@ class FormViewBlock
             $html,
             [
                 'header' => $this->renderHeader(),
-                'rows'   => join('', $renderedRows),
+                'rows'   => implode('', $renderedRows),
             ]
         );
     }
@@ -110,7 +110,7 @@ class FormViewBlock
     /**
      * @return null|string
      */
-    private function renderHeader(): ?string
+    protected function renderHeader(): ?string
     {
         if ($this->hasHeader())
         {

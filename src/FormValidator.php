@@ -240,9 +240,10 @@ class FormValidator
         {
             foreach ($fields->getAll() as $field)
             {
-                $field->setValue(
-                    $this->getRequestData($field->getId())
-                );
+                $field
+                    ->setHasCloneData($this->hasCloneData($field->getId()))
+                    ->setValue($this->getRequestData($field->getId()))
+                ;
             }
         }
 
@@ -276,12 +277,26 @@ class FormValidator
      */
     private function getRequestData(string $id)
     {
-        if (isset($this->requestData[$id]))
+        if ($this->hasCloneData($id))
+        {
+            return $this->requestData['clone'][$id];
+        }
+        elseif (isset($this->requestData[$id]))
         {
             return $this->requestData[$id];
         }
 
         return null;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return bool
+     */
+    private function hasCloneData(string $id): bool
+    {
+        return isset($this->requestData['clone'][$id]);
     }
 
     /**
