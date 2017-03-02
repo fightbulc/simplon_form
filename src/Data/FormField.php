@@ -46,17 +46,32 @@ class FormField
      * @var bool
      */
     private $arrangedRules = false;
-    /**
-     * @var bool
-     */
-    private $hasCloneData = false;
 
     /**
      * @param string $id
      *
      * @throws FormError
      */
-    public function __construct($id)
+    public function __construct(string $id)
+    {
+        $this->setId($id);
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return FormField
+     * @throws FormError
+     */
+    public function setId(string $id): self
     {
         if (preg_match('/^[0-9a-zA-Z_-]+$/u', $id) === 0)
         {
@@ -64,14 +79,22 @@ class FormField
         }
 
         $this->id = $id;
+
+        return $this;
     }
 
     /**
-     * @return string
+     * @param int $iteration
+     *
+     * @return FormField
+     * @throws FormError
      */
-    public function getId()
+    public function cloneMe(int $iteration): self
     {
-        return $this->id;
+        $clone = clone $this;
+        $clone->setId($this->id . '-' . $iteration);
+
+        return $clone;
     }
 
     /**
@@ -121,7 +144,7 @@ class FormField
      *
      * @return null|mixed
      */
-    public function getMeta($key)
+    public function getMeta(string $key)
     {
         if (isset($this->meta[$key]))
         {
@@ -136,7 +159,7 @@ class FormField
      *
      * @return bool
      */
-    public function hasMeta($key)
+    public function hasMeta(string $key): bool
     {
         return empty($this->meta[$key]) === false;
     }
@@ -156,7 +179,7 @@ class FormField
     /**
      * @return FilterInterface[]
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return $this->filters;
     }
@@ -164,7 +187,7 @@ class FormField
     /**
      * @return bool
      */
-    public function hasFilters()
+    public function hasFilters(): bool
     {
         return empty($this->filters) === false;
     }
@@ -174,7 +197,7 @@ class FormField
      *
      * @return FormField
      */
-    public function addFilter(FilterInterface $filter)
+    public function addFilter(FilterInterface $filter): self
     {
         $this->filters[] = $filter;
 
@@ -186,7 +209,7 @@ class FormField
      *
      * @return FormField
      */
-    public function setFilters(array $filters)
+    public function setFilters(array $filters): self
     {
         $this->filters = $filters;
 
@@ -196,7 +219,7 @@ class FormField
     /**
      * @return RuleInterface[]
      */
-    public function getRules()
+    public function getRules(): array
     {
         if ($this->arrangedRules === false)
         {
@@ -210,7 +233,7 @@ class FormField
     /**
      * @return bool
      */
-    public function hasRules()
+    public function hasRules(): bool
     {
         return empty($this->rules) === false;
     }
@@ -220,7 +243,7 @@ class FormField
      *
      * @return FormField
      */
-    public function addRule(RuleInterface $rule)
+    public function addRule(RuleInterface $rule): self
     {
         $this->rules[] = $rule;
         $this->arrangedRules = false;
@@ -233,7 +256,7 @@ class FormField
      *
      * @return FormField
      */
-    public function setRules(array $rules)
+    public function setRules(array $rules): self
     {
         $this->rules = $rules;
         $this->arrangedRules = false;
@@ -244,7 +267,7 @@ class FormField
     /**
      * @return array
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }
@@ -252,7 +275,7 @@ class FormField
     /**
      * @return bool
      */
-    public function hasErrors()
+    public function hasErrors(): bool
     {
         return empty($this->errors) === false;
     }
@@ -262,7 +285,7 @@ class FormField
      *
      * @return FormField
      */
-    public function addError($error)
+    public function addError(string $error): self
     {
         $this->errors[] = $error;
 
@@ -274,29 +297,9 @@ class FormField
      *
      * @return FormField
      */
-    public function setErrors(array $errors)
+    public function setErrors(array $errors): self
     {
         $this->errors = $errors;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasCloneData(): bool
-    {
-        return $this->hasCloneData;
-    }
-
-    /**
-     * @param bool $hasData
-     *
-     * @return FormField
-     */
-    public function setHasCloneData(bool $hasData): FormField
-    {
-        $this->hasCloneData = $hasData === true;
 
         return $this;
     }
@@ -324,7 +327,7 @@ class FormField
      *
      * @return RuleInterface[]
      */
-    private function arrangeRules(array $rules)
+    private function arrangeRules(array $rules): array
     {
         $arranged = [];
 
