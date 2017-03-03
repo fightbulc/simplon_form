@@ -100,7 +100,7 @@ class FormField
      *
      * @return FormField
      */
-    public function setValue($value)
+    public function setValue($value): self
     {
         $this->value = $this->applyFilters($value);
 
@@ -137,7 +137,7 @@ class FormField
      *
      * @return FormField
      */
-    public function addMeta(MetaInterface $meta)
+    public function addMeta(MetaInterface $meta): self
     {
         $this->meta[$meta->getKey()] = $meta->getData();
 
