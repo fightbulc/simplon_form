@@ -6,7 +6,6 @@ use Moment\Moment;
 use Moment\MomentException;
 
 /**
- * Class DateListElement
  * @package Simplon\Form\View\Elements
  */
 class DateListElement extends DropDownElement
@@ -15,31 +14,27 @@ class DateListElement extends DropDownElement
      * @var bool
      */
     private $isNone = false;
-
     /**
      * @var int
      */
     private $days = 7;
-
     /**
      * @var string|int
      */
     private $startingDate;
-
     /**
      * @var string
      */
     private $fieldMetaFormatValue = 'Y-m-d';
-
     /**
      * @var string
      */
     private $fieldMetaFormatLabel = 'D, d.m.Y';
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function hasNone()
+    public function hasNone(): bool
     {
         return $this->isNone;
     }
@@ -49,7 +44,7 @@ class DateListElement extends DropDownElement
      *
      * @return DateListElement
      */
-    public function isNone($isNone)
+    public function isNone(bool $isNone): self
     {
         $this->isNone = $isNone === true;
 
@@ -79,7 +74,7 @@ class DateListElement extends DropDownElement
     /**
      * @return int
      */
-    public function getDays()
+    public function getDays(): int
     {
         return $this->days;
     }
@@ -89,7 +84,7 @@ class DateListElement extends DropDownElement
      *
      * @return DateListElement
      */
-    public function setDays($days)
+    public function setDays(int $days): self
     {
         $this->days = $days;
 
@@ -99,15 +94,16 @@ class DateListElement extends DropDownElement
     /**
      * @return bool
      */
-    protected function hasOptions()
+    protected function hasOptions(): bool
     {
         return true;
     }
 
     /**
      * @return array
+     * @throws MomentException
      */
-    protected function getOptions()
+    protected function getOptions(): array
     {
         $options = [];
 
@@ -159,7 +155,7 @@ class DateListElement extends DropDownElement
      * @return Moment
      * @throws MomentException
      */
-    private function getMoment()
+    private function getMoment(): Moment
     {
         $value = $this->getDateValue();
 
@@ -174,7 +170,7 @@ class DateListElement extends DropDownElement
     /**
      * @return string|null
      */
-    private function getMetaFormat()
+    private function getMetaFormat(): ?string
     {
         return $this->getField()->getMeta('format');
     }
@@ -182,7 +178,7 @@ class DateListElement extends DropDownElement
     /**
      * @return string
      */
-    private function getFormatValue()
+    private function getFormatValue(): string
     {
         $format = $this->getFieldMetaFormatValue();
 
@@ -197,7 +193,7 @@ class DateListElement extends DropDownElement
     /**
      * @return string
      */
-    private function getFormatLabel()
+    private function getFormatLabel(): string
     {
         $format = $this->getFieldMetaFormatLabel();
 
@@ -212,7 +208,7 @@ class DateListElement extends DropDownElement
     /**
      * @return string
      */
-    private function getFieldMetaFormatValue()
+    private function getFieldMetaFormatValue(): string
     {
         return $this->fieldMetaFormatValue;
     }
@@ -220,7 +216,7 @@ class DateListElement extends DropDownElement
     /**
      * @return string
      */
-    private function getFieldMetaFormatLabel()
+    private function getFieldMetaFormatLabel(): string
     {
         return $this->fieldMetaFormatLabel;
     }

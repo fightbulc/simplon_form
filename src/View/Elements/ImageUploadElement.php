@@ -2,11 +2,10 @@
 
 namespace Simplon\Form\View\Elements;
 
-use Simplon\Form\FormException;
+use Simplon\Form\FormError;
 use Simplon\Form\View\RenderHelper;
 
 /**
- * Class ImageUploadElement
  * @package Simplon\Form\View\Elements
  */
 class ImageUploadElement extends Element
@@ -27,7 +26,7 @@ class ImageUploadElement extends Element
     private $removeLabel = 'Click to remove';
 
     /**
-     * @var string
+     * @var null|string
      */
     private $uploadUrl;
 
@@ -59,7 +58,7 @@ class ImageUploadElement extends Element
     /**
      * @return string
      */
-    public function getAttachLabel()
+    public function getAttachLabel(): string
     {
         return $this->attachLabel;
     }
@@ -69,7 +68,7 @@ class ImageUploadElement extends Element
      *
      * @return ImageUploadElement
      */
-    public function setAttachLabel($attachLabel)
+    public function setAttachLabel(string $attachLabel): self
     {
         $this->attachLabel = $attachLabel;
 
@@ -79,7 +78,7 @@ class ImageUploadElement extends Element
     /**
      * @return string
      */
-    public function getReplaceLabel()
+    public function getReplaceLabel(): string
     {
         return $this->replaceLabel;
     }
@@ -89,7 +88,7 @@ class ImageUploadElement extends Element
      *
      * @return ImageUploadElement
      */
-    public function setReplaceLabel($replaceLabel)
+    public function setReplaceLabel(string $replaceLabel): self
     {
         $this->replaceLabel = $replaceLabel;
 
@@ -99,7 +98,7 @@ class ImageUploadElement extends Element
     /**
      * @return string
      */
-    public function getRemoveLabel()
+    public function getRemoveLabel(): string
     {
         return $this->removeLabel;
     }
@@ -109,7 +108,7 @@ class ImageUploadElement extends Element
      *
      * @return ImageUploadElement
      */
-    public function setRemoveLabel($removeLabel)
+    public function setRemoveLabel(string $removeLabel): self
     {
         $this->removeLabel = $removeLabel;
 
@@ -118,9 +117,9 @@ class ImageUploadElement extends Element
 
     /**
      * @return int
-     * @throws FormException
+     * @throws FormError
      */
-    public function getImageWidth()
+    public function getImageWidth(): int
     {
         $value = $this->imageWidth;
 
@@ -129,7 +128,7 @@ class ImageUploadElement extends Element
             return $value;
         }
 
-        throw new FormException('Missing image width');
+        throw new FormError('Missing image width');
     }
 
     /**
@@ -137,7 +136,7 @@ class ImageUploadElement extends Element
      *
      * @return ImageUploadElement
      */
-    public function setImageWidth($imageWidth)
+    public function setImageWidth(int $imageWidth): self
     {
         $this->imageWidth = $imageWidth;
 
@@ -146,9 +145,9 @@ class ImageUploadElement extends Element
 
     /**
      * @return string
-     * @throws FormException
+     * @throws FormError
      */
-    public function getThumbContainer()
+    public function getThumbContainer(): string
     {
         $value = $this->thumbContainer;
 
@@ -157,7 +156,7 @@ class ImageUploadElement extends Element
             return $value;
         }
 
-        throw new FormException('Missing thumb container reference');
+        throw new FormError('Missing thumb container reference');
     }
 
     /**
@@ -165,7 +164,7 @@ class ImageUploadElement extends Element
      *
      * @return ImageUploadElement
      */
-    public function setThumbContainer($thumbContainer)
+    public function setThumbContainer(string $thumbContainer): self
     {
         $this->thumbContainer = $thumbContainer;
 
@@ -174,9 +173,9 @@ class ImageUploadElement extends Element
 
     /**
      * @return int
-     * @throws FormException
+     * @throws FormError
      */
-    public function getThumbWidth()
+    public function getThumbWidth(): int
     {
         $value = $this->thumbWidth;
 
@@ -185,7 +184,7 @@ class ImageUploadElement extends Element
             return $value;
         }
 
-        throw new FormException('Missing thumb width');
+        throw new FormError('Missing thumb width');
     }
 
     /**
@@ -193,7 +192,7 @@ class ImageUploadElement extends Element
      *
      * @return ImageUploadElement
      */
-    public function setThumbWidth($thumbWidth)
+    public function setThumbWidth(int $thumbWidth): self
     {
         $this->thumbWidth = $thumbWidth;
 
@@ -203,7 +202,7 @@ class ImageUploadElement extends Element
     /**
      * @return array
      */
-    public function getUploadMetaData()
+    public function getUploadMetaData(): array
     {
         return $this->uploadMetaData;
     }
@@ -213,7 +212,7 @@ class ImageUploadElement extends Element
      *
      * @return ImageUploadElement
      */
-    public function setUploadMetaData(array $uploadMetaData)
+    public function setUploadMetaData(array $uploadMetaData): self
     {
         $this->uploadMetaData = $uploadMetaData;
 
@@ -221,10 +220,10 @@ class ImageUploadElement extends Element
     }
 
     /**
-     * @return string
-     * @throws FormException
+     * @return null|string
+     * @throws FormError
      */
-    public function getUploadUrl()
+    public function getUploadUrl(): ?string
     {
         $value = $this->uploadUrl;
 
@@ -233,7 +232,7 @@ class ImageUploadElement extends Element
             return $value;
         }
 
-        throw new FormException('Missing upload-url');
+        throw new FormError('Missing upload-url');
     }
 
     /**
@@ -241,7 +240,7 @@ class ImageUploadElement extends Element
      *
      * @return ImageUploadElement
      */
-    public function setUploadUrl($uploadUrl)
+    public function setUploadUrl(string $uploadUrl): self
     {
         $this->uploadUrl = $uploadUrl;
 
@@ -250,9 +249,9 @@ class ImageUploadElement extends Element
 
     /**
      * @return string
-     * @throws FormException
+     * @throws FormError
      */
-    public function getUrlResponseObject()
+    public function getUrlResponseObject(): string
     {
         $value = $this->urlResponseObject;
 
@@ -261,7 +260,7 @@ class ImageUploadElement extends Element
             return $value;
         }
 
-        throw new FormException('Missing url-response-object definition');
+        throw new FormError('Missing url-response-object definition');
     }
 
     /**
@@ -269,7 +268,7 @@ class ImageUploadElement extends Element
      *
      * @return ImageUploadElement
      */
-    public function setUrlResponseObject($urlResponseObject)
+    public function setUrlResponseObject(string $urlResponseObject): self
     {
         $this->urlResponseObject = $urlResponseObject;
 
@@ -279,7 +278,7 @@ class ImageUploadElement extends Element
     /**
      * @return array
      */
-    public function getWidgetAttributes()
+    public function getWidgetAttributes(): array
     {
         $base = [
             'type'  => 'hidden',
@@ -314,14 +313,14 @@ class ImageUploadElement extends Element
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function renderLabel()
+    public function renderLabel(): ?string
     {
         if ($this->hasLabel())
         {
             /** @noinspection HtmlUnknownAttribute */
-            $html = '<label {attrs}>' . $this->getLabel() . '</label>';
+            $html = '<label {attrs}>' . $this->getLabel() . $this->renderDescription('&nbsp;') . '</label>';
 
             $attrs = [
                 'attrs' => [
@@ -338,7 +337,7 @@ class ImageUploadElement extends Element
     /**
      * @return string
      */
-    public function getWidgetHtml()
+    public function getWidgetHtml(): string
     {
         /** @noinspection HtmlUnknownAttribute */
         return '<div {attrs-wrapper}><input {attrs-file}><input {attrs-field}><div {attrs-button-wrapper}><i class="icon photo"></i>&nbsp;<span>{label}</span></div></div>';
@@ -346,8 +345,9 @@ class ImageUploadElement extends Element
 
     /**
      * @return string
+     * @throws FormError
      */
-    public function renderWidget()
+    public function renderWidget(): string
     {
         $attrs = [
             'attrs-wrapper'        => [
@@ -387,7 +387,7 @@ class ImageUploadElement extends Element
     /**
      * @return array
      */
-    public function getAssets()
+    public function getAssets(): array
     {
         return [
             'image-upload/bundle.min.css',
@@ -397,8 +397,9 @@ class ImageUploadElement extends Element
 
     /**
      * @return string
+     * @throws FormError
      */
-    public function getCode()
+    public function getCode(): string
     {
         return '$(\'#' . $this->renderElementId() . '\').imageUpload({getUrlResponseObject: function(response) { return ' . $this->getUrlResponseObject() . '; }})';
     }

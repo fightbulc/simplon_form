@@ -2,10 +2,9 @@
 
 namespace Simplon\Form\View\Elements;
 
-use Simplon\Form\Data\Field;
+use Simplon\Form\Data\FormField;
 
 /**
- * Interface ElementInterface
  * @package Simplon\Form\View\Elements
  */
 interface ElementInterface
@@ -13,50 +12,55 @@ interface ElementInterface
     /**
      * @return array|null
      */
-    public function getAssets();
+    public function getAssets(): ?array;
 
     /**
-     * @return string|null
+     * @return null|string
      */
-    public function getCode();
+    public function getCode(): ?string;
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getWide();
-
-    /**
-     * @return string
-     */
-    public function getWidgetHtml();
-
-    /**
-     * @return Field
-     */
-    public function getField();
-
-    /**
-     * @return string|null
-     */
-    public function getLabel();
-
-    /**
-     * @return string|null
-     */
-    public function renderLabel();
+    public function getWide(): ?string;
 
     /**
      * @return string
      */
-    public function renderWidget();
+    public function getWidgetHtml(): string;
 
     /**
-     * @return string|null
+     * @return FormField
      */
-    public function renderErrors();
+    public function getField(): FormField;
+
+    /**
+     * @return null|string
+     */
+    public function getLabel(): ?string;
+
+    /**
+     * @return null|string
+     */
+    public function getDescription(): ?string;
+
+    /**
+     * @return null|string
+     */
+    public function renderLabel(): ?string;
 
     /**
      * @return string
      */
-    public function renderElement();
+    public function renderWidget(): string;
+
+    /**
+     * @return null|string
+     */
+    public function renderErrors(): ?string;
+
+    /**
+     * @return string
+     */
+    public function renderElement(): string;
 }

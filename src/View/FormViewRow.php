@@ -1,35 +1,32 @@
 <?php
 
-namespace Simplon\Form;
+namespace Simplon\Form\View;
 
+use Simplon\Form\FormError;
 use Simplon\Form\View\Elements\ElementInterface;
-use Simplon\Form\View\RenderHelper;
 
 /**
- * Class FormRow
- * @package Simplon\Form
+ * @package Simplon\Form\View
  */
-class FormRow
+class FormViewRow
 {
     /**
-     * @var string
+     * @var null|string
      */
     private $label;
-
     /**
      * @var ElementInterface[]
      */
     private $elements;
-
     /**
      * @var bool
      */
     private $autoWide = false;
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getLabel()
+    public function getLabel(): ?string
     {
         return $this->label;
     }
@@ -37,7 +34,7 @@ class FormRow
     /**
      * @return bool
      */
-    public function hasLabel()
+    public function hasLabel(): bool
     {
         return empty($this->label) === false;
     }
@@ -45,9 +42,9 @@ class FormRow
     /**
      * @param string $label
      *
-     * @return FormRow
+     * @return FormViewRow
      */
-    public function setLabel($label)
+    public function setLabel(string $label): self
     {
         $this->label = $label;
 
@@ -57,10 +54,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addAutoColumns(ElementInterface $element)
+    public function autoColumns(ElementInterface $element): self
     {
         $this->autoWide = true;
         $this->addElement($element);
@@ -71,10 +68,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addOneColumns(ElementInterface $element)
+    public function oneColumn(ElementInterface $element)
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->addElement($element->setWide('one'));
@@ -85,10 +82,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addTwoColumns(ElementInterface $element)
+    public function twoColumns(ElementInterface $element)
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->addElement($element->setWide('two'));
@@ -99,10 +96,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addThreeColumns(ElementInterface $element)
+    public function threeColumns(ElementInterface $element)
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->addElement($element->setWide('three'));
@@ -113,10 +110,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addFourColumns(ElementInterface $element)
+    public function fourColumns(ElementInterface $element)
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->addElement($element->setWide('four'));
@@ -127,10 +124,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addFiveColumns(ElementInterface $element)
+    public function fiveColumns(ElementInterface $element)
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->addElement($element->setWide('five'));
@@ -141,10 +138,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addSixColumns(ElementInterface $element)
+    public function sixColumns(ElementInterface $element)
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->addElement($element->setWide('six'));
@@ -155,10 +152,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addSevenColumns(ElementInterface $element)
+    public function sevenColumns(ElementInterface $element)
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->addElement($element->setWide('seven'));
@@ -169,10 +166,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addEightColumns(ElementInterface $element)
+    public function eightColumns(ElementInterface $element)
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->addElement($element->setWide('eight'));
@@ -183,10 +180,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addNineColumns(ElementInterface $element)
+    public function nineColumns(ElementInterface $element)
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->addElement($element->setWide('nine'));
@@ -197,10 +194,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addTenColumns(ElementInterface $element)
+    public function tenColumns(ElementInterface $element)
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->addElement($element->setWide('ten'));
@@ -211,10 +208,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addElevenColumns(ElementInterface $element)
+    public function elevenColumns(ElementInterface $element)
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->addElement($element->setWide('eleven'));
@@ -225,10 +222,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addTwelveColumns(ElementInterface $element)
+    public function twelveColumns(ElementInterface $element)
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->addElement($element->setWide('twelve'));
@@ -239,10 +236,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addThirteenColumns(ElementInterface $element)
+    public function thirteenColumns(ElementInterface $element)
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->addElement($element->setWide('thirteen'));
@@ -253,10 +250,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addFourteenColumns(ElementInterface $element)
+    public function fourteenColumns(ElementInterface $element)
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->addElement($element->setWide('fourteen'));
@@ -267,10 +264,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addFifthteenColumns(ElementInterface $element)
+    public function fifthteenColumns(ElementInterface $element)
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->addElement($element->setWide('fifthteen'));
@@ -281,10 +278,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    public function addSixthteenColumns(ElementInterface $element)
+    public function sixthteenColumns(ElementInterface $element)
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->addElement($element->setWide('sixthteen'));
@@ -295,7 +292,7 @@ class FormRow
     /**
      * @return ElementInterface[]
      */
-    public function getElements()
+    public function getElements(): array
     {
         return $this->elements;
     }
@@ -304,22 +301,22 @@ class FormRow
      * @param string $id
      *
      * @return ElementInterface
-     * @throws FormException
+     * @throws FormError
      */
-    public function getElement($id)
+    public function getElement(string $id): ElementInterface
     {
         if (isset($this->elements[$id]))
         {
             return $this->elements[$id];
         }
 
-        throw new FormException('Element with ID "' . $id . '" does not exist');
+        throw new FormError('Element with ID "' . $id . '" does not exist');
     }
 
     /**
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         $class = ['field'];
         $renderedElements = [];
@@ -362,10 +359,10 @@ class FormRow
     /**
      * @param ElementInterface $element
      *
-     * @return FormRow
-     * @throws FormException
+     * @return FormViewRow
+     * @throws FormError
      */
-    protected function addElement(ElementInterface $element)
+    protected function addElement(ElementInterface $element): self
     {
         $this->elements[$element->getField()->getId()] = $element;
 
@@ -375,7 +372,7 @@ class FormRow
     /**
      * @return boolean
      */
-    private function isAutoWide()
+    private function isAutoWide(): bool
     {
         return $this->autoWide;
     }
@@ -383,7 +380,7 @@ class FormRow
     /**
      * @return string
      */
-    private function getRowHtml()
+    private function getRowHtml(): string
     {
         /** @noinspection HtmlUnknownAttribute */
         $html = '<div {attrs}>{elements}</div>';
@@ -399,7 +396,7 @@ class FormRow
     /**
      * @return null|string
      */
-    private function renderLabel()
+    private function renderLabel(): ?string
     {
         if ($this->hasLabel())
         {
@@ -412,7 +409,7 @@ class FormRow
     /**
      * @return int
      */
-    private function getElementsCount()
+    private function getElementsCount(): int
     {
         return count($this->getElements());
     }
@@ -422,7 +419,7 @@ class FormRow
      *
      * @return string
      */
-    private function getElementWide($count)
+    private function getElementWide($count): string
     {
         switch ($count)
         {

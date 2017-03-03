@@ -5,16 +5,14 @@ namespace Simplon\Form\View\Elements;
 use Simplon\Form\View\RenderHelper;
 
 /**
- * Class TextareaElement
  * @package Simplon\Form\View\Elements
  */
 class TextareaElement extends Element
 {
     /**
-     * @var string
+     * @var null|string
      */
     protected $placeholder;
-
     /**
      * @var int
      */
@@ -23,7 +21,7 @@ class TextareaElement extends Element
     /**
      * @return string|null
      */
-    public function getPlaceholder()
+    public function getPlaceholder(): ?string
     {
         return $this->placeholder;
     }
@@ -33,7 +31,7 @@ class TextareaElement extends Element
      *
      * @return TextareaElement
      */
-    public function setPlaceholder($placeholder)
+    public function setPlaceholder(string $placeholder): self
     {
         $this->placeholder = $placeholder;
 
@@ -43,7 +41,7 @@ class TextareaElement extends Element
     /**
      * @return int
      */
-    public function getRows()
+    public function getRows(): int
     {
         return $this->rows;
     }
@@ -53,7 +51,7 @@ class TextareaElement extends Element
      *
      * @return TextareaElement
      */
-    public function setRows($rows)
+    public function setRows(int $rows): self
     {
         $this->rows = $rows;
 
@@ -63,7 +61,7 @@ class TextareaElement extends Element
     /**
      * @return array
      */
-    public function getWidgetAttributes()
+    public function getWidgetAttributes(): array
     {
         $base = [
             'id'          => $this->renderElementId(),
@@ -98,14 +96,14 @@ class TextareaElement extends Element
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function renderLabel()
+    public function renderLabel(): ?string
     {
         if ($this->hasLabel())
         {
             /** @noinspection HtmlUnknownAttribute */
-            $html = '<label {attrs}>' . $this->getLabel() . '</label>';
+            $html = '<label {attrs}>' . $this->getLabel() . $this->renderDescription('&nbsp;') . '</label>';
 
             $attrs = [
                 'attrs' => [
@@ -122,7 +120,7 @@ class TextareaElement extends Element
     /**
      * @return string
      */
-    public function getWidgetHtml()
+    public function getWidgetHtml(): string
     {
         /** @noinspection HtmlUnknownAttribute */
         return '<textarea {attrs}>{value}</textarea>';
@@ -131,7 +129,7 @@ class TextareaElement extends Element
     /**
      * @return string
      */
-    public function renderWidget()
+    public function renderWidget(): string
     {
         $attrs = [
             'attrs' => $this->getWidgetAttributes(),

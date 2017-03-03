@@ -2,11 +2,10 @@
 
 namespace Simplon\Form\View\Elements;
 
-use Simplon\Form\FormException;
+use Simplon\Form\FormError;
 use Simplon\Form\View\RenderHelper;
 
 /**
- * Class DropDownElement
  * @package Simplon\Form\View\Elements
  */
 class DropDownElement extends Element
@@ -16,18 +15,15 @@ class DropDownElement extends Element
     /**
      * @var string
      */
-    private $placeholder;
-
+    private $placeholder = 'Choose';
     /**
      * @var bool
      */
     private $multiple = false;
-
     /**
      * @var bool
      */
     private $searchable = false;
-
     /**
      * @var bool
      */
@@ -36,7 +32,7 @@ class DropDownElement extends Element
     /**
      * @return string
      */
-    public function getPlaceholder()
+    public function getPlaceholder(): string
     {
         return $this->placeholder;
     }
@@ -46,7 +42,7 @@ class DropDownElement extends Element
      *
      * @return static
      */
-    public function setPlaceholder($placeholder)
+    public function setPlaceholder(string $placeholder)
     {
         $this->placeholder = $placeholder;
 
@@ -54,59 +50,55 @@ class DropDownElement extends Element
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function hasMultiple()
+    public function isMultiple(): bool
     {
         return $this->multiple;
     }
 
     /**
-     * @param boolean $multiple
-     *
      * @return static
      */
-    public function isMultiple($multiple)
+    public function enableMultiple()
     {
-        $this->multiple = $multiple === true;
+        $this->multiple = true;
 
         return $this;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function hasSearchable()
+    public function isSearchable(): bool
     {
         return $this->searchable;
     }
 
     /**
-     * @param boolean $searchable
-     *
      * @return static
      */
-    public function isSearchable($searchable)
+    public function enableSearchable()
     {
-        $this->searchable = $searchable === true;
+        $this->searchable = true;
 
         return $this;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function getAllowAdditions()
+    public function getAllowAdditions(): bool
     {
         return $this->allowAdditions;
     }
 
     /**
-     * @param boolean $allowAdditions
+     * @param bool $allowAdditions
      *
      * @return static
      */
-    public function allowAdditions($allowAdditions)
+    public function allowAdditions(bool $allowAdditions)
     {
         $this->allowAdditions = $allowAdditions === true;
 
@@ -114,9 +106,83 @@ class DropDownElement extends Element
     }
 
     /**
+     * @return null|string
+     */
+    public function renderLabel(): ?string
+    {
+        if ($this->hasLabel())
+        {
+            /** @noinspection HtmlUnknownAttribute */
+            $html = '<label {attrs}>' . $this->getLabel() . $this->renderDescription('&nbsp;') . '</label>';
+
+            $attrs = [
+                'attrs' => [
+                    'for' => $this->renderElementId(),
+                ],
+            ];
+
+            return RenderHelper::attributes($html, $attrs);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $text
+     * @param bool $isDefault
+     *
+     * @return string
+     */
+    public function renderTextWidget(string $text, bool $isDefault = true): string
+    {
+        return '<div class="' . ($isDefault ? 'default' : null) . ' text">' . $text . '</div>';
+    }
+
+    /**
+     * @return string
+     */
+    public function getWidgetHtml(): string
+    {
+        /** @noinspection HtmlUnknownAttribute */
+        return '<div {attrs-wrapper}><input {attrs-field}><i class="dropdown icon"></i>{placeholder}<div class="menu">{options}</div></div>';
+    }
+
+    /**
+     * @return string
+     * @throws FormError
+     */
+    public function renderWidget(): string
+    {
+        $attrs = [
+            'attrs-wrapper' => [
+                'class' => ['ui fluid selection dropdown'],
+            ],
+            'attrs-field'   => $this->getWidgetAttributes(),
+        ];
+
+        if ($this->isMultiple())
+        {
+            $attrs['attrs-wrapper']['class'][] = 'multiple';
+        }
+
+        if ($this->isSearchable())
+        {
+            $attrs['attrs-wrapper']['class'][] = 'search';
+        }
+
+        return RenderHelper::placeholders(
+            RenderHelper::attributes($this->getWidgetHtml(), $attrs),
+            [
+                'placeholder' => !empty($this->getPlaceholder()) ? $this->renderTextWidget($this->getPlaceholder()) : null,
+                'options'     => $this->renderOptions(),
+            ]
+        );
+    }
+
+    /**
      * @return array
      */
-    public function getWidgetAttributes()
+    public function getWidgetAttributes(): array
     {
         $fieldValue = $this->getField()->getValue();
 
@@ -158,77 +224,15 @@ class DropDownElement extends Element
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function renderLabel()
-    {
-        if ($this->hasLabel())
-        {
-            /** @noinspection HtmlUnknownAttribute */
-            $html = '<label {attrs}>' . $this->getLabel() . '</label>';
-
-            $attrs = [
-                'attrs' => [
-                    'for' => $this->renderElementId(),
-                ],
-            ];
-
-            return RenderHelper::attributes($html, $attrs);
-        }
-
-        return null;
-    }
-
-    /**
-     * @return string
-     */
-    public function getWidgetHtml()
-    {
-        /** @noinspection HtmlUnknownAttribute */
-        return '<div {attrs-wrapper}><input {attrs-field}><i class="dropdown icon"></i>{placeholder}<div class="menu">{options}</div></div>';
-    }
-
-    /**
-     * @return string
-     */
-    public function renderWidget()
-    {
-        $attrs = [
-            'attrs-wrapper' => [
-                'class' => ['ui fluid selection dropdown'],
-            ],
-            'attrs-field'   => $this->getWidgetAttributes(),
-        ];
-
-        if ($this->hasMultiple())
-        {
-            $attrs['attrs-wrapper']['class'][] = 'multiple';
-        }
-
-        if ($this->hasSearchable())
-        {
-            $attrs['attrs-wrapper']['class'][] = 'search';
-        }
-
-        return RenderHelper::placeholders(
-            RenderHelper::attributes($this->getWidgetHtml(), $attrs),
-            [
-                'placeholder' => $this->getPlaceholder() ? '<div class="default text">' . $this->getPlaceholder() . '</div>' : false,
-                'options'     => $this->renderOptions(),
-            ]
-        );
-    }
-
-    /**
-     * @return string
-     */
-    public function getCode()
+    public function getCode(): ?string
     {
         $selector = '$(\'#' . $this->renderElementId() . '\').parent()';
 
         $options = [
-            "allowAdditions" => $this->getAllowAdditions(),
-            "forceSelection" => false,
+            'allowAdditions' => $this->getAllowAdditions(),
+            'forceSelection' => false,
         ];
 
         return $selector . '.dropdown(' . json_encode($options) . ')';
@@ -237,7 +241,7 @@ class DropDownElement extends Element
     /**
      * @return bool
      */
-    protected function hasOptions()
+    protected function hasOptions(): bool
     {
         return $this->getField()->hasMeta('options');
     }
@@ -245,16 +249,16 @@ class DropDownElement extends Element
     /**
      * @return null|array
      */
-    protected function getOptions()
+    protected function getOptions(): ?array
     {
         return $this->getField()->getMeta('options');
     }
 
     /**
-     * @return string
-     * @throws FormException
+     * @return null|string
+     * @throws FormError
      */
-    private function renderOptions()
+    private function renderOptions(): ?string
     {
         if ($this->hasOptions())
         {
@@ -288,9 +292,6 @@ class DropDownElement extends Element
             return join('', $renderedOptions);
         }
 
-        if ($this->getAllowAdditions() === false)
-        {
-            throw new FormException('"' . $this->getField()->getId() . '" missing field options. Set via "Field::addMetas(new OptionsMeta())"');
-        }
+        return null;
     }
 }

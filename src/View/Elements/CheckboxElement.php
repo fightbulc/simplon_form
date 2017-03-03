@@ -2,13 +2,10 @@
 
 namespace Simplon\Form\View\Elements;
 
-use Simplon\Form\FormException;
-use Simplon\Form\View\Elements\Support\CheckboxRadioMeta;
-use Simplon\Form\View\Elements\Support\RadioMeta;
+use Simplon\Form\FormError;
 use Simplon\Form\View\RenderHelper;
 
 /**
- * Class CheckboxElement
  * @package Simplon\Form\View\Elements
  */
 class CheckboxElement extends Element
@@ -27,7 +24,7 @@ class CheckboxElement extends Element
     /**
      * @return string
      */
-    public function getElementType()
+    public function getElementType(): string
     {
         return self::TYPE_CHECKBOX;
     }
@@ -35,7 +32,7 @@ class CheckboxElement extends Element
     /**
      * @return string
      */
-    public function getFormat()
+    public function getFormat(): string
     {
         return $this->format;
     }
@@ -45,7 +42,7 @@ class CheckboxElement extends Element
      *
      * @return CheckboxElement
      */
-    public function setFormat($format)
+    public function setFormat(string $format): self
     {
         if (in_array($format, [self::FORMAT_GROUPED, self::FORMAT_INLINE]))
         {
@@ -58,7 +55,7 @@ class CheckboxElement extends Element
     /**
      * @return array
      */
-    public function getWidgetAttributes()
+    public function getWidgetAttributes(): array
     {
         $base = [
             'id'   => $this->renderElementId(),
@@ -91,14 +88,14 @@ class CheckboxElement extends Element
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function renderLabel()
+    public function renderLabel(): ?string
     {
         if ($this->hasLabel())
         {
             /** @noinspection HtmlUnknownAttribute */
-            $html = '<label {attrs}>' . $this->getLabel() . '</label>';
+            $html = '<label {attrs}>' . $this->getLabel() . $this->renderDescription('&nbsp;') . '</label>';
 
             $attrs = [
                 'attrs' => [
@@ -115,7 +112,7 @@ class CheckboxElement extends Element
     /**
      * @return string
      */
-    public function getWidgetHtml()
+    public function getWidgetHtml(): string
     {
         /** @noinspection HtmlUnknownAttribute */
         return '<div {attrs-wrapper}>{options}</div>';
@@ -123,8 +120,9 @@ class CheckboxElement extends Element
 
     /**
      * @return string
+     * @throws FormError
      */
-    public function renderWidget()
+    public function renderWidget(): string
     {
         $attrs = [
             'attrs-wrapper' => [
@@ -140,9 +138,9 @@ class CheckboxElement extends Element
     }
 
     /**
-     * @return null
+     * @return null|string
      */
-    public function getCode()
+    public function getCode(): ?string
     {
         return '$(\'#' . $this->renderElementId() . ' .ui.checkbox\').checkbox()';
     }
@@ -150,7 +148,7 @@ class CheckboxElement extends Element
     /**
      * @return bool
      */
-    private function hasOptions()
+    private function hasOptions(): bool
     {
         return $this->getField()->hasMeta('options');
     }
@@ -158,16 +156,16 @@ class CheckboxElement extends Element
     /**
      * @return null|array
      */
-    private function getOptions()
+    private function getOptions(): ?array
     {
         return $this->getField()->getMeta('options');
     }
 
     /**
      * @return string
-     * @throws FormException
+     * @throws FormError
      */
-    private function renderOptions()
+    private function renderOptions(): string
     {
         if ($this->hasOptions())
         {
@@ -233,6 +231,6 @@ class CheckboxElement extends Element
             return join('', $renderedOptions);
         }
 
-        throw new FormException('"'.$this->getField()->getId().'" missing field options. Set via "Field::addMeta(new OptionsMeta())"');
+        throw new FormError('"' . $this->getField()->getId() . '" missing field options. Set via "FormField::addMeta(new OptionsMeta())"');
     }
 }

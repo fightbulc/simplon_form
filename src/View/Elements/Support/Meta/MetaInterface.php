@@ -3,7 +3,6 @@
 namespace Simplon\Form\View\Elements\Support\Meta;
 
 /**
- * Interface MetaInterface
  * @package Simplon\Form\View\Elements\Support\Meta
  */
 interface MetaInterface
@@ -11,10 +10,10 @@ interface MetaInterface
     /**
      * @return string
      */
-    public function getKey();
+    public function getKey(): string;
 
     /**
      * @return array
      */
-    public function getData();
+    public function getData(): array;
 }

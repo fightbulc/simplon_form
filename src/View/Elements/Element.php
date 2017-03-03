@@ -2,48 +2,75 @@
 
 namespace Simplon\Form\View\Elements;
 
-use Simplon\Form\Data\Field;
-use Simplon\Form\Data\Rules\RequiredRule;
+use Simplon\Form\Data\FormField;
 use Simplon\Form\View\RenderHelper;
 
 /**
- * Class Element
  * @package Simplon\Form\View\Elements
  */
 abstract class Element implements ElementInterface
 {
     /**
+     * @var string
+     */
+    protected $language = 'en';
+    /**
+     * @var FormField
+     */
+    protected $field;
+    /**
      * @var array
      */
     protected $attrs = [];
-
     /**
-     * @var Field
-     */
-    protected $field;
-
-    /**
-     * @var string
+     * @var null|string
      */
     protected $label;
-
     /**
-     * @var string
+     * @var null|string
+     */
+    protected $description;
+    /**
+     * @var null|string
+     */
+    protected $descriptionColor;
+    /**
+     * @var null|string
      */
     protected $wide;
 
     /**
-     * @param Field $field
+     * @param FormField $field
      */
-    public function __construct(Field $field)
+    public function __construct(FormField $field)
     {
         $this->field = $field;
     }
 
     /**
-     * @return Field
+     * @return string
      */
-    public function getField()
+    public function getLanguage(): string
+    {
+        return $this->language;
+    }
+
+    /**
+     * @param string $language
+     *
+     * @return Element
+     */
+    public function setLanguage(string $language): Element
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
+    /**
+     * @return FormField
+     */
+    public function getField(): FormField
     {
         return $this->field;
     }
@@ -51,7 +78,7 @@ abstract class Element implements ElementInterface
     /**
      * @return string|null
      */
-    public function getLabel()
+    public function getLabel(): ?string
     {
         return $this->label;
     }
@@ -59,7 +86,7 @@ abstract class Element implements ElementInterface
     /**
      * @return bool
      */
-    public function hasLabel()
+    public function hasLabel(): bool
     {
         return empty($this->label) === false;
     }
@@ -69,7 +96,7 @@ abstract class Element implements ElementInterface
      *
      * @return static
      */
-    public function setLabel($label)
+    public function setLabel(string $label)
     {
         $this->label = $label;
 
@@ -77,9 +104,39 @@ abstract class Element implements ElementInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getWide()
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasDescription(): bool
+    {
+        return empty($this->description) === false;
+    }
+
+    /**
+     * @param string $description
+     * @param string $color
+     *
+     * @return static
+     */
+    public function setDescription(string $description, string $color = 'grey')
+    {
+        $this->description = $description;
+        $this->descriptionColor = $color;
+
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getWide(): ?string
     {
         return $this->wide;
     }
@@ -89,7 +146,7 @@ abstract class Element implements ElementInterface
      *
      * @return Element
      */
-    public function setWide($wide)
+    public function setWide(string $wide): self
     {
         $this->wide = $wide;
 
@@ -102,7 +159,7 @@ abstract class Element implements ElementInterface
      *
      * @return static
      */
-    public function addAttribute($name, $value)
+    public function addAttribute(string $name, $value)
     {
         $this->attrs[$name] = $value;
 
@@ -112,7 +169,7 @@ abstract class Element implements ElementInterface
     /**
      * @return string|null
      */
-    public function renderErrors()
+    public function renderErrors(): ?string
     {
         if ($this->getField()->hasErrors())
         {
@@ -126,7 +183,36 @@ abstract class Element implements ElementInterface
             /** @noinspection HtmlUnknownAttribute */
             $html = '<div {attrs}>' . join('', $errors) . '</div>';
 
-            return RenderHelper::attributes($html, ['attrs' => ['class' => ['ui', 'list', 'error']]]);
+            return RenderHelper::attributes($html, [
+                'attrs' => [
+                    'class' => ['ui', 'list', 'error'],
+                ],
+            ]);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param null|string $spacer
+     *
+     * @return null|string
+     */
+    public function renderDescription(?string $spacer = null): ?string
+    {
+        if ($this->hasDescription())
+        {
+            /** @noinspection HtmlUnknownAttribute */
+            $html = $spacer . '<i {attrs}></i>';
+
+            $attrs = [
+                'attrs' => [
+                    'class'        => ['field-description', $this->descriptionColor, 'info', 'circle', 'icon'],
+                    'data-content' => $this->getDescription(),
+                ],
+            ];
+
+            return RenderHelper::attributes($html, $attrs);
         }
 
         return null;
@@ -135,14 +221,14 @@ abstract class Element implements ElementInterface
     /**
      * @return string
      */
-    public function renderElement()
+    public function renderElement(): string
     {
         /** @noinspection HtmlUnknownAttribute */
         $html = '<div {attrs-wrapper}>{label}{widget}{errors}</div>';
 
         $class = ['field'];
 
-        if($this->getField()->hasRules())
+        if ($this->getField()->hasRules())
         {
             $class[] = 'required';
         }
@@ -175,17 +261,17 @@ abstract class Element implements ElementInterface
     }
 
     /**
-     * @return null
+     * @return array|null
      */
-    public function getAssets()
+    public function getAssets(): ?array
     {
         return null;
     }
 
     /**
-     * @return null
+     * @return null|string
      */
-    public function getCode()
+    public function getCode(): ?string
     {
         return null;
     }
@@ -193,7 +279,7 @@ abstract class Element implements ElementInterface
     /**
      * @return string
      */
-    protected function renderElementId()
+    protected function renderElementId(): string
     {
         return 'form-' . $this->getField()->getId();
     }
@@ -201,7 +287,7 @@ abstract class Element implements ElementInterface
     /**
      * @return string
      */
-    protected function renderElementName()
+    protected function renderElementName(): string
     {
         return 'form[' . $this->getField()->getId() . ']';
     }

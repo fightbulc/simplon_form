@@ -3,7 +3,6 @@
 namespace Simplon\Form\View\Elements;
 
 /**
- * Class InputPasswordElement
  * @package Simplon\Form\View\Elements
  */
 class InputPasswordElement extends InputTextElement
@@ -11,7 +10,7 @@ class InputPasswordElement extends InputTextElement
     /**
      * @return array
      */
-    public function getWidgetAttributes()
+    public function getWidgetAttributes(): array
     {
         $base = [
             'type' => 'password',

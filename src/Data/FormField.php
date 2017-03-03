@@ -6,50 +6,42 @@ use Simplon\Form\Data\Filters\FilterInterface;
 use Simplon\Form\Data\Rules\FieldDependencyRule;
 use Simplon\Form\Data\Rules\IfFilledRule;
 use Simplon\Form\Data\Rules\RuleInterface;
-use Simplon\Form\FormException;
+use Simplon\Form\FormError;
 use Simplon\Form\View\Elements\Support\Meta\MetaInterface;
 
 /**
- * Class Field
  * @package Simplon\Form\Data
  */
-class Field
+class FormField
 {
     /**
      * @var string
      */
     private $id;
-
     /**
      * @var mixed
      */
     private $value;
-
     /**
      * @var mixed
      */
     private $initialValue;
-
     /**
      * @var array
      */
     private $meta = [];
-
     /**
      * @var FilterInterface[]
      */
     private $filters = [];
-
     /**
      * @var RuleInterface[]
      */
     private $rules = [];
-
     /**
      * @var array
      */
     private $errors = [];
-
     /**
      * @var bool
      */
@@ -58,22 +50,17 @@ class Field
     /**
      * @param string $id
      *
-     * @throws FormException
+     * @throws FormError
      */
-    public function __construct($id)
+    public function __construct(string $id)
     {
-        if (preg_match('/^[0-9a-zA-Z_-]+$/u', $id) === 0)
-        {
-            throw new FormException('ID "' . $id . '" has invalid characters. Please use only [a-zA-Z_-]');
-        }
-
-        $this->id = $id;
+        $this->setId($id);
     }
 
     /**
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -89,7 +76,7 @@ class Field
     /**
      * @param mixed $initialValue
      *
-     * @return Field
+     * @return FormField
      */
     public function setInitialValue($initialValue)
     {
@@ -111,7 +98,7 @@ class Field
     /**
      * @param mixed $value
      *
-     * @return Field
+     * @return FormField
      */
     public function setValue($value)
     {
@@ -125,7 +112,7 @@ class Field
      *
      * @return null|mixed
      */
-    public function getMeta($key)
+    public function getMeta(string $key)
     {
         if (isset($this->meta[$key]))
         {
@@ -140,7 +127,7 @@ class Field
      *
      * @return bool
      */
-    public function hasMeta($key)
+    public function hasMeta(string $key): bool
     {
         return empty($this->meta[$key]) === false;
     }
@@ -148,7 +135,7 @@ class Field
     /**
      * @param MetaInterface $meta
      *
-     * @return Field
+     * @return FormField
      */
     public function addMeta(MetaInterface $meta)
     {
@@ -160,7 +147,7 @@ class Field
     /**
      * @return FilterInterface[]
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return $this->filters;
     }
@@ -168,7 +155,7 @@ class Field
     /**
      * @return bool
      */
-    public function hasFilters()
+    public function hasFilters(): bool
     {
         return empty($this->filters) === false;
     }
@@ -176,9 +163,9 @@ class Field
     /**
      * @param FilterInterface $filter
      *
-     * @return Field
+     * @return FormField
      */
-    public function addFilter(FilterInterface $filter)
+    public function addFilter(FilterInterface $filter): self
     {
         $this->filters[] = $filter;
 
@@ -188,9 +175,9 @@ class Field
     /**
      * @param FilterInterface[] $filters
      *
-     * @return Field
+     * @return FormField
      */
-    public function setFilters(array $filters)
+    public function setFilters(array $filters): self
     {
         $this->filters = $filters;
 
@@ -200,7 +187,7 @@ class Field
     /**
      * @return RuleInterface[]
      */
-    public function getRules()
+    public function getRules(): array
     {
         if ($this->arrangedRules === false)
         {
@@ -214,7 +201,7 @@ class Field
     /**
      * @return bool
      */
-    public function hasRules()
+    public function hasRules(): bool
     {
         return empty($this->rules) === false;
     }
@@ -222,9 +209,9 @@ class Field
     /**
      * @param RuleInterface $rule
      *
-     * @return Field
+     * @return FormField
      */
-    public function addRule(RuleInterface $rule)
+    public function addRule(RuleInterface $rule): self
     {
         $this->rules[] = $rule;
         $this->arrangedRules = false;
@@ -235,9 +222,9 @@ class Field
     /**
      * @param RuleInterface[] $rules
      *
-     * @return Field
+     * @return FormField
      */
-    public function setRules(array $rules)
+    public function setRules(array $rules): self
     {
         $this->rules = $rules;
         $this->arrangedRules = false;
@@ -248,7 +235,7 @@ class Field
     /**
      * @return array
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }
@@ -256,7 +243,7 @@ class Field
     /**
      * @return bool
      */
-    public function hasErrors()
+    public function hasErrors(): bool
     {
         return empty($this->errors) === false;
     }
@@ -264,9 +251,9 @@ class Field
     /**
      * @param string $error
      *
-     * @return Field
+     * @return FormField
      */
-    public function addError($error)
+    public function addError(string $error): self
     {
         $this->errors[] = $error;
 
@@ -276,11 +263,29 @@ class Field
     /**
      * @param array $errors
      *
-     * @return Field
+     * @return FormField
      */
-    public function setErrors(array $errors)
+    public function setErrors(array $errors): self
     {
         $this->errors = $errors;
+
+        return $this;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return FormField
+     * @throws FormError
+     */
+    protected function setId(string $id): self
+    {
+        if (preg_match('/^[0-9a-zA-Z_-]+$/u', $id) === 0)
+        {
+            throw new FormError('ID "' . $id . '" has invalid characters. Please use only [a-zA-Z_-]');
+        }
+
+        $this->id = $id;
 
         return $this;
     }
@@ -308,7 +313,7 @@ class Field
      *
      * @return RuleInterface[]
      */
-    private function arrangeRules(array $rules)
+    private function arrangeRules(array $rules): array
     {
         $arranged = [];
 

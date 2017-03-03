@@ -3,7 +3,6 @@
 namespace Simplon\Form\View\Elements;
 
 /**
- * Class InputHiddenElement
  * @package Simplon\Form\View\Elements
  */
 class InputHiddenElement extends InputTextElement
@@ -11,7 +10,7 @@ class InputHiddenElement extends InputTextElement
     /**
      * @return array
      */
-    public function getWidgetAttributes()
+    public function getWidgetAttributes(): array
     {
         $base = [
             'type' => 'hidden',
@@ -21,9 +20,9 @@ class InputHiddenElement extends InputTextElement
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function renderLabel()
+    public function renderLabel(): ?string
     {
         return null;
     }
@@ -31,7 +30,7 @@ class InputHiddenElement extends InputTextElement
     /**
      * @return string
      */
-    public function getWidgetHtml()
+    public function getWidgetHtml(): string
     {
         /** @noinspection HtmlUnknownAttribute */
         return '<input {attrs-field}>';
@@ -40,7 +39,7 @@ class InputHiddenElement extends InputTextElement
     /**
      * @return string
      */
-    public function renderElement()
+    public function renderElement(): string
     {
         return $this->renderWidget();
     }

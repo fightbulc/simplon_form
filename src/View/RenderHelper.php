@@ -3,7 +3,6 @@
 namespace Simplon\Form\View;
 
 /**
- * Class RenderHelper
  * @package Simplon\Form\View
  */
 class RenderHelper
@@ -14,7 +13,7 @@ class RenderHelper
      *
      * @return string
      */
-    public static function attributes($html, array $attrs)
+    public static function attributes(string $html, array $attrs): string
     {
         foreach ($attrs as $group => $elements)
         {
@@ -42,7 +41,7 @@ class RenderHelper
      *
      * @return string
      */
-    public static function placeholders($html, array $placeholders)
+    public static function placeholders(string $html, array $placeholders): string
     {
         foreach ($placeholders as $key => $value)
         {
@@ -57,7 +56,7 @@ class RenderHelper
      *
      * @return string
      */
-    public static function codeLines(array $lines)
+    public static function codeLines(array $lines): string
     {
         foreach ($lines as $index => $line)
         {

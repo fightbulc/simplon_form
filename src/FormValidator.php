@@ -2,50 +2,39 @@
 
 namespace Simplon\Form;
 
-use Simplon\Form\Data\Field;
+use Simplon\Form\Data\FormField;
 use Simplon\Form\Data\Rules\RuleException;
 use Simplon\Form\Security\Csrf;
 
 /**
- * Class FormValidator
  * @package Simplon\Form
  */
 class FormValidator
 {
     /**
+     * @var string|null
+     */
+    private $scope;
+    /**
      * @var array
      */
     private $requestData = [];
-
-    /**
-     * @var string
-     */
-    private $scope;
-
     /**
      * @var FormFields[]
      */
     private $fields = [];
-
     /**
-     * @var Field[]
+     * @var FormField[]
      */
     private $errorFields = [];
-
     /**
-     * @var Csrf
+     * @var Csrf|null
      */
     private $csrf;
-
     /**
      * @var bool
      */
-    private $hasBeenValidated = false;
-
-    /**
-     * @var bool|null
-     */
-    private $validationResult;
+    private $formIsValid = false;
 
     /**
      * @param array $requestData
@@ -65,7 +54,7 @@ class FormValidator
      *
      * @return FormValidator
      */
-    public function setScope($scope)
+    public function setScope(string $scope): self
     {
         $this->scope = $scope;
 
@@ -73,9 +62,9 @@ class FormValidator
     }
 
     /**
-     * @return Csrf
+     * @return Csrf|null
      */
-    public function getCsrf()
+    public function getCsrf(): ?Csrf
     {
         return $this->csrf;
     }
@@ -85,7 +74,7 @@ class FormValidator
      *
      * @return FormValidator
      */
-    public function setCsrf(Csrf $csrf)
+    public function setCsrf(Csrf $csrf): self
     {
         $this->csrf = $csrf;
 
@@ -95,7 +84,7 @@ class FormValidator
     /**
      * @return FormFields[]
      */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->fields;
     }
@@ -105,66 +94,67 @@ class FormValidator
      *
      * @return FormValidator
      */
-    public function addFields(FormFields $fields)
+    public function addFields(FormFields $fields): self
     {
-        $this->fields[] = $fields;
+        $this->fields[] = $this->applyRequestData($fields);
 
         return $this;
     }
 
     /**
-     * @param FormFields[] $formFields
+     * @param FormFields[] $fields
      *
      * @return FormValidator
      */
-    public function setFormFields(array $formFields)
+    public function setFields(array $fields): self
     {
-        $this->fields = $formFields;
+        foreach ($fields as $item)
+        {
+            $this->addFields($item);
+        }
 
         return $this;
     }
 
     /**
-     * @return bool|null
-     * @throws FormException
+     * @return bool
      */
-    public function isValid()
+    public function hasBeenSubmitted(): bool
     {
-        if ($this->hasBeenValidated() === false)
+        // nothing to check against
+        if ($this->hasRequestData() === false)
         {
-            $this->setHasBeenValidated();
+            return false;
+        }
 
-            // nothing to check against
-            if ($this->hasRequestData() === false)
-            {
-                $this->setValidationResult(null);
+        // in case we require a scope and scope is not within request data
+        if ($this->getScope() && $this->getRequestData($this->getScope()) === null)
+        {
+            return false;
+        }
 
-                return null;
-            }
+        return true;
+    }
 
-            // in case we require a scope and scope is not within request data
-            if ($this->getScope() && $this->getRequestData($this->getScope()) === null)
-            {
-                $this->setValidationResult(null);
-
-                return null;
-            }
-
+    /**
+     * @return FormValidator
+     * @throws FormError
+     */
+    public function validate(): self
+    {
+        if ($this->hasBeenSubmitted())
+        {
             // run check if CSRF is enabled
             if ($this->getCsrf() && $this->getCsrf()->isValid($this->requestData) === false)
             {
-                throw new FormException('CSRF mismatch');
+                throw new FormError('CSRF mismatch');
             }
 
             // validate all fields
             foreach ($this->getFields() as $fields)
             {
-                foreach ($fields->getAllFields() as $field)
+                foreach ($fields->getAll() as $field)
                 {
-                    $field->setValue(
-                        $this->getRequestData($field->getId())
-                    );
-
                     foreach ($field->getRules() as $rule)
                     {
                         try
@@ -184,16 +174,34 @@ class FormValidator
                 }
             }
 
-            $this->setValidationResult($this->hasErrorFields() === false);
+            $this->setFormIsValid(
+                $this->hasErrorFields() === false
+            );
         }
 
-        return $this->getValidationResult();
+        return $this;
     }
 
     /**
-     * @return Field[]
+     * @return bool
      */
-    public function getErrorFields()
+    public function isValid(): bool
+    {
+        return $this->formIsValid === true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasErrorFields(): bool
+    {
+        return empty($this->errorFields) === false;
+    }
+
+    /**
+     * @return FormField[]
+     */
+    public function getErrorFields(): array
     {
         return $this->errorFields;
     }
@@ -201,13 +209,13 @@ class FormValidator
     /**
      * @return array
      */
-    public function getErrorMessages()
+    public function getErrorMessages(): array
     {
         $errors = [];
 
         if ($this->hasErrorFields())
         {
-            foreach ($this->errorFields as $field)
+            foreach ($this->getErrorFields() as $field)
             {
                 $errors[] = [
                     'id'     => $field->getId(),
@@ -222,19 +230,31 @@ class FormValidator
     }
 
     /**
-     * @return bool
+     * @param FormFields $fields
+     *
+     * @return FormFields
      */
-    public function hasErrorFields()
+    private function applyRequestData(FormFields $fields): FormFields
     {
-        return empty($this->errorFields) === false;
+        if ($this->hasBeenSubmitted())
+        {
+            foreach ($fields->getAll() as $field)
+            {
+                $field->setValue(
+                    $this->getRequestData($field->getId())
+                );
+            }
+        }
+
+        return $fields;
     }
 
     /**
-     * @param Field $field
+     * @param FormField $field
      *
      * @return FormValidator
      */
-    private function addErrorField(Field $field)
+    private function addErrorField(FormField $field): self
     {
         $this->errorFields[] = $field;
 
@@ -244,7 +264,7 @@ class FormValidator
     /**
      * @return bool
      */
-    private function hasRequestData()
+    private function hasRequestData(): bool
     {
         return empty($this->requestData) === false;
     }
@@ -254,7 +274,7 @@ class FormValidator
      *
      * @return mixed|null
      */
-    private function getRequestData($id)
+    private function getRequestData(string $id)
     {
         if (isset($this->requestData[$id]))
         {
@@ -265,47 +285,21 @@ class FormValidator
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    private function getScope()
+    private function getScope(): ?string
     {
         return $this->scope;
     }
 
     /**
-     * @return boolean
-     */
-    private function hasBeenValidated()
-    {
-        return $this->hasBeenValidated;
-    }
-
-    /**
-     * @return FormValidator
-     */
-    private function setHasBeenValidated()
-    {
-        $this->hasBeenValidated = true;
-
-        return $this;
-    }
-
-    /**
-     * @return boolean|null
-     */
-    private function getValidationResult()
-    {
-        return $this->validationResult;
-    }
-
-    /**
-     * @param bool|null $result
+     * @param bool $formIsValid
      *
      * @return FormValidator
      */
-    private function setValidationResult($result)
+    private function setFormIsValid(bool $formIsValid): self
     {
-        $this->validationResult = $result;
+        $this->formIsValid = $formIsValid;
 
         return $this;
     }
