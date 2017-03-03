@@ -13,30 +13,6 @@ class FormFields
      * @var FormField[]
      */
     private $fields = [];
-    /**
-     * @var null|int
-     */
-    private $cloneIteration;
-
-    /**
-     * @return int|null
-     */
-    public function getCloneIteration(): ?int
-    {
-        return $this->cloneIteration;
-    }
-
-    /**
-     * @param int|null $cloneIteration
-     *
-     * @return FormFields
-     */
-    public function setCloneIteration(int $cloneIteration): self
-    {
-        $this->cloneIteration = $cloneIteration;
-
-        return $this;
-    }
 
     /**
      * @param string $id
@@ -56,11 +32,6 @@ class FormFields
      */
     public function get(string $id): FormField
     {
-        if ($cloneIteration)
-        {
-            $id .= '-' . $cloneIteration;
-        }
-
         if ($this->has($id))
         {
             return $this->fields[$id];

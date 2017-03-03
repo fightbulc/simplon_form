@@ -13,44 +13,74 @@ class FormCloneViewBlock extends FormViewBlock
     protected $cloneIteration = 0;
 
     /**
-     * @return null|int
+     * @param string $id
+     * @param array $requestData
+     * @param callable $callback
      */
-    public function getCloneIteration(): ?int
+    public function __construct(string $id, array $requestData, callable $callback)
+    {
+        parent::__construct($id);
+
+        $this->setCloneIteration($requestData);
+
+        for ($i = 0; $i <= $this->getCloneIteration(); $i++)
+        {
+            $callback($this, $i);
+        }
+    }
+
+    /**
+     * @return int
+     */
+    public function getCloneIteration(): int
     {
         return $this->cloneIteration;
     }
 
     /**
+     * @return string
+     */
+    public function renderBlock(): string
+    {
+        $html = '{header}{rows}{cloning}';
+
+        $renderedRows = [];
+
+        foreach ($this->getRows() as $row)
+        {
+            $renderedRows[] = $row->render();
+        }
+
+        return RenderHelper::placeholders(
+            $html,
+            [
+                'header'  => $this->renderHeader(),
+                'rows'    => implode('', $renderedRows),
+                'cloning' => $this->renderCloning(),
+            ]
+        );
+    }
+
+    /**
      * @param array $requestData
      *
-     * @return FormViewBlock
+     * @return FormCloneViewBlock
      */
-    public function setCloneIteration(array $requestData = []): FormViewBlock
+    protected function setCloneIteration(array $requestData = []): self
     {
-        $value = 0;
-
         if (!empty($requestData['form']))
         {
             $requestData = $requestData['form'];
         }
 
-        if (!empty($requestData['clone']))
+        if (!empty($requestData['clone'][$this->getId() . '-iteration']))
         {
-            $value = (int)$requestData['clone']['__iteration'];
-            $value = $value > 0 ? $value : 0;
+            $value = (int)$requestData['clone'][$this->getId() . '-iteration'];
+            $this->cloneIteration = $value > 0 ? $value : 0;
         }
 
-        $this->cloneIteration = $value;
 
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function hasCloning(): bool
-    {
-        return $this->getCloneIteration() !== null;
     }
 
     /**
@@ -62,38 +92,33 @@ class FormCloneViewBlock extends FormViewBlock
     {
         $rowsString = implode('', $renderedRows);
 
-        if ($this->hasCloning())
-        {
-            $clonedRows = [];
-
-            for ($i = 0; $i <= $this->getCloneIteration(); $i++)
-            {
-                $row = $rowsString;
-                $row = preg_replace('/name="form\[(.*?)\]"/', 'name="form[clone][\\1][' . $i . ']"', $row);
-                $row = preg_replace('/id="form\-(.*?)"/', 'id="form-clone-\\1-' . $i . '"', $row);
-                $clonedRows[] = $row;
-            }
-
-            $rowsString = implode('', $clonedRows);
-        }
+//        if ($this->hasCloning())
+//        {
+//            $clonedRows = [];
+//
+//            for ($i = 0; $i <= $this->getCloneIteration(); $i++)
+//            {
+//                $row = $rowsString;
+//                $row = preg_replace('/name="form\[(.*?)\]"/', 'name="form[clone][\\1][' . $i . ']"', $row);
+//                $row = preg_replace('/id="form\-(.*?)"/', 'id="form-clone-\\1-' . $i . '"', $row);
+//                $clonedRows[] = $row;
+//            }
+//
+//            $rowsString = implode('', $clonedRows);
+//        }
 
         return $rowsString;
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    protected function renderCloning(): ?string
+    protected function renderCloning(): string
     {
-        if ($this->hasCloning())
-        {
-            return '
-            <div style="margin-top:20px">
-                <input type="text" name="form[clone][__iteration]" value="' . $this->getCloneIteration() . '">
-                <input type="button" value="Clone" class="ui button">
-            </div>';
-        }
-
-        return null;
+        return '
+        <div style="margin-top:20px">
+            <input type="text" name="form[clone][' . $this->getId() . '-iteration]" value="' . $this->getCloneIteration() . '">
+            <input type="button" value="Clone" class="ui button">
+        </div>';
     }
 }
