@@ -91,7 +91,7 @@ $citiesBlock = (new FormViewBlock('cities'))
 // ====================================
 
 $view = (new FormView())
-    ->setComponentDir('../assets/vendor')
+    ->setComponentDir('../../assets/vendor')
     ->addBlock($defaultBlock)
     ->addBlock($datesBlock)
     ->addBlock($citiesBlock)
