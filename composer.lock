@@ -1,0 +1,539 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "000466e26b279160eeca237a7bc9f7d5",
+    "packages": [
+        {
+            "name": "fightbulc/moment",
+            "version": "1.26.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fightbulc/moment.php.git",
+                "reference": "68f3ddad3feca6d7aae5a333724401355661afbb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fightbulc/moment.php/zipball/68f3ddad3feca6d7aae5a333724401355661afbb",
+                "reference": "68f3ddad3feca6d7aae5a333724401355661afbb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Moment\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ashish Tilara",
+                    "email": "ashish@itcutives.com",
+                    "role": "developer"
+                },
+                {
+                    "name": "Jaroslaw Kozak",
+                    "email": "jaroslaw.kozak68@gmail.com",
+                    "role": "developer"
+                },
+                {
+                    "name": "Tino Ehrich",
+                    "email": "tino@bigpun.me",
+                    "role": "developer"
+                }
+            ],
+            "description": "Parse, validate, manipulate, and display dates in PHP w/ i18n support. Inspired by moment.js",
+            "keywords": [
+                "date",
+                "display",
+                "format",
+                "i18n",
+                "locale",
+                "manipulate",
+                "moment",
+                "parse",
+                "time",
+                "translation",
+                "validate"
+            ],
+            "time": "2017-01-19T07:57:28+00:00"
+        },
+        {
+            "name": "kriswallsmith/assetic",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kriswallsmith/assetic.git",
+                "reference": "e911c437dbdf006a8f62c2f59b15b2d69a5e0aa1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/e911c437dbdf006a8f62c2f59b15b2d69a5e0aa1",
+                "reference": "e911c437dbdf006a8f62c2f59b15b2d69a5e0aa1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.1",
+                "symfony/process": "~2.1|~3.0"
+            },
+            "conflict": {
+                "twig/twig": "<1.27"
+            },
+            "require-dev": {
+                "leafo/lessphp": "^0.3.7",
+                "leafo/scssphp": "~0.1",
+                "meenie/javascript-packer": "^1.1",
+                "mrclay/minify": "<2.3",
+                "natxet/cssmin": "3.0.4",
+                "patchwork/jsqueeze": "~1.0|~2.0",
+                "phpunit/phpunit": "~4.8 || ^5.6",
+                "psr/log": "~1.0",
+                "ptachoire/cssembed": "~1.0",
+                "symfony/phpunit-bridge": "~2.7|~3.0",
+                "twig/twig": "~1.23|~2.0",
+                "yfix/packager": "dev-master"
+            },
+            "suggest": {
+                "leafo/lessphp": "Assetic provides the integration with the lessphp LESS compiler",
+                "leafo/scssphp": "Assetic provides the integration with the scssphp SCSS compiler",
+                "leafo/scssphp-compass": "Assetic provides the integration with the SCSS compass plugin",
+                "patchwork/jsqueeze": "Assetic provides the integration with the JSqueeze JavaScript compressor",
+                "ptachoire/cssembed": "Assetic provides the integration with phpcssembed to embed data uris",
+                "twig/twig": "Assetic provides the integration with the Twig templating engine"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Assetic": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kris Wallsmith",
+                    "email": "kris.wallsmith@gmail.com",
+                    "homepage": "http://kriswallsmith.net/"
+                }
+            ],
+            "description": "Asset Management for PHP",
+            "homepage": "https://github.com/kriswallsmith/assetic",
+            "keywords": [
+                "assets",
+                "compression",
+                "minification"
+            ],
+            "time": "2016-11-11T18:43:20+00:00"
+        },
+        {
+            "name": "simplon/component_form",
+            "version": "0.0.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fightbulc/simplon_component_form.git",
+                "reference": "5ff570e3358699dfcf382ce139b05a0df8ee6c30"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fightbulc/simplon_component_form/zipball/5ff570e3358699dfcf382ce139b05a0df8ee6c30",
+                "reference": "5ff570e3358699dfcf382ce139b05a0df8ee6c30",
+                "shasum": ""
+            },
+            "require": {
+                "simplon/components": "*"
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "files": [
+                        "simplon-form/base.min.css",
+                        "simplon-form/base.min.js",
+                        "momentjs/2.17.x/moment-with-locales.min.js",
+                        "momentjs/2.17.x/timezone.min.js",
+                        "image-upload/bundle.min.css",
+                        "image-upload/bundle.min.js",
+                        "handlebars/4.0.x/handlebars.min.js"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Tino Ehrich",
+                    "email": "tino@bigpun.me",
+                    "role": "developer"
+                }
+            ],
+            "description": "Assets required for simplon/form",
+            "time": "2017-02-27T17:39:11+00:00"
+        },
+        {
+            "name": "simplon/component_semanticui",
+            "version": "0.0.17",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fightbulc/simplon_component_semanticui.git",
+                "reference": "9ea86ea9685eac22f2995d080d20a813c788bb0f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fightbulc/simplon_component_semanticui/zipball/9ea86ea9685eac22f2995d080d20a813c788bb0f",
+                "reference": "9ea86ea9685eac22f2995d080d20a813c788bb0f",
+                "shasum": ""
+            },
+            "require": {
+                "simplon/components": "*"
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "files": [
+                        "jquery/3.1.x/jquery.min.js",
+                        "semantic-ui/2.2.x/themes/basic/assets/fonts/icons.eot",
+                        "semantic-ui/2.2.x/themes/basic/assets/fonts/icons.svg",
+                        "semantic-ui/2.2.x/themes/basic/assets/fonts/icons.ttf",
+                        "semantic-ui/2.2.x/themes/basic/assets/fonts/icons.woff",
+                        "semantic-ui/2.2.x/themes/default/assets/fonts/icons.eot",
+                        "semantic-ui/2.2.x/themes/default/assets/fonts/icons.otf",
+                        "semantic-ui/2.2.x/themes/default/assets/fonts/icons.svg",
+                        "semantic-ui/2.2.x/themes/default/assets/fonts/icons.ttf",
+                        "semantic-ui/2.2.x/themes/default/assets/fonts/icons.woff",
+                        "semantic-ui/2.2.x/themes/default/assets/fonts/icons.woff2",
+                        "semantic-ui/2.2.x/themes/default/assets/images/flags.png",
+                        "semantic-ui/2.2.x/themes/github/assets/fonts/icons.eot",
+                        "semantic-ui/2.2.x/themes/github/assets/fonts/icons.svg",
+                        "semantic-ui/2.2.x/themes/github/assets/fonts/icons.ttf",
+                        "semantic-ui/2.2.x/themes/github/assets/fonts/icons.woff",
+                        "semantic-ui/2.2.x/components/accordion.css",
+                        "semantic-ui/2.2.x/components/accordion.js",
+                        "semantic-ui/2.2.x/components/accordion.min.css",
+                        "semantic-ui/2.2.x/components/accordion.min.js",
+                        "semantic-ui/2.2.x/components/ad.css",
+                        "semantic-ui/2.2.x/components/ad.min.css",
+                        "semantic-ui/2.2.x/components/api.js",
+                        "semantic-ui/2.2.x/components/api.min.js",
+                        "semantic-ui/2.2.x/components/breadcrumb.css",
+                        "semantic-ui/2.2.x/components/breadcrumb.min.css",
+                        "semantic-ui/2.2.x/components/button.css",
+                        "semantic-ui/2.2.x/components/button.min.css",
+                        "semantic-ui/2.2.x/components/card.css",
+                        "semantic-ui/2.2.x/components/card.min.css",
+                        "semantic-ui/2.2.x/components/checkbox.css",
+                        "semantic-ui/2.2.x/components/checkbox.js",
+                        "semantic-ui/2.2.x/components/checkbox.min.css",
+                        "semantic-ui/2.2.x/components/checkbox.min.js",
+                        "semantic-ui/2.2.x/components/colorize.js",
+                        "semantic-ui/2.2.x/components/colorize.min.js",
+                        "semantic-ui/2.2.x/components/comment.css",
+                        "semantic-ui/2.2.x/components/comment.min.css",
+                        "semantic-ui/2.2.x/components/container.css",
+                        "semantic-ui/2.2.x/components/container.min.css",
+                        "semantic-ui/2.2.x/components/dimmer.css",
+                        "semantic-ui/2.2.x/components/dimmer.js",
+                        "semantic-ui/2.2.x/components/dimmer.min.css",
+                        "semantic-ui/2.2.x/components/dimmer.min.js",
+                        "semantic-ui/2.2.x/components/divider.css",
+                        "semantic-ui/2.2.x/components/divider.min.css",
+                        "semantic-ui/2.2.x/components/dropdown.css",
+                        "semantic-ui/2.2.x/components/dropdown.js",
+                        "semantic-ui/2.2.x/components/dropdown.min.css",
+                        "semantic-ui/2.2.x/components/dropdown.min.js",
+                        "semantic-ui/2.2.x/components/embed.css",
+                        "semantic-ui/2.2.x/components/embed.js",
+                        "semantic-ui/2.2.x/components/embed.min.css",
+                        "semantic-ui/2.2.x/components/embed.min.js",
+                        "semantic-ui/2.2.x/components/feed.css",
+                        "semantic-ui/2.2.x/components/feed.min.css",
+                        "semantic-ui/2.2.x/components/flag.css",
+                        "semantic-ui/2.2.x/components/flag.min.css",
+                        "semantic-ui/2.2.x/components/form.css",
+                        "semantic-ui/2.2.x/components/form.js",
+                        "semantic-ui/2.2.x/components/form.min.css",
+                        "semantic-ui/2.2.x/components/form.min.js",
+                        "semantic-ui/2.2.x/components/grid.css",
+                        "semantic-ui/2.2.x/components/grid.min.css",
+                        "semantic-ui/2.2.x/components/header.css",
+                        "semantic-ui/2.2.x/components/header.min.css",
+                        "semantic-ui/2.2.x/components/icon.css",
+                        "semantic-ui/2.2.x/components/icon.min.css",
+                        "semantic-ui/2.2.x/components/image.css",
+                        "semantic-ui/2.2.x/components/image.min.css",
+                        "semantic-ui/2.2.x/components/input.css",
+                        "semantic-ui/2.2.x/components/input.min.css",
+                        "semantic-ui/2.2.x/components/item.css",
+                        "semantic-ui/2.2.x/components/item.min.css",
+                        "semantic-ui/2.2.x/components/label.css",
+                        "semantic-ui/2.2.x/components/label.min.css",
+                        "semantic-ui/2.2.x/components/list.css",
+                        "semantic-ui/2.2.x/components/list.min.css",
+                        "semantic-ui/2.2.x/components/loader.css",
+                        "semantic-ui/2.2.x/components/loader.min.css",
+                        "semantic-ui/2.2.x/components/menu.css",
+                        "semantic-ui/2.2.x/components/menu.min.css",
+                        "semantic-ui/2.2.x/components/message.css",
+                        "semantic-ui/2.2.x/components/message.min.css",
+                        "semantic-ui/2.2.x/components/modal.css",
+                        "semantic-ui/2.2.x/components/modal.js",
+                        "semantic-ui/2.2.x/components/modal.min.css",
+                        "semantic-ui/2.2.x/components/modal.min.js",
+                        "semantic-ui/2.2.x/components/nag.css",
+                        "semantic-ui/2.2.x/components/nag.js",
+                        "semantic-ui/2.2.x/components/nag.min.css",
+                        "semantic-ui/2.2.x/components/nag.min.js",
+                        "semantic-ui/2.2.x/components/popup.css",
+                        "semantic-ui/2.2.x/components/popup.js",
+                        "semantic-ui/2.2.x/components/popup.min.css",
+                        "semantic-ui/2.2.x/components/popup.min.js",
+                        "semantic-ui/2.2.x/components/progress.css",
+                        "semantic-ui/2.2.x/components/progress.js",
+                        "semantic-ui/2.2.x/components/progress.min.css",
+                        "semantic-ui/2.2.x/components/progress.min.js",
+                        "semantic-ui/2.2.x/components/rail.css",
+                        "semantic-ui/2.2.x/components/rail.min.css",
+                        "semantic-ui/2.2.x/components/rating.css",
+                        "semantic-ui/2.2.x/components/rating.js",
+                        "semantic-ui/2.2.x/components/rating.min.css",
+                        "semantic-ui/2.2.x/components/rating.min.js",
+                        "semantic-ui/2.2.x/components/reset.css",
+                        "semantic-ui/2.2.x/components/reset.min.css",
+                        "semantic-ui/2.2.x/components/reveal.css",
+                        "semantic-ui/2.2.x/components/reveal.min.css",
+                        "semantic-ui/2.2.x/components/search.css",
+                        "semantic-ui/2.2.x/components/search.js",
+                        "semantic-ui/2.2.x/components/search.min.css",
+                        "semantic-ui/2.2.x/components/search.min.js",
+                        "semantic-ui/2.2.x/components/segment.css",
+                        "semantic-ui/2.2.x/components/segment.min.css",
+                        "semantic-ui/2.2.x/components/shape.css",
+                        "semantic-ui/2.2.x/components/shape.js",
+                        "semantic-ui/2.2.x/components/shape.min.css",
+                        "semantic-ui/2.2.x/components/shape.min.js",
+                        "semantic-ui/2.2.x/components/sidebar.css",
+                        "semantic-ui/2.2.x/components/sidebar.js",
+                        "semantic-ui/2.2.x/components/sidebar.min.css",
+                        "semantic-ui/2.2.x/components/sidebar.min.js",
+                        "semantic-ui/2.2.x/components/site.css",
+                        "semantic-ui/2.2.x/components/site.js",
+                        "semantic-ui/2.2.x/components/site.min.css",
+                        "semantic-ui/2.2.x/components/site.min.js",
+                        "semantic-ui/2.2.x/components/state.js",
+                        "semantic-ui/2.2.x/components/state.min.js",
+                        "semantic-ui/2.2.x/components/statistic.css",
+                        "semantic-ui/2.2.x/components/statistic.min.css",
+                        "semantic-ui/2.2.x/components/step.css",
+                        "semantic-ui/2.2.x/components/step.min.css",
+                        "semantic-ui/2.2.x/components/sticky.css",
+                        "semantic-ui/2.2.x/components/sticky.js",
+                        "semantic-ui/2.2.x/components/sticky.min.css",
+                        "semantic-ui/2.2.x/components/sticky.min.js",
+                        "semantic-ui/2.2.x/components/tab.css",
+                        "semantic-ui/2.2.x/components/tab.js",
+                        "semantic-ui/2.2.x/components/tab.min.css",
+                        "semantic-ui/2.2.x/components/tab.min.js",
+                        "semantic-ui/2.2.x/components/table.css",
+                        "semantic-ui/2.2.x/components/table.min.css",
+                        "semantic-ui/2.2.x/components/transition.css",
+                        "semantic-ui/2.2.x/components/transition.js",
+                        "semantic-ui/2.2.x/components/transition.min.css",
+                        "semantic-ui/2.2.x/components/transition.min.js",
+                        "semantic-ui/2.2.x/components/video.css",
+                        "semantic-ui/2.2.x/components/video.js",
+                        "semantic-ui/2.2.x/components/video.min.css",
+                        "semantic-ui/2.2.x/components/video.min.js",
+                        "semantic-ui/2.2.x/components/visibility.js",
+                        "semantic-ui/2.2.x/components/visibility.min.js",
+                        "semantic-ui/2.2.x/components/visit.js",
+                        "semantic-ui/2.2.x/components/visit.min.js",
+                        "semantic-ui/2.2.x/semantic.css",
+                        "semantic-ui/2.2.x/semantic.min.css",
+                        "semantic-ui/2.2.x/semantic.js",
+                        "semantic-ui/2.2.x/semantic.min.js"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Jack Lukic",
+                    "email": "jacklukic@gmail.com",
+                    "homepage": "http://www.jacklukic.com",
+                    "role": "Creator"
+                }
+            ],
+            "description": "Semantic empowers designers and developers by creating a shared vocabulary for UI.",
+            "homepage": "http://www.semantic-ui.com",
+            "time": "2017-02-23T17:16:03+00:00"
+        },
+        {
+            "name": "simplon/components",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fightbulc/simplon_components.git",
+                "reference": "64a49b4d9d9a7b342fd1008d50fbde0edcea58b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fightbulc/simplon_components/zipball/64a49b4d9d9a7b342fd1008d50fbde0edcea58b2",
+                "reference": "64a49b4d9d9a7b342fd1008d50fbde0edcea58b2",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0",
+                "kriswallsmith/assetic": "1.*",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "composer/composer": "1.*@alpha",
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                },
+                "class": "ComponentInstaller\\ComponentInstallerPlugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "ComponentInstaller\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Loach",
+                    "homepage": "http://robloach.net"
+                }
+            ],
+            "description": "Allows installation of Components via Composer.",
+            "time": "2015-10-19T15:57:27+00:00"
+        },
+        {
+            "name": "simplon/phtml",
+            "version": "0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fightbulc/simplon_phtml.git",
+                "reference": "89a7a1dbf9ab70dbfba8a7170897129d533bb5ae"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fightbulc/simplon_phtml/zipball/89a7a1dbf9ab70dbfba8a7170897129d533bb5ae",
+                "reference": "89a7a1dbf9ab70dbfba8a7170897129d533bb5ae",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Simplon\\Phtml\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tino Ehrich",
+                    "email": "tino@bigpun.me",
+                    "role": "developer"
+                }
+            ],
+            "description": "Simple, straight forward implementation of php templates.",
+            "homepage": "https://github.com/fightbulc/simplon_phtml",
+            "keywords": [
+                "php",
+                "phtml",
+                "template"
+            ],
+            "time": "2017-02-23T17:14:23+00:00"
+        },
+        {
+            "name": "symfony/process",
+            "version": "v3.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/process.git",
+                "reference": "0ab87c1e7570b3534a6e51eb4ca8e9f6d7327856"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/process/zipball/0ab87c1e7570b3534a6e51eb4ca8e9f6d7327856",
+                "reference": "0ab87c1e7570b3534a6e51eb4ca8e9f6d7327856",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Process\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Process Component",
+            "homepage": "https://symfony.com",
+            "time": "2017-02-16T14:07:22+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=7.1"
+    },
+    "platform-dev": []
+}
