@@ -1,0 +1,32 @@
+<?php
+/**
+ * @var FormView $formView
+ */
+use Simplon\Form\View\FormView;
+
+?>
+
+<?php if ($formView->hasErrors()): ?>
+    <div class="ui basic segment">
+        <?= $formView->renderErrorMessage() ?>
+    </div>
+<?php endif ?>
+
+<div class="ui basic segment">
+    <h3>Default</h3>
+    <?= $formView->getBlock('default')->renderBlock() ?>
+</div>
+
+<div class="ui basic segment">
+    <h3>Dates</h3>
+    <?= $formView->getBlock('dates')->renderBlock() ?>
+</div>
+
+<div class="ui basic segment">
+    <h3>City</h3>
+    <?= $formView->getBlock('cities')->renderBlock() ?>
+</div>
+
+<div class="ui basic segment">
+    <?= $formView->getSubmitElement()->renderElement() ?>
+</div>

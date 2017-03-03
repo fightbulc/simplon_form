@@ -1,0 +1,38 @@
+<?php
+/**
+ * @var FormView $formView
+ */
+use Simplon\Form\View\FormView;
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>simplon/form</title>
+
+    <link href="../../assets/vendor/semantic-ui/2.2.x/semantic.min.css" rel="stylesheet">
+    <link href="../../assets/vendor/simplon-form/base.min.css" rel="stylesheet">
+
+    <style type="text/css">
+        body {
+            padding: 0;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="ui container">
+        <?= $formView->render(__DIR__ . '/form.phtml') ?>
+    </div>
+
+    <script src="../../assets/vendor/jquery/3.1.x/jquery.min.js"></script>
+    <script src="../../assets/vendor/semantic-ui/2.2.x/semantic.min.js"></script>
+    <script src="../../assets/vendor/simplon-form/base.min.js"></script>
+
+    <?= $formView->renderFieldAssets() ?>
+</body>
+</html>
