@@ -40,7 +40,6 @@ $fields = (new FormFields())
     ->applyInitialData($storedData)
 ;
 
-
 //
 // validate form
 //
