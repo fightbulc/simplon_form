@@ -87,7 +87,7 @@ class FormViewBlock
     /**
      * @return string
      */
-    public function renderBlock(): string
+    public function render(): string
     {
         $html = '{header}{rows}';
 
