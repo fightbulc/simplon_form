@@ -207,6 +207,27 @@ class FormField
     }
 
     /**
+     * @return bool
+     */
+    public function hasDirectRules(): bool
+    {
+        if ($this->hasRules())
+        {
+            foreach ($this->rules as $rule)
+            {
+                if ($rule instanceof IfFilledRule)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @param RuleInterface $rule
      *
      * @return FormField

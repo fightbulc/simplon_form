@@ -228,7 +228,7 @@ abstract class Element implements ElementInterface
 
         $class = ['field'];
 
-        if ($this->getField()->hasRules())
+        if ($this->getField()->hasDirectRules())
         {
             $class[] = 'required';
         }
