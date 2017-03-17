@@ -1,8 +1,26 @@
 # Simplon/Forms
 
 `Simplon/Forms` helps to validate data and, if needed, to build a form view with a couple of widgets by leveraging `Semantic-UI` library.
+
+-------------------------------------------------
+
+1. [__Quick example__](#1-quick-example)  
+1.1 [Fields](#11-fields)  
+1.2 [Validation](#12-validation)  
+1.3 [View](#13-view)  
+2. [__Fields__](#2-fields)  
+2.1 [Rules](#21-rules)  
+2.2 [Filters](#22-filters)  
+3. [__View elements__](#3-view-elements)  
+3.1 [Input text](#31-input-text)  
+4. [__Examples__](#4-examples)  
+4.1 [Place search](#41-place-search)  
+
+-------------------------------------------------
+
+# 1. Quick example
  
-## Introduction
+## 1.1 Fields
 
 In order to validate data we need to create at least one field which can hold any number of rules to define its validity. A field can also hold any number of filters which will be applied to the field value.
 
@@ -65,7 +83,7 @@ $fields->get('email')->getInitialValue(); // foo@bar.com
 $fields->get('email')->getValue(); // foo@bar.com
 ```
 
-## Validation
+## 1.2 Validation
  
 `FormValidation` is expecting at least one set of `FormFields`. Let's pick up the example from above with an additional `name` field. We set an empty array for our `request data`. You can take the value from any source as long as its organised as an array.
 
@@ -125,7 +143,7 @@ if($validator->hasBeenSubmitted()) // any request data?
 
 In case of success we can collect all field values by `FormFields::getAllData`. Otherwise you can check for errors by collecting the error messages via `FormValidator::getErrorMessages` or by collecting all error fields `FormValidator::getErrorFields`. The latter also holds all error messages by field.
 
-## View
+## 1.3 View
 
 In order to render your fields we need to apply them to `Elements`. These elements can be applied to the `FormView` directly or to a `FormBlock` which renders our form automatically in a set structure. We will continue with our before defined fields:
 
@@ -231,3 +249,15 @@ use Simplon\Form\View\FormView;
 ```
 
 Any validation errors would be rendered on top of the template. After this follows our defined block with the ID `default`. This statement will render both of your fields next to each other with equal spacing. At the end you can place your `Submit element` which comes in our example as an automatically set element. You can also define this field yourself.
+
+-------------------------------------------------
+
+# 2. Fields
+
+-------------------------------------------------
+
+# 3. View elements
+
+-------------------------------------------------
+
+# 4. Examples
