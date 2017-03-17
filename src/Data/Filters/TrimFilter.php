@@ -23,6 +23,18 @@ class TrimFilter implements FilterInterface
     }
 
     /**
+     * @param string $chars
+     *
+     * @return TrimFilter
+     */
+    public function addChars(string $chars): self
+    {
+        $this->trimChars .= $chars;
+
+        return $this;
+    }
+
+    /**
      * @param string $value
      *
      * @return string
