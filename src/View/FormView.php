@@ -418,17 +418,23 @@ class FormView
             $class[] = 'warning';
         }
 
+        $formAttrs = [
+            'action'         => $this->getUrl(),
+            'method'         => $this->getMethod(),
+            'accept-charset' => $this->getAcceptCharset(),
+            'class'          => $class,
+        ];
+
+        if ($scope = $this->getScope())
+        {
+            $formAttrs['id'] = 'form-' . $this->getScope();
+        }
+
         $placeholders = [
             'attrs' => RenderHelper::attributes(
                 '{attrs}',
                 [
-                    'attrs' => [
-                        'id'             => 'form-' . $this->getScope(),
-                        'action'         => $this->getUrl(),
-                        'method'         => $this->getMethod(),
-                        'accept-charset' => $this->getAcceptCharset(),
-                        'class'          => $class,
-                    ],
+                    'attrs' => $formAttrs,
                 ]
             ),
             'css'   => $this->buildFieldAssetsCss(),
