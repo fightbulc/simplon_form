@@ -347,14 +347,11 @@ class FormView
 
         // add elements
 
-        foreach ($this->blocks as $block)
+        foreach ($block->getRows() as $row)
         {
-            foreach ($block->getRows() as $row)
+            foreach ($row->getElements() as $element)
             {
-                foreach ($row->getElements() as $element)
-                {
-                    $this->addElement($element);
-                }
+                $this->addElement($element);
             }
         }
 
