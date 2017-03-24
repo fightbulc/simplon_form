@@ -433,7 +433,7 @@ class DateCalendarElement extends Element
 
         $code = [
             'moment.locale("' . $this->getLanguage() . '")',
-            '$("#' . $this->renderElementId() . '").parent().parent().calendar({' . substr(json_encode($options), 1, -1) . ', ' . implode(', ', $functions) . '})',
+            '$("#' . $this->renderElementId() . '").parent().parent().calendar({' . RenderHelper::jsonEncode($options, true) . ', ' . implode(', ', $functions) . '})',
         ];
 
         return implode(";\n", $code);

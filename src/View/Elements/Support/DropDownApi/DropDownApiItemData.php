@@ -2,6 +2,8 @@
 
 namespace Simplon\Form\View\Elements\Support\DropDownApi;
 
+use Simplon\Form\View\RenderHelper;
+
 /**
  * @package Simplon\Form\View\Elements\Support\DropDownApi
  */
@@ -66,12 +68,14 @@ class DropDownApiItemData
         $this->remoteID = $remoteID;
         $this->meta = $meta;
 
-        $this->encodedJson = rawurlencode(json_encode([
-            'label'    => $label,
-            'name'     => $name,
-            'remoteID' => $remoteID,
-            'meta'     => $meta,
-        ]));
+        $this->encodedJson = rawurlencode(
+            RenderHelper::jsonEncode([
+                'label'    => $label,
+                'name'     => $name,
+                'remoteID' => $remoteID,
+                'meta'     => $meta,
+            ])
+        );
 
         return $this;
     }

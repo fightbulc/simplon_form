@@ -2,6 +2,8 @@
 
 namespace Simplon\Form\View\Elements\Support\DropDownApi;
 
+use Simplon\Form\View\RenderHelper;
+
 /**
  * @package Simplon\Form\View\Elements\Support\DropDownApi
  */
@@ -78,7 +80,7 @@ class DropDownApiData implements \Iterator
      */
     public function toJSON(): string
     {
-        return json_encode($this->toArray());
+        return RenderHelper::jsonEncode($this->toArray());
     }
 
     /**

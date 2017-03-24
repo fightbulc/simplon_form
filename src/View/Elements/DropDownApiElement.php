@@ -105,9 +105,8 @@ class DropDownApiElement extends DropDownElement
 
         return
             $selector
-            . '.dropdown({'
-            . substr(json_encode($options), 1, -1) . ', '
-            . '"apiSettings": { ' . substr(json_encode($apiSettings), 1, -1) . ', ' . implode(",", $functions) . '}'
+            . '.dropdown({' . RenderHelper::jsonEncode($options, true) . ', '
+            . '"apiSettings": { ' . RenderHelper::jsonEncode($apiSettings, true) . ', ' . implode(",", $functions) . '}'
             . '})';
     }
 

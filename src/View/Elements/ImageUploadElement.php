@@ -353,7 +353,7 @@ class ImageUploadElement extends Element
             'attrs-wrapper'        => [
                 'class'                 => ['form-image-upload'],
                 'data-upload-url'       => $this->getUploadUrl(),
-                'data-upload-meta-data' => urlencode(json_encode($this->getUploadMetaData())),
+                'data-upload-meta-data' => urlencode(RenderHelper::jsonEncode($this->getUploadMetaData())),
                 'data-image-width'      => $this->getImageWidth(),
                 'data-thumb-width'      => $this->getThumbWidth(),
                 'data-thumb-container'  => $this->getThumbContainer(),

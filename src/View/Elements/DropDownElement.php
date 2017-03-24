@@ -96,7 +96,7 @@ class DropDownElement extends Element
     /**
      * @return static
      */
-    public function allowAdditions()
+    public function enableAdditions()
     {
         $this->allowAdditions = true;
 
@@ -163,7 +163,7 @@ class DropDownElement extends Element
             $attrs['attrs-wrapper']['class'][] = 'multiple';
         }
 
-        if ($this->isSearchable())
+        if ($this->isSearchable() || $this->isAllowedAdditions())
         {
             $attrs['attrs-wrapper']['class'][] = 'search';
         }
@@ -231,9 +231,12 @@ class DropDownElement extends Element
         $options = [
             'allowAdditions' => $this->isAllowedAdditions(),
             'forceSelection' => false,
+            'keys'           => [
+                'delimiter' => 13,
+            ],
         ];
 
-        return $selector . '.dropdown(' . json_encode($options) . ')';
+        return $selector . '.dropdown(' . RenderHelper::jsonEncode($options) . ')';
     }
 
     /**

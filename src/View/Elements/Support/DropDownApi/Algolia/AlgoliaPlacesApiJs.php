@@ -4,6 +4,7 @@ namespace Simplon\Form\View\Elements\Support\DropDownApi\Algolia;
 
 use Simplon\Form\View\Elements\Support\DropDownApi\DropDownApiJsInterface;
 use Simplon\Form\View\Elements\Support\DropDownApi\DropDownApiResponseDataInterface;
+use Simplon\Form\View\RenderHelper;
 
 /**
  * @package Simplon\Form\View\Elements\Support\DropDownApi\Algolia
@@ -181,7 +182,7 @@ class AlgoliaPlacesApiJs implements DropDownApiJsInterface
             . 'query: settings.urlData.query.replace(/str\./, "straße"),' // updated for German address handling
             . 'language: "' . $this->getLanguage() . '",'
             . 'type: "' . $this->getType() . '",'
-            . 'countries: ' . json_encode($this->getCountries())
+            . 'countries: ' . RenderHelper::jsonEncode($this->getCountries())
             . '})';
     }
 

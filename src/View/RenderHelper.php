@@ -65,4 +65,22 @@ class RenderHelper
 
         return join(";\n", $lines);
     }
+
+    /**
+     * @param array $options
+     * @param bool $removeOutterWrappers
+     *
+     * @return string
+     */
+    public static function jsonEncode(array $options = [], bool $removeOutterWrappers = false): string
+    {
+        $json = json_encode($options, JSON_PRETTY_PRINT);
+
+        if ($removeOutterWrappers)
+        {
+            substr($json, 1, -1);
+        }
+
+        return $json;
+    }
 }
