@@ -78,7 +78,7 @@ class RenderHelper
 
         if ($removeOutterWrappers)
         {
-            substr($json, 1, -1);
+            $json = substr($json, 1, -1);
         }
 
         return $json;
