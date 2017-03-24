@@ -88,19 +88,17 @@ class DropDownElement extends Element
     /**
      * @return bool
      */
-    public function getAllowAdditions(): bool
+    public function isAllowedAdditions(): bool
     {
         return $this->allowAdditions;
     }
 
     /**
-     * @param bool $allowAdditions
-     *
      * @return static
      */
-    public function allowAdditions(bool $allowAdditions)
+    public function allowAdditions()
     {
-        $this->allowAdditions = $allowAdditions === true;
+        $this->allowAdditions = true;
 
         return $this;
     }
@@ -231,7 +229,7 @@ class DropDownElement extends Element
         $selector = '$(\'#' . $this->renderElementId() . '\').parent()';
 
         $options = [
-            'allowAdditions' => $this->getAllowAdditions(),
+            'allowAdditions' => $this->isAllowedAdditions(),
             'forceSelection' => false,
         ];
 

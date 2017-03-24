@@ -88,7 +88,7 @@ class DropDownApiElement extends DropDownElement
             'forceSelection'   => false,
             'filterRemoteData' => false,
             'saveRemoteData'   => false,
-            'allowAdditions'   => $this->getAllowAdditions(),
+            'allowAdditions'   => $this->isAllowedAdditions(),
         ];
 
         $apiSettings = [
