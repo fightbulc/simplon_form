@@ -54,6 +54,6 @@ class AlgoliaPlacesApiResponseData implements DropDownApiResponseDataInterface
      */
     private function renderAdministrativeString(): string
     {
-        return "(item.administrative[0] !== undefined ? ', ' + item.administrative[0] : '' )";
+        return "(item.administrative !== undefined && item.administrative[0] !== undefined ? ', ' + item.administrative[0] : '' )";
     }
 }
