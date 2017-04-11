@@ -148,16 +148,16 @@
         },
         {
             "name": "simplon/component_form",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fightbulc/simplon_component_form.git",
-                "reference": "0671bf33b45c6ee3c3bf8e2914841ff2d58c1298"
+                "reference": "2625ad48e113bd657c9e64629b5c7751c4423c3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fightbulc/simplon_component_form/zipball/0671bf33b45c6ee3c3bf8e2914841ff2d58c1298",
-                "reference": "0671bf33b45c6ee3c3bf8e2914841ff2d58c1298",
+                "url": "https://api.github.com/repos/fightbulc/simplon_component_form/zipball/2625ad48e113bd657c9e64629b5c7751c4423c3d",
+                "reference": "2625ad48e113bd657c9e64629b5c7751c4423c3d",
                 "shasum": ""
             },
             "require": {
@@ -186,7 +186,7 @@
                 }
             ],
             "description": "Assets required for simplon/form",
-            "time": "2017-04-11T11:53:55+00:00"
+            "time": "2017-04-11T12:36:27+00:00"
         },
         {
             "name": "simplon/component_semanticui",
