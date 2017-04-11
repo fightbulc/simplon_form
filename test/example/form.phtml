@@ -28,5 +28,11 @@ use Simplon\Form\View\FormView;
 </div>
 
 <div class="ui basic segment">
+    <h3>Image</h3>
+    <?= $formView->getBlock('image')->render() ?>
+    <div id="thumb"></div>
+</div>
+
+<div class="ui basic segment">
     <?= $formView->getSubmitElement()->renderElement() ?>
 </div>

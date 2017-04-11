@@ -8,6 +8,7 @@ use Simplon\Form\FormValidator;
 use Simplon\Form\View\Elements\DateCalendarElement;
 use Simplon\Form\View\Elements\DropDownApiElement;
 use Simplon\Form\View\Elements\DropDownElement;
+use Simplon\Form\View\Elements\ImageUploadElement;
 use Simplon\Form\View\Elements\InputTextElement;
 use Simplon\Form\View\Elements\Support\DropDownApi\Algolia\AlgoliaPlacesApiJs;
 use Simplon\Form\View\Elements\Support\Meta\OptionsMeta;
@@ -27,6 +28,7 @@ $storedData = [
     'firstname' => 'Foo',
     'lastname'  => 'Bar',
     'email'     => 'foo@bar.me',
+    'url_image' => 'test.jpg',
 ];
 
 $fields = (new FormFields())
@@ -37,6 +39,7 @@ $fields = (new FormFields())
     ->add((new FormField('startDate'))->addRule(new RequiredRule()))
     ->add((new FormField('endDate'))->addRule(new RequiredRule()))
     ->add((new FormField('city'))->addRule(new RequiredRule()))
+    ->add((new FormField('url_image'))->addRule(new RequiredRule()))
     ->applyInitialData($storedData)
 ;
 
@@ -89,11 +92,22 @@ $citiesBlock = (new FormViewBlock('cities'))
 
 // ====================================
 
+$imageElement = (new ImageUploadElement($fields->get('url_image')))
+    ->setLabel('Upload')
+    ->setUploadUrl('#')
+;
+
+$imageBlock = (new FormViewBlock('image'))
+    ->addRow((new FormViewRow())->autoColumns($imageElement));
+
+// ====================================
+
 $view = (new FormView())
     ->setComponentDir('../../assets/vendor')
     ->addBlock($defaultBlock)
     ->addBlock($datesBlock)
     ->addBlock($citiesBlock)
+    ->addBlock($imageBlock)
 ;
 
 echo (new Phtml())->render(__DIR__ . '/page.phtml', ['formView' => $view]);
