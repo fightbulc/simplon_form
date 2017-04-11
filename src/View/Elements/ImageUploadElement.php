@@ -23,7 +23,12 @@ class ImageUploadElement extends Element
     /**
      * @var string
      */
-    private $removeLabel = 'Click to remove';
+    private $removeLabel = 'Remove';
+
+    /**
+     * @var string
+     */
+    private $downloadLabel = 'Download';
 
     /**
      * @var null|string
@@ -111,6 +116,26 @@ class ImageUploadElement extends Element
     public function setRemoveLabel(string $removeLabel): self
     {
         $this->removeLabel = $removeLabel;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDownloadLabel(): string
+    {
+        return $this->downloadLabel;
+    }
+
+    /**
+     * @param string $downloadLabel
+     *
+     * @return ImageUploadElement
+     */
+    public function setDownloadLabel(string $downloadLabel): self
+    {
+        $this->downloadLabel = $downloadLabel;
 
         return $this;
     }
@@ -360,6 +385,7 @@ class ImageUploadElement extends Element
                 'data-attach-label'     => $this->getAttachLabel(),
                 'data-replace-label'    => $this->getReplaceLabel(),
                 'data-remove-label'     => $this->getRemoveLabel(),
+                'data-download-label'   => $this->getDownloadLabel(),
             ],
             'attrs-button-wrapper' => [
                 'class'    => ['ui vertical large fluid button'],
