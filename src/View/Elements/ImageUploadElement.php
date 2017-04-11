@@ -31,6 +31,11 @@ class ImageUploadElement extends Element
     private $downloadLabel = 'Download';
 
     /**
+     * @var bool
+     */
+    private $showNoThumbContainer = false;
+
+    /**
      * @var null|string
      */
     private $uploadUrl;
@@ -136,6 +141,24 @@ class ImageUploadElement extends Element
     public function setDownloadLabel(string $downloadLabel): self
     {
         $this->downloadLabel = $downloadLabel;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShowNoThumbContainer(): bool
+    {
+        return $this->showNoThumbContainer;
+    }
+
+    /**
+     * @return ImageUploadElement
+     */
+    public function enableShowNoThumbContainer(): self
+    {
+        $this->showNoThumbContainer = true;
 
         return $this;
     }
@@ -376,16 +399,17 @@ class ImageUploadElement extends Element
     {
         $attrs = [
             'attrs-wrapper'        => [
-                'class'                 => ['form-image-upload'],
-                'data-upload-url'       => $this->getUploadUrl(),
-                'data-upload-meta-data' => urlencode(RenderHelper::jsonEncode($this->getUploadMetaData())),
-                'data-image-width'      => $this->getImageWidth(),
-                'data-thumb-width'      => $this->getThumbWidth(),
-                'data-thumb-container'  => $this->getThumbContainer(),
-                'data-attach-label'     => $this->getAttachLabel(),
-                'data-replace-label'    => $this->getReplaceLabel(),
-                'data-remove-label'     => $this->getRemoveLabel(),
-                'data-download-label'   => $this->getDownloadLabel(),
+                'class'                   => ['form-image-upload'],
+                'data-upload-url'         => $this->getUploadUrl(),
+                'data-upload-meta-data'   => urlencode(RenderHelper::jsonEncode($this->getUploadMetaData())),
+                'data-image-width'        => $this->getImageWidth(),
+                'data-thumb-width'        => $this->getThumbWidth(),
+                'data-thumb-container'    => $this->getThumbContainer(),
+                'data-attach-label'       => $this->getAttachLabel(),
+                'data-replace-label'      => $this->getReplaceLabel(),
+                'data-remove-label'       => $this->getRemoveLabel(),
+                'data-download-label'     => $this->getDownloadLabel(),
+                'data-no-thumb-container' => $this->isShowNoThumbContainer(),
             ],
             'attrs-button-wrapper' => [
                 'class'    => ['ui vertical large fluid button'],

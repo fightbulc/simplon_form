@@ -93,8 +93,8 @@ $citiesBlock = (new FormViewBlock('cities'))
 // ====================================
 
 $imageElement = (new ImageUploadElement($fields->get('url_image')))
-    ->setLabel('Upload')
     ->setUploadUrl('#')
+    ->enableShowNoThumbContainer()
 ;
 
 $imageBlock = (new FormViewBlock('image'))
