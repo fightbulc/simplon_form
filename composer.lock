@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "000466e26b279160eeca237a7bc9f7d5",
+    "content-hash": "d63e09fe4cbda256c320031754a4c077",
     "packages": [
         {
             "name": "fightbulc/moment",
@@ -148,16 +148,16 @@
         },
         {
             "name": "simplon/component_form",
-            "version": "0.0.12",
+            "version": "0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fightbulc/simplon_component_form.git",
-                "reference": "5ff570e3358699dfcf382ce139b05a0df8ee6c30"
+                "reference": "0671bf33b45c6ee3c3bf8e2914841ff2d58c1298"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fightbulc/simplon_component_form/zipball/5ff570e3358699dfcf382ce139b05a0df8ee6c30",
-                "reference": "5ff570e3358699dfcf382ce139b05a0df8ee6c30",
+                "url": "https://api.github.com/repos/fightbulc/simplon_component_form/zipball/0671bf33b45c6ee3c3bf8e2914841ff2d58c1298",
+                "reference": "0671bf33b45c6ee3c3bf8e2914841ff2d58c1298",
                 "shasum": ""
             },
             "require": {
@@ -186,20 +186,20 @@
                 }
             ],
             "description": "Assets required for simplon/form",
-            "time": "2017-02-27T17:39:11+00:00"
+            "time": "2017-04-11T11:53:55+00:00"
         },
         {
             "name": "simplon/component_semanticui",
-            "version": "0.0.17",
+            "version": "0.0.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fightbulc/simplon_component_semanticui.git",
-                "reference": "9ea86ea9685eac22f2995d080d20a813c788bb0f"
+                "reference": "3e2ff0e73244c9eaa6957aa9694fce8afd721ad8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fightbulc/simplon_component_semanticui/zipball/9ea86ea9685eac22f2995d080d20a813c788bb0f",
-                "reference": "9ea86ea9685eac22f2995d080d20a813c788bb0f",
+                "url": "https://api.github.com/repos/fightbulc/simplon_component_semanticui/zipball/3e2ff0e73244c9eaa6957aa9694fce8afd721ad8",
+                "reference": "3e2ff0e73244c9eaa6957aa9694fce8afd721ad8",
                 "shasum": ""
             },
             "require": {
@@ -368,7 +368,11 @@
                         "semantic-ui/2.2.x/semantic.css",
                         "semantic-ui/2.2.x/semantic.min.css",
                         "semantic-ui/2.2.x/semantic.js",
-                        "semantic-ui/2.2.x/semantic.min.js"
+                        "semantic-ui/2.2.x/semantic.min.js",
+                        "semantic-calendar/0.0.x/calendar.css",
+                        "semantic-calendar/0.0.x/calendar.min.css",
+                        "semantic-calendar/0.0.x/calendar.js",
+                        "semantic-calendar/0.0.x/calendar.min.js"
                     ]
                 }
             },
@@ -383,7 +387,7 @@
             ],
             "description": "Semantic empowers designers and developers by creating a shared vocabulary for UI.",
             "homepage": "http://www.semantic-ui.com",
-            "time": "2017-02-23T17:16:03+00:00"
+            "time": "2017-03-21T20:07:24+00:00"
         },
         {
             "name": "simplon/components",
@@ -478,16 +482,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v3.2.4",
+            "version": "v3.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "0ab87c1e7570b3534a6e51eb4ca8e9f6d7327856"
+                "reference": "57fdaa55827ae14d617550ebe71a820f0a5e2282"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/0ab87c1e7570b3534a6e51eb4ca8e9f6d7327856",
-                "reference": "0ab87c1e7570b3534a6e51eb4ca8e9f6d7327856",
+                "url": "https://api.github.com/repos/symfony/process/zipball/57fdaa55827ae14d617550ebe71a820f0a5e2282",
+                "reference": "57fdaa55827ae14d617550ebe71a820f0a5e2282",
                 "shasum": ""
             },
             "require": {
@@ -523,7 +527,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2017-02-16T14:07:22+00:00"
+            "time": "2017-03-27T18:07:02+00:00"
         }
     ],
     "packages-dev": [],
