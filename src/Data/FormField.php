@@ -3,6 +3,7 @@
 namespace Simplon\Form\Data;
 
 use Simplon\Form\Data\Filters\FilterInterface;
+use Simplon\Form\Data\Filters\TrimFilter;
 use Simplon\Form\Data\Rules\FieldDependencyRule;
 use Simplon\Form\Data\Rules\IfFilledRule;
 use Simplon\Form\Data\Rules\RuleInterface;
@@ -49,12 +50,20 @@ class FormField
 
     /**
      * @param string $id
+     * @param bool $setTrimFilter
      *
      * @throws FormError
      */
-    public function __construct(string $id)
+    public function __construct(string $id, bool $setTrimFilter = true)
     {
         $this->setId($id);
+
+        // most of the fields will need this so let's make it default
+
+        if ($setTrimFilter)
+        {
+            $this->addFilter(new TrimFilter());
+        }
     }
 
     /**
