@@ -3,7 +3,7 @@
 namespace Simplon\Form;
 
 use Simplon\Form\Data\FormField;
-use Simplon\Form\Data\Rules\RuleException;
+use Simplon\Form\Data\RuleException;
 use Simplon\Form\Security\Csrf;
 
 /**

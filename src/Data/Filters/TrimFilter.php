@@ -2,6 +2,8 @@
 
 namespace Simplon\Form\Data\Filters;
 
+use Simplon\Form\Data\FilterInterface;
+
 /**
  * TrimFilter
  * @package Simplon\Form\Filters

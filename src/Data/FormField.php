@@ -2,11 +2,9 @@
 
 namespace Simplon\Form\Data;
 
-use Simplon\Form\Data\Filters\FilterInterface;
 use Simplon\Form\Data\Filters\TrimFilter;
 use Simplon\Form\Data\Rules\FieldDependencyRule;
 use Simplon\Form\Data\Rules\IfFilledRule;
-use Simplon\Form\Data\Rules\RuleInterface;
 use Simplon\Form\FormError;
 use Simplon\Form\View\Elements\Support\Meta\MetaInterface;
 

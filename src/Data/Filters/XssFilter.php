@@ -2,6 +2,8 @@
 
 namespace Simplon\Form\Data\Filters;
 
+use Simplon\Form\Data\FilterInterface;
+
 /**
  * Class XssFilter
  * @package Simplon\Form\Data\Filters

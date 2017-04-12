@@ -1,11 +1,9 @@
 <?php
 
-namespace Simplon\Form\Data\Rules;
-
-use Simplon\Form\Data\FormField;
+namespace Simplon\Form\Data;
 
 /**
- * @package Simplon\Form\Data\Rules
+ * @package Simplon\Form\Data
  */
 interface RuleInterface
 {

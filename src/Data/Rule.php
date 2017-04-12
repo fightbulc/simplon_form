@@ -1,9 +1,9 @@
 <?php
 
-namespace Simplon\Form\Data\Rules;
+namespace Simplon\Form\Data;
 
 /**
- * @package Simplon\Form\Data\Rules
+ * @package Simplon\Form\Data
  */
 abstract class Rule implements RuleInterface
 {
