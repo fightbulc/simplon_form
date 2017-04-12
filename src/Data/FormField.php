@@ -176,7 +176,7 @@ class FormField
      */
     public function addFilter(FilterInterface $filter): self
     {
-        $this->filters[] = $filter;
+        $this->filters[get_class($filter)] = $filter;
 
         return $this;
     }
@@ -243,7 +243,7 @@ class FormField
      */
     public function addRule(RuleInterface $rule): self
     {
-        $this->rules[] = $rule;
+        $this->rules[get_class($rule)] = $rule;
         $this->arrangedRules = false;
 
         return $this;
@@ -350,6 +350,7 @@ class FormField
         foreach ($rules as $rule)
         {
             // needs to be on top because other rules might throw an exception
+
             if ($rule instanceof FieldDependencyRule)
             {
                 array_unshift($arranged, $rule);
