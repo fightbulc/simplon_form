@@ -9,8 +9,10 @@
 1.2 [Validation](#12-validation)  
 1.3 [View](#13-view)  
 2. [__Fields__](#2-fields)  
-2.1 [Rules](#21-rules)  
-2.2 [Filters](#22-filters)  
+2.1 [General fields](#21-general-fields)  
+2.2 [Fields with options](#22-fields-with-options)  
+2.3 [Rules](#23-rules)  
+2.4 [Filters](#24-filters)  
 3. [__View elements__](#3-view-elements)  
 3.1 [Input text](#31-input-text)  
 4. [__Examples__](#4-examples)  
@@ -24,21 +26,23 @@
 
 In order to validate data we need to create at least one field which can hold any number of rules to define its validity. A field can also hold any number of filters which will be applied to the field value.
 
-### A field example
+### Some field examples
 
 ```php
 //
 // easiest setup
 //
 
-(new FormFields())->add(new FormField('email'));
+(new FormFields())->add(
+	new FormField('email')
+);
 
 //
-// let's trim our field value
+// we can add filters
 //
 
 (new FormFields())->add(
-	(new FormField('email'))->addFilter(new TrimFilter())
+	(new FormField('email'))->addFilter(new CaseLowerFilter())
 );
 
 //
@@ -46,9 +50,7 @@ In order to validate data we need to create at least one field which can hold an
 // 
 
 (new FormFields())->add(
-	(new FormField('email'))
-		->addFilter(new TrimFilter())
-		->addRule(new EmailRule())
+	(new FormField('email')->addRule(new EmailRule())
 );
 ```
 
@@ -62,9 +64,7 @@ We can pre-poluate our fields with data we already have - not `request` data:
 //
 
 $fields = (new FormFields())->add(
-	(new FormField('email'))
-		->addFilter(new TrimFilter())
-		->addRule(new EmailRule())
+	(new FormField('email'))->addRule(new EmailRule())
 );
 
 //
@@ -104,13 +104,11 @@ $requestData = [
 $fields = new FormFields();
 
 $fields->add(
-	(new FormField('name'))->addFilter(new TrimFilter())
+	new FormField('name')
 );
 
 $fields->add(
-	(new FormField('email'))
-		->addFilter(new TrimFilter())
-		->addRule(new EmailRule())
+	(new FormField('email'))->addRule(new EmailRule())
 );
 
 //
@@ -176,7 +174,7 @@ $block = (new FormViewBlock('default')) // set block ID to default
 // set view
 //
 
-$view = (new FormView())->addBlock($block);
+$formView = (new FormView())->addBlock($block);
 ```
 
 We could set much more options but that should do it for now. Let's pass on our view to a template.
@@ -185,7 +183,7 @@ For the following example we assume that we have access to the `$view` variable.
 ```php
 <?php
 /**
- * @var FormView $view
+ * @var FormView $formView
  */
 use Simplon\Form\View\FormView;
 
@@ -199,8 +197,8 @@ use Simplon\Form\View\FormView;
 
     <title>simplon/form</title>
 
-    <link href="../../assets/vendor/semantic-ui/2.2.x/semantic.min.css" rel="stylesheet">
-    <link href="../../assets/vendor/simplon-form/base.min.css" rel="stylesheet">
+    <link href="/assets/vendor/semantic-ui/2.2.x/semantic.min.css" rel="stylesheet">
+    <link href="/assets/vendor/simplon-form/base.min.css" rel="stylesheet">
 
     <style type="text/css">
         body {
@@ -211,18 +209,18 @@ use Simplon\Form\View\FormView;
 </head>
 <body>
     <div class="ui container">
-        <?= $view->render(__DIR__ . '/form.phtml') ?>
+        <?= $formView->render(__DIR__ . '/form.phtml') ?>
     </div>
 
-    <script src="../../assets/vendor/jquery/3.1.x/jquery.min.js"></script>
-    <script src="../../assets/vendor/semantic-ui/2.2.x/semantic.min.js"></script>
-    <script src="../../assets/vendor/simplon-form/base.min.js"></script>
+    <script src="/assets/vendor/jquery/3.1.x/jquery.min.js"></script>
+    <script src="/assets/vendor/semantic-ui/2.2.x/semantic.min.js"></script>
+    <script src="/assets/vendor/simplon-form/base.min.js"></script>
 
-    <?= $view->renderFieldAssets() ?>
+    <?= $formView->renderFieldAssets() ?>
 </body>
 </html>
 ```
-We separate our main template from the actual form template so that we can automatically render the required `<form></form>` tags with all required attributes at the beginning and the end of the template. We also inject the `$view` instance as `$formView` variable.
+We separate our main template from the actual form template so that we can automatically render the required `<form></form>` tags with all required attributes at the beginning and the end of the template. We also inject the `FormView` instance as `$formView` variable.
 
 ```php
 <?php
@@ -253,6 +251,137 @@ Any validation errors would be rendered on top of the template. After this follo
 -------------------------------------------------
 
 # 2. Fields
+
+Fields are an abstraction of your data and are by design very generic. The goal was that fields should work with incoming API requests as well as with the usual html forms.
+
+## 2.1. General fields
+
+Most of the fields simply require one rule and a filter. These would be most commonly `RequiredRule` and the `TrimFilter`. The latter comes already by default. What you definitely need is a `field-id` which needs to be passed on with the constructor.
+
+```php
+$field = (new FormField('name'))->addRule(new RequiredRule()) // required field with ID "name"
+```
+
+## 2.2. Fields with options
+
+You might have fields which accept only a given set of values. In that case you can add `options` as meta data to the field. Classic example would be an address field or a country selection.
+
+```php
+$options = (new OptionsMeta())
+	->add('DE', 'Germany')
+	->add('FR', 'France')
+	->add('US', 'United States')
+	;
+	
+$field = (new FormField('shipping-to'))
+	->addMeta($options)
+	->addRule(new RequiredRule())
+	;
+```
+
+## 2.3. Rules
+
+There are a couple of common rules which we used so for all our form requirements. You can find them below. However, if you are in need to have some more rules it's very easy to add/extend rules. Just take a look at one of the existing rules to see how to do that.
+ 
+### RequiredRule
+
+Mark a field to be required.
+
+```php
+(new FormField('name'))->addRule(new RequiredRule())
+```
+
+### UrlRule
+
+Make sure that the field's value validates against a URL format.
+
+```php
+(new FormField('website'))->addRule(new UrlRule())
+```
+
+### EmailRule
+
+Make sure that the field's value validates against an email format.
+
+```php
+(new FormField('email'))->addRule(new EmailRule())
+```
+
+### ExactLengthRule
+
+Make sure that the field's value validates against an exact length.
+
+```php
+(new FormField('photos'))->addRule(new ExactLengthRule(5))
+```
+
+### MaxLengthRule
+
+Make sure that the field's value validates against a maximum length.
+
+```php
+(new FormField('photos'))->addRule(new MaxLengthRule(5))
+```
+
+### MinLengthRule
+
+Make sure that the field's value validates against a minimum length.
+
+```php
+(new FormField('photos'))->addRule(new MinLengthRule(1))
+```
+
+### CallbackRule
+
+Sometimes you need to run a check against the database or maybe to a cross-reference with some other fields. 
+In that case this rule comes in handy. It lets you handle the validation and requires only the return of a boolean value to determine if the value is valid. We use it e.g. to make sure that the given email address is unique before we accept a new user registration.
+
+First parameter takes the `callback` and the second parameter is an optional `error message`.
+
+```php
+$callback = function(FormField $field)
+{
+	$model = $this->db->read(['email' => $field->getValue()]);
+
+	return $model === null;
+};
+
+(new FormField('email'))->addRule(new CallbackRule($callback, 'Email address exists already'))
+```
+
+### IfFilledRule
+
+Sometimes we have optional fields which should only validate against a set of rules if they have a value.
+For this case we have this rule in place.
+
+```php
+(new FormField('email'))->addRule(new IfFilledRule([new EmailRule()])
+```
+
+### FieldDependencyRule
+
+This rules lets you add rules to another field. Imagine that your actual field is an optional one and only if filled you want to validate some other fields.
+
+```php
+$email = new FormField('email');
+
+$depRule = new FieldDependencyRule($email, [new EmailRule()]);
+
+(new FormField('newsletter'))->addRule(new IfFilledRule([$depRule]))
+```
+
+### WithinOptionsRule
+
+
+## 2.4. Filters
+
+### CaseLowFilter
+### CaseTitleFilter
+### CaseUpperFilter
+### TrimFilter
+### TrimLeftFilter
+### TrimRightFilter
+### XssFilter
 
 -------------------------------------------------
 
