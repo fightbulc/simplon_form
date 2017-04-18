@@ -13,8 +13,10 @@
 2.2 [Fields with options](#22-fields-with-options)  
 2.3 [Rules](#23-rules)  
 2.4 [Filters](#24-filters)  
-3. [__View elements__](#3-view-elements)  
-3.1 [Input text](#31-input-text)  
+3. [__View__](#3-view)  
+3.1 [Simple example](#31-simple-example)  
+3.2 [Blocks & Rows](#32-blocks-rows)  
+3.3 [Elements](#33-elements)  
 4. [__Examples__](#4-examples)  
 4.1 [Place search](#41-place-search)  
 
@@ -464,19 +466,492 @@ Use this filter to avoid [XSS](https://en.wikipedia.org/wiki/Cross-site_scriptin
 // "A comment <script>...</script>" --> "A comment"
 ```
 
-# 3. View elements
+# 3. View
+
+A view helps you to collect your fields in a structured way and to render them to display your form.
+
+## 3.1. Simple example
+
+For this example we would like to create a form for entering an email address. Remember that html structure is build on top of Semantic-UI's grid and widgets.
+
+### Code
+
+```php
+//
+// fields
+//
+
+$emailId = 'email';
+
+$fields = (new FormFields())->add(
+	(new FormField($emailId))->addRule(new EmailRule())
+);
+
+//
+// validation
+//
+
+$validator = (new FormValidator($_POST))->addFields($fields)->validate();
+
+if ($validator->hasBeenSubmitted())
+{
+	// do something when form is OK
+}
+
+//
+// build view
+//
+
+$view = (new FormView())->addElement(
+	(new InputTextElement($fields->get($emailId)))->setLabel('Email address')
+);
+
+//
+// render view
+// https://github.com/fightbulc/simplon_phtml
+// 
+
+echo (new Phtml())->render('page.phtml', ['formView' => $view]);
+```
+
+### Page template
+
+```php	
+/**
+ * @var FormView $formView
+ */
+use Simplon\Form\View\FormView;
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>simplon/form</title>
+
+    <link href="/assets/vendor/semantic-ui/2.2.x/semantic.min.css" rel="stylesheet">
+    <link href="/assets/vendor/simplon-form/base.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="ui container">
+        <?= $formView->render('form.phtml') ?>
+    </div>
+
+    <script src="/assets/vendor/jquery/3.1.x/jquery.min.js"></script>
+    <script src="/assets/vendor/semantic-ui/2.2.x/semantic.min.js"></script>
+    <script src="/assets/vendor/simplon-form/base.min.js"></script>
+
+    <?= $formView->renderFieldAssets() ?>
+</body>
+</html>
+```
+
+### Form template
+
+```php	
+/**
+ * @var FormView $formView
+ */
+use Simplon\Form\View\FormView;
+
+?>
+
+<?php if ($formView->hasErrors()): ?>
+    <div class="ui basic segment">
+        <?= $formView->renderErrorMessage() ?>
+    </div>
+<?php endif ?>
+
+<div class="ui basic segment">
+    <?= $formView->getElement('email')->renderElement() ?>
+</div>
+
+<div class="ui basic segment">
+    <?= $formView->getSubmitElement()->renderElement() ?>
+</div>
+```
+
+## 3.2. Blocks & Rows
+
+In the prior example we built our view by adding the email element directly to our view. Blocks and rows help us to automatically arrange our elements with ease.
+
+### Blocks
+
+Blocks are directly added to your view and hold a unique ID which is needed to reference them later in your template. You can add as many block as you wish.
+
+```php
+$block = new FormViewBlock('foo');
+
+(new FormView())->addBlock($block);
+```
+
+### Rows
+
+Rows are added to your blocks and hold your elements. A row structures your elements in columns. There is no row limit for your blocks. Let's continue the blocks example:
+
+```php
+$block = new FormViewBlock('foo');
+
+$someElement = ... ; // some element
+
+$block->addRow(
+	(new FormViewRow())->autoColumns($someElement) // takes up all columns
+);
+
+(new FormView())->addBlock($block);
+```
+
+You can see that we are using `autoColumns()` for setting our element. This means that the element will take as much space as is available for this row. For instance if we would have set second element for this row both elements would take 50% of the row's width.
+
+```php
+// before
+
+// all auto columns
+
+$block->addRow(
+	(new FormViewRow())
+		->autoColumns($someElement) // takes up half of all columns
+		->autoColumns($someOtherElement) // takes up half of all columns
+);
+
+// after
+```
+
+It is also possible to set a specific width for each element respectively to combine `auto-width` with a `specific-width`.
+
+
+```php
+// before
+
+// two rows with mixed width specifications
+
+$block
+	->addRow(
+		(new FormViewRow())
+			->threeColumns($someElement) // takes up 3 columns
+			->autoColumns($someOtherElement) // takes everything what is left (13 columns)
+	)
+	->addRow(
+		(new FormViewRow())
+			->tenColumns($someElement) // takes up 10 columns
+			->sixColumns($someOtherElement) // takes up 6 columns
+	)
+;
+
+// after
+```
+
+## 3.3. Elements
+
+Most of the elements require a `FormField` in order to be build. The following elements come delivered with your simplon\form release. You can always build your own elements which should inherit the abstract `Element` class.
+
+### InputTextElement
+
+This builds a single-line text field.
+
+```php
+$element = new InputTextElement(
+	new FormField('name')
+);
+
+$element
+	->setLabel('Your name')
+	->setPlaceholder('Enter your name ...')
+	->setDescription('Name is needed so that we can address your properly')
+	;
+	
+// attach to FormView ...
+```
+
+### InputPasswordElement
+
+This builds a single-line password field. This field inherits from `InputTextElement`.
+
+```php
+$element = new InputPasswordElement(
+	new FormField('password')
+);
+
+$element
+	->setLabel('Your password')
+	->setPlaceholder('Enter your password ...')
+	->setDescription('Needed so that you can login')
+	;
+
+// attach to FormView ...
+```
+
+### InputHiddenElement
+
+This builds a hidden field. This field inherits from `InputTextElement`.
+
+```php
+$element = new InputHiddenElement(
+	new FormField('counter')
+);
+
+// attach to FormView ...
+```
+
+### TextareaElement
+
+This builds a multi-line text field.
+
+```php
+$element = new TextareaElement(
+	new FormField('comment')
+);
+
+$element
+	->setLabel('Your comment')
+	->setPlaceholder('Enter your comment ...')
+	->setRows(10) // determines rows-height; default is 4
+	;
+	
+// attach to FormView ...
+```
+
 
 ### CheckboxElement
-### DateCalendarElement
-### DateListElement
-### DropDownApiElement
+
+We use checkbox elements for fields which offer one or more options to choose from - but in general only a few options. It requires at least one option. If any option has been selected you will receive an array of the selected options.
+
+```php
+$options = (new OptionsMeta())->add('yes', 'I herewith confirm ...');
+
+$confirmElement = new CheckboxElement(
+	(new FormField('confirm'))->addMeta($options)
+);
+
+// attach to FormView ...
+
+// [ ] I herwith confirm ...
+```
+
+Example for multiple values. We only need to add more options. Also, notice that it's sufficient to define a value for each our options. The value will be used for the label.
+
+```php
+$options = (new OptionsMeta())
+	->add('Magazines')
+	->add('Books')
+	->add('Newspapers')
+	;
+
+$confirmElement = new CheckboxElement(
+	(new FormField('reading'))->addMeta($options)
+);
+
+// attach to FormView ...
+
+// [ ] Magazines
+// [ ] Books
+// [ ] Newspapers
+```
+
+### RadioElement
+
+We use radio elements for fields which offer only a few options but where we require only one selection. Your selected option will be Note that it's sufficient to define a value for each our options. The value will be used for the label.
+
+```php
+$options = (new OptionsMeta())
+	->add('Magazines')
+	->add('Books')
+	->add('Newspapers')
+	;
+
+$confirmElement = new RadioElement(
+	(new FormField('reading'))->addMeta($options)
+);
+
+// attach to FormView ...
+
+// ( ) Magazines
+// ( ) Books
+// ( ) Newspapers
+```
+
+### SubmitElement
+
+This builds a submit button which can be added to your `FormView`. It does not require any field but you may set a button label and add css classes.
+
+```php
+$element = new SubmitElement('Save data', ['foo-class', 'bar-class']); // values are optional
+	
+// attach to FormView ...
+```
+
 ### DropDownElement
-### CheckboxElement
-### CheckboxElement
-### CheckboxElement
-### CheckboxElement
-### CheckboxElement
-### CheckboxElement
+
+We use drop-down elements for fields which offer one or more options to choose from. It requires at least one option. If any option has been selected you will receive it as a string within your request data. Multiple selections are passed on as string separated with commas.
+
+Drop-down elements can either accept one- or multiple-selected options. We are also able to add new options on the fly. Further, we are able to filter through all options.
+
+```php
+$options = (new OptionsMeta())
+	->add('DE', 'Germany')
+	->add('FR', 'France')
+	->add('US', 'United States')
+	->add('...')
+	->add('...')
+	->add('...')
+	;
+
+$element = new DropDownElement(
+	(new FormField('countries'))->addMeta($options)
+);
+
+$element
+	->setLabel('City')
+	->setDescription('Search for a city')
+	->enableMultiple()		// allows selection of multiple options
+	->enableSearchable()	// lets user search over options
+	->enableAdditions()		// lets user add new options
+;
+
+// attach to FormView ...
+```
+
+### TimeListElement
+
+This element renders a drop-down with time options in the given minute interval. This field inherits from `DropDownElement`.
+
+```php
+$element = new TimeListElement(
+	new FormField('time')
+);
+
+$element
+	->setInterval(30) 	// build time options with 30 minutes interval
+	->enableNone() 		// add "none" option
+	;
+
+// attach to FormView	
+
+// - None
+// - 00:00
+// - 00:30
+// - 01:00
+// - 01:30
+// - ...
+// - ...
+// - ...
+```
+
+### DateListElement
+
+This element renders a drop-down with date options starting from a given start date for a set number of days. This field inherits from `DropDownElement`.
+
+```php
+$element = new DateListElement(
+	new FormField('date')
+);
+
+$element
+	->setFormatOptionLabel('D, d.m.Y') 	// label for each option; e.g. Sat, 01.04.2017
+	->setFormatOptionValue('Y-m-d') 	// value for each option; e.g. 2017-04-01
+	->setStartingDate('2017-04-01') 	// set starting date; YYYY-MM-DD or unix time stamp
+	->setDays(7) 						// build date options for n days from given start date
+	->enableNone() 						// add "none" option
+	;
+
+// attach to FormView	
+
+// - None
+// - Sat, 01.04.2017
+// - Sun, 02.04.2017
+// - Mon, 03.04.2017
+// - Tues, 04.04.2017
+// - ...
+// - ...
+// - ...
+```
+
+### DateCalendarElement
+
+We can also implement a proper calendar which is build on top of a [calendar extension](https://github.com/mdehoog/Semantic-UI-Calendar) for Semantic-UI. [Here](https://jsbin.com/ruqakehefa/1/edit?html,js,output)  are a couple of the look & feel of this extension. We are also making use of [momentjs](https://github.com/moment/moment/) for rendering the actual dates while respecting locale information.
+
+```php
+$element = new DateCalendarElement(
+	new FormField('date')
+);
+
+$calendar
+	->setLabel('Date')
+	->dateOnly() 					// only show dates
+	->setDateFormat('DD/MM/YYYY') 	// format of the selected date; e.g. 01/04/2017
+
+// attach to FormView	
+```
+
+__Date/Time options:__ You can see that there is an option `dateOnly()` which limits the calendar to let the user only select a date. By default the user is asked for a date/time combination. Related options are:
+
+- `timeOnly()`
+- `monthOnly()`
+- `yearOnly()`
+
+__Format options:__ Next to `setDateFormat()` there are also the following format options: `setTimeFormat()` and `setDateTimeFormat()`.
+
+__Defining a range:__ It is also possible to two have two calendars being directly related so that the user can define a specific date range:
+
+```php
+//
+// start date range
+//
+
+$startDateElement = (new DateCalendarElement(new FormField('startDate')))
+	->setLabel('Start date')
+	->dateOnly()
+	->setDateFormat('DD/MM/YYYY')
+	;
+
+//
+// end date range
+//
+
+$endDateElement = new DateCalendarElement(
+	new FormField('endDate'),
+	$startDateElement // pass in related DateCalendarElement instance
+);
+
+$endDateElement
+	->setLabel('End date')
+	->dateOnly()
+	->setDateFormat('DD/MM/YYYY')
+	;
+```
+
+### DropDownApiElement
+
+This element enables you to send a search request against a defined API and to display its results. This can work with any API since handling the response is up to you. Out of the box we support [Algolia place search](https://community.algolia.com/places/) and [Semantic-UI's API response handling]().
+
+```php
+$jsOptions = (new AlgoliaPlacesApiJs())
+	->setType(AlgoliaPlacesApiJs::TYPE_CITY)
+	;
+
+$cityElement = new DropDownApiElement(new FormField('city'), $jsOptions);
+
+$cityElement
+	->enableMultiple()
+	->setLabel('City')
+	->setDescription('Search for a city')
+	;
+```
+
+### ImageUploadElement
+
+This element handles the client side of an image upload for you.
+
+```php
+$imageElement = new ImageUploadElement(new FormField('urlImage'));
+
+$imageElement
+    ->setUploadUrl('/upload/images') // URL which will receive a POST file upload request
+    ;
+```
 
 -------------------------------------------------
 
