@@ -25,11 +25,11 @@ class DateListElement extends DropDownElement
     /**
      * @var string
      */
-    private $fieldMetaFormatValue = 'Y-m-d';
+    private $formatOptionValue = 'Y-m-d';
     /**
      * @var string
      */
-    private $fieldMetaFormatLabel = 'D, d.m.Y';
+    private $formatOptionLabel = 'D, d.m.Y';
 
     /**
      * @return bool
@@ -40,13 +40,11 @@ class DateListElement extends DropDownElement
     }
 
     /**
-     * @param boolean $isNone
-     *
      * @return DateListElement
      */
-    public function isNone(bool $isNone): self
+    public function enableNone(): self
     {
-        $this->isNone = $isNone === true;
+        $this->isNone = true;
 
         return $this;
     }
@@ -92,6 +90,30 @@ class DateListElement extends DropDownElement
     }
 
     /**
+     * @param string $formatOptionValue
+     *
+     * @return DateListElement
+     */
+    public function setFormatOptionValue(string $formatOptionValue): DateListElement
+    {
+        $this->formatOptionValue = $formatOptionValue;
+
+        return $this;
+    }
+
+    /**
+     * @param string $formatOptionLabel
+     *
+     * @return DateListElement
+     */
+    public function setFormatOptionLabel(string $formatOptionLabel): DateListElement
+    {
+        $this->formatOptionLabel = $formatOptionLabel;
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     protected function hasOptions(): bool
@@ -121,8 +143,8 @@ class DateListElement extends DropDownElement
         for ($d = 0; $d < $this->getDays(); $d++)
         {
             $options[] = [
-                'value' => $moment->format($this->getFormatValue()),
-                'label' => $moment->format($this->getFormatLabel()),
+                'value' => $moment->format($this->getFormatOptionValue()),
+                'label' => $moment->format($this->getFormatOptionLabel()),
             ];
 
             $moment->addDays(1);
@@ -168,56 +190,18 @@ class DateListElement extends DropDownElement
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    private function getMetaFormat(): ?string
+    private function getFormatOptionValue(): string
     {
-        return $this->getField()->getMeta('format');
+        return $this->formatOptionValue;
     }
 
     /**
      * @return string
      */
-    private function getFormatValue(): string
+    private function getFormatOptionLabel(): string
     {
-        $format = $this->getFieldMetaFormatValue();
-
-        if ($this->getMetaFormat() && empty($this->getMetaFormat()['value']) === false)
-        {
-            $format = $this->getMetaFormat()['value'];
-        }
-
-        return $format;
-    }
-
-    /**
-     * @return string
-     */
-    private function getFormatLabel(): string
-    {
-        $format = $this->getFieldMetaFormatLabel();
-
-        if ($this->getMetaFormat() && empty($this->getMetaFormat()['label']) === false)
-        {
-            $format = $this->getMetaFormat()['label'];
-        }
-
-        return $format;
-    }
-
-    /**
-     * @return string
-     */
-    private function getFieldMetaFormatValue(): string
-    {
-        return $this->fieldMetaFormatValue;
-    }
-
-    /**
-     * @return string
-     */
-    private function getFieldMetaFormatLabel(): string
-    {
-        return $this->fieldMetaFormatLabel;
+        return $this->formatOptionLabel;
     }
 }

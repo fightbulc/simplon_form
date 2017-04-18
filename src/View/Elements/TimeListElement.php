@@ -45,13 +45,11 @@ class TimeListElement extends DropDownElement
     }
 
     /**
-     * @param bool $isNone
-     *
      * @return TimeListElement
      */
-    public function isNone(bool $isNone): self
+    public function enableNone(): self
     {
-        $this->isNone = $isNone === true;
+        $this->isNone = true;
 
         return $this;
     }
