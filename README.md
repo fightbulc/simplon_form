@@ -248,8 +248,6 @@ use Simplon\Form\View\FormView;
 
 Any validation errors would be rendered on top of the template. After this follows our defined block with the ID `default`. This statement will render both of your fields next to each other with equal spacing. At the end you can place your `Submit element` which comes in our example as an automatically set element. You can also define this field yourself.
 
--------------------------------------------------
-
 # 2. Fields
 
 Fields are an abstraction of your data and are by design very generic. The goal was that fields should work with incoming API requests as well as with the usual html forms.
@@ -372,18 +370,99 @@ $depRule = new FieldDependencyRule($email, [new EmailRule()]);
 
 ### WithinOptionsRule
 
+Semantic-UI's drop-down field saves its selection in a hidden field. For multi-selection fields the selected values will be separated by a comma within that hidden field. To make sure that the submitted values still match your given options we can make use of `WithinOptionsRule`.
+
+```php
+$options = (new OptionsMeta())
+	->add('DE', 'Germany')
+	->add('FR', 'France')
+	->add('US', 'United States')
+	;
+	
+$field = (new FormField('shipping-to'))
+	->addMeta($options)
+	->addRule(new RequiredRule())
+	->addRule(new WithinOptionsRule())
+	;
+```
 
 ## 2.4. Filters
 
+A filter is run over your submitted field values. For instance, to make sure that a textfield does not include any white space characters you can add `TrimFilter` to your field and simplon\form will make sure that your field value is cleared before processed further. Below is a list available filters but as for the rules you are able to add your own filters. Just take a look at one of the filters. Lastly, filters are combinable.
+
 ### CaseLowFilter
+
+Transform the field value to all lower-case.
+
+```php
+(new FormField('email'))->addFilter(new CaseLowFilter()); // Foo@BAR.com --> foo@bar.com
+```
+
 ### CaseTitleFilter
+
+Uppercase the first character of each word in the field's value.
+
+```php
+(new FormField('name'))->addFilter(new CaseTitleFilter()); // foo bar --> Foo Bar
+```
+
 ### CaseUpperFilter
+
+Uppercase the the complete field's value.
+
+```php
+(new FormField('name'))->addFilter(new CaseUpperFilter()); // foo bar --> FOO BAR
+```
+
 ### TrimFilter
+
+__Each field holds this filter by default.__ Strip whitespace (or other characters) from the beginning and end of the field's value.
+
+```php
+(new FormField('emai'))->addFilter(new TrimFilter()); // " foo@bar.com " --> "foo@bar.com"
+```
+
+You can override the default trimming characters by passing them through the filter's constructor:
+
+```php
+(new FormField('emai'))->addFilter(new TrimFilter("$")); // "$foo@bar.com$" --> "foo@bar.com"
+```
+
+Instead of overriding the default trimming characters you can simply add characters:
+
+```php
+(new FormField('emai'))->addFilter(
+	(new TrimFilter())->addChars("$")
+);
+
+// " foo@bar.com$" --> "foo@bar.com"
+```
+
 ### TrimLeftFilter
+
+Same as for the `TrimFilter` but only for the left-side of the field's value.
+
+```php
+(new FormField('emai'))->addFilter(new TrimLeftFilter()); // " foo@bar.com" --> "foo@bar.com"
+```
+
 ### TrimRightFilter
+
+Same as for the `TrimFilter` but only for the right-side of the field's value.
+
+```php
+(new FormField('emai'))->addFilter(new TrimRightFilter()); // "foo@bar.com " --> "foo@bar.com"
+```
+
 ### XssFilter
 
--------------------------------------------------
+Use this filter to avoid [XSS](https://en.wikipedia.org/wiki/Cross-site_scripting). The filter will try to catch and remove all html-related elements which seem to appear in your field's value.
+
+```php
+(new FormField('comment'))->addFilter(new XssFilter());
+
+// "A comment <script>...</script>" --> "A comment"
+```
 
 # 3. View elements
 
