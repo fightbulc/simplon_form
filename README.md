@@ -15,7 +15,7 @@
 2.4 [Filters](#24-filters)  
 3. [__View__](#3-view)  
 3.1 [Simple example](#31-simple-example)  
-3.2 [Blocks & Rows](#32-blocks-rows)  
+3.2 [Blocks & Rows](#32-blocks--rows)  
 3.3 [Elements](#33-elements)  
 4. [__Examples__](#4-examples)  
 4.1 [Place search](#41-place-search)  
