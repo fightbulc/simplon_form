@@ -35,7 +35,7 @@ class XssFilter implements FilterInterface
      *
      * @return string
      */
-    private function convert($value)
+    private function convert(string $value): string
     {
         $filters = [
             '\<script.*?\>'               => '', // <script...> ...
