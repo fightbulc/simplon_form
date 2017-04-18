@@ -4,7 +4,6 @@ namespace Simplon\Form\View;
 
 use Simplon\Form\FormError;
 use Simplon\Form\Security\Csrf;
-use Simplon\Form\View\Elements\ElementInterface;
 use Simplon\Form\View\Elements\SubmitElement;
 use Simplon\Phtml\Phtml;
 use Simplon\Phtml\PhtmlException;

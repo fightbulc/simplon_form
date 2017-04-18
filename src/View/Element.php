@@ -1,12 +1,11 @@
 <?php
 
-namespace Simplon\Form\View\Elements;
+namespace Simplon\Form\View;
 
 use Simplon\Form\Data\FormField;
-use Simplon\Form\View\RenderHelper;
 
 /**
- * @package Simplon\Form\View\Elements
+ * @package Simplon\Form\View
  */
 abstract class Element implements ElementInterface
 {

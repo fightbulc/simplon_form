@@ -3,7 +3,6 @@
 namespace Simplon\Form\View;
 
 use Simplon\Form\FormError;
-use Simplon\Form\View\Elements\ElementInterface;
 
 /**
  * @package Simplon\Form\View

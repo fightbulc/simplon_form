@@ -1,11 +1,11 @@
 <?php
 
-namespace Simplon\Form\View\Elements;
+namespace Simplon\Form\View;
 
 use Simplon\Form\Data\FormField;
 
 /**
- * @package Simplon\Form\View\Elements
+ * @package Simplon\Form\View
  */
 interface ElementInterface
 {

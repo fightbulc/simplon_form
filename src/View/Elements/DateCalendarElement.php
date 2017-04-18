@@ -4,6 +4,7 @@ namespace Simplon\Form\View\Elements;
 
 use Moment\Moment;
 use Simplon\Form\Data\FormField;
+use Simplon\Form\View\Element;
 use Simplon\Form\View\RenderHelper;
 
 /**
