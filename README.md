@@ -18,7 +18,6 @@
 3.2 [Blocks & Rows](#32-blocks--rows)  
 3.3 [Elements](#33-elements)  
 4. [__Examples__](#4-examples)  
-4.1 [Place search](#41-place-search)  
 
 -------------------------------------------------
 
@@ -40,19 +39,29 @@ In order to validate data we need to create at least one field which can hold an
 );
 
 //
-// we can add filters
+// another way with a filter
 //
 
 (new FormFields())->add(
-	(new FormField('email'))->addFilter(new CaseLowerFilter())
+	(new FormField('email'))->addFilter(new CaseLowerFilter()) // lower case field value
 );
 
 //
-// and let's make sure that we have an email address
+// fields can also have rules
 // 
 
 (new FormFields())->add(
-	(new FormField('email')->addRule(new EmailRule())
+	(new FormField('email')->addRule(new EmailRule()) // make sure that we get an email address
+);
+
+//
+// we can also combine these things
+// 
+
+(new FormFields())->add(
+	(new FormField('email')
+		->addRule(new EmailRule())
+		->addFilter(new CaseLowerFilter())
 );
 ```
 
@@ -73,9 +82,9 @@ $fields = (new FormFields())->add(
 // set our data
 //
 
-$fields->applyInitialData([
-	'email' => 'foo@bar.com',
-]);
+$fields->applyInitialData(
+	['email' => 'foo@bar.com']
+);
 
 //
 // testing ...
@@ -83,6 +92,14 @@ $fields->applyInitialData([
 
 $fields->get('email')->getInitialValue(); // foo@bar.com
 $fields->get('email')->getValue(); // foo@bar.com
+
+//
+// these values change if we enter for instance
+// "hello@bar.com" in our form and hit submit ...
+//
+
+$fields->get('email')->getInitialValue(); // foo@bar.com
+$fields->get('email')->getValue(); // hello@bar.com
 ```
 
 ## 1.2 Validation
@@ -180,7 +197,7 @@ $formView = (new FormView())->addBlock($block);
 ```
 
 We could set much more options but that should do it for now. Let's pass on our view to a template.
-For the following example we assume that we have access to the `$view` variable. We simply pass on a form template to the `FormView::render` method and include all `core assets`:
+For the following example we assume that we have access to the `$formView` variable. We simply pass on a form template to the `FormView::render` method and include all `core assets`:
 
 ```php
 <?php
@@ -214,7 +231,7 @@ use Simplon\Form\View\FormView;
         <?= $formView->render(__DIR__ . '/form.phtml') ?>
     </div>
 
-    <script src="/assets/vendor/jquery/3.1.x/jquery.min.js"></script>
+    <script src="/assets/vendor/jquery/3.2.x/jquery.min.js"></script>
     <script src="/assets/vendor/semantic-ui/2.2.x/semantic.min.js"></script>
     <script src="/assets/vendor/simplon-form/base.min.js"></script>
 
@@ -222,7 +239,7 @@ use Simplon\Form\View\FormView;
 </body>
 </html>
 ```
-We separate our main template from the actual form template so that we can automatically render the required `<form></form>` tags with all required attributes at the beginning and the end of the template. We also inject the `FormView` instance as `$formView` variable.
+We separate our main template from the actual form template so that we can automatically render the required `<form></form>` tags with all required attributes at the beginning and the end of the template. We also inject automatically the `FormView` instance as `$formView` variable.
 
 ```php
 <?php
@@ -249,6 +266,8 @@ use Simplon\Form\View\FormView;
 ```
 
 Any validation errors would be rendered on top of the template. After this follows our defined block with the ID `default`. This statement will render both of your fields next to each other with equal spacing. At the end you can place your `Submit element` which comes in our example as an automatically set element. You can also define this field yourself.
+
+-------------------------------------------------
 
 # 2. Fields
 
@@ -466,6 +485,8 @@ Use this filter to avoid [XSS](https://en.wikipedia.org/wiki/Cross-site_scriptin
 // "A comment <script>...</script>" --> "A comment"
 ```
 
+-------------------------------------------------
+
 # 3. View
 
 A view helps you to collect your fields in a structured way and to render them to display your form.
@@ -540,7 +561,7 @@ use Simplon\Form\View\FormView;
         <?= $formView->render('form.phtml') ?>
     </div>
 
-    <script src="/assets/vendor/jquery/3.1.x/jquery.min.js"></script>
+    <script src="/assets/vendor/jquery/3.2.x/jquery.min.js"></script>
     <script src="/assets/vendor/semantic-ui/2.2.x/semantic.min.js"></script>
     <script src="/assets/vendor/simplon-form/base.min.js"></script>
 
@@ -950,9 +971,34 @@ $imageElement = new ImageUploadElement(new FormField('urlImage'));
 
 $imageElement
     ->setUploadUrl('/upload/images') // URL which will receive a POST file upload request
+    ->setThumbContainer('#thumb')	 // thumb container in your template
     ;
+```
+
+Following a snippet which shows an example of an implementation of an ImageUploadElement. Notice the `thumb container`: you have total freedom in how you want to design your forms hence you need to place your thumb container manually within your template.
+
+```php
+<div class="ui basic segment">
+    <h3>Image</h3>
+    <?= $formView->getBlock('image')->render() ?>
+    <div id="thumb"></div>
+</div>
+```
+
+The POST request which sends the image data to the defined `upload url` is send as `photo` and can be read for instance via [ServerRequestInterface::getUploadFiles()](https://github.com/php-fig/http-message/blob/master/src/ServerRequestInterface.php). See the following example:
+
+```php
+$request = ServerRequestFactory::fromGlobals();
+
+/** @var UploadedFile $file */
+$file = $request->getUploadedFiles()['photo'];
+
+// read image data via ...
+$file->getStream()->getContents();
 ```
 
 -------------------------------------------------
 
 # 4. Examples
+
+Coming soon
