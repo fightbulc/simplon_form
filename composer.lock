@@ -190,16 +190,16 @@
         },
         {
             "name": "simplon/component_semanticui",
-            "version": "0.0.19",
+            "version": "0.0.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fightbulc/simplon_component_semanticui.git",
-                "reference": "3e2ff0e73244c9eaa6957aa9694fce8afd721ad8"
+                "reference": "f035e8350f2c2fe68b3c523fda7375df768f49db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fightbulc/simplon_component_semanticui/zipball/3e2ff0e73244c9eaa6957aa9694fce8afd721ad8",
-                "reference": "3e2ff0e73244c9eaa6957aa9694fce8afd721ad8",
+                "url": "https://api.github.com/repos/fightbulc/simplon_component_semanticui/zipball/f035e8350f2c2fe68b3c523fda7375df768f49db",
+                "reference": "f035e8350f2c2fe68b3c523fda7375df768f49db",
                 "shasum": ""
             },
             "require": {
@@ -209,7 +209,7 @@
             "extra": {
                 "component": {
                     "files": [
-                        "jquery/3.1.x/jquery.min.js",
+                        "jquery/3.2.x/jquery.min.js",
                         "semantic-ui/2.2.x/themes/basic/assets/fonts/icons.eot",
                         "semantic-ui/2.2.x/themes/basic/assets/fonts/icons.svg",
                         "semantic-ui/2.2.x/themes/basic/assets/fonts/icons.ttf",
@@ -387,7 +387,7 @@
             ],
             "description": "Semantic empowers designers and developers by creating a shared vocabulary for UI.",
             "homepage": "http://www.semantic-ui.com",
-            "time": "2017-03-21T20:07:24+00:00"
+            "time": "2017-04-19T12:21:58+00:00"
         },
         {
             "name": "simplon/components",
