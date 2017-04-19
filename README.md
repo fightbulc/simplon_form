@@ -1,5 +1,14 @@
-# Simplon/Forms
+<pre>
+     _                 _                __                          
+ ___(_)_ __ ___  _ __ | | ___  _ __    / _| ___  _ __ _ __ ___  ___ 
+/ __| | '_ ` _ \| '_ \| |/ _ \| '_ \  | |_ / _ \| '__| '_ ` _ \/ __|
+\__ \ | | | | | | |_) | | (_) | | | | |  _| (_) | |  | | | | | \__ \
+|___/_|_| |_| |_| .__/|_|\___/|_| |_| |_|  \___/|_|  |_| |_| |_|___/
+                |_|                                                 
+</pre>
 
+# Simplon/Forms
+                
 `Simplon/Forms` helps to validate data and, if needed, to build a form view with a couple of widgets by leveraging `Semantic-UI` library.
 
 -------------------------------------------------
