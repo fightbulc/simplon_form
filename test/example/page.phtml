@@ -14,9 +14,6 @@ use Simplon\Form\View\FormView;
 
     <title>simplon/form</title>
 
-    <link href="../../assets/vendor/semantic-ui/2.2.x/semantic.min.css" rel="stylesheet">
-    <link href="../../assets/vendor/simplon-form/base.min.css" rel="stylesheet">
-
     <style type="text/css">
         body {
             padding: 0;
@@ -29,10 +26,6 @@ use Simplon\Form\View\FormView;
         <?= $formView->render(__DIR__ . '/form.phtml') ?>
     </div>
 
-    <script src="../../assets/vendor/jquery/3.2.x/jquery.min.js"></script>
-    <script src="../../assets/vendor/semantic-ui/2.2.x/semantic.min.js"></script>
-    <script src="../../assets/vendor/simplon-form/base.min.js"></script>
-
-    <?= $formView->renderFieldAssets() ?>
+    <?= $formView->renderFieldAssets(true) ?>
 </body>
 </html>

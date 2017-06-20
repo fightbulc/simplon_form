@@ -26,7 +26,8 @@
 3.1 [Simple example](#31-simple-example)  
 3.2 [Blocks & Rows](#32-blocks--rows)  
 3.3 [Elements](#33-elements)  
-4. [__Examples__](#4-examples)  
+4. [__Cloning field blocks__](#5-cloning-field-blocks)  
+5. [__Examples__](#5-examples)  
 
 -------------------------------------------------
 
@@ -1008,6 +1009,12 @@ $file->getStream()->getContents();
 
 -------------------------------------------------
 
-# 4. Examples
+# 4. Cloning field blocks
+
+Coming soon
+
+-------------------------------------------------
+
+# 5. Examples
 
 Coming soon

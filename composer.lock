@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d63e09fe4cbda256c320031754a4c077",
+    "content-hash": "b83ab3d9edf37f0395b61f0a25fad0be",
     "packages": [
         {
             "name": "fightbulc/moment",
-            "version": "1.26.2",
+            "version": "1.26.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fightbulc/moment.php.git",
-                "reference": "68f3ddad3feca6d7aae5a333724401355661afbb"
+                "reference": "cdd7e35a03d2fe13e8d050c9526eaeea241f9b0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fightbulc/moment.php/zipball/68f3ddad3feca6d7aae5a333724401355661afbb",
-                "reference": "68f3ddad3feca6d7aae5a333724401355661afbb",
+                "url": "https://api.github.com/repos/fightbulc/moment.php/zipball/cdd7e35a03d2fe13e8d050c9526eaeea241f9b0e",
+                "reference": "cdd7e35a03d2fe13e8d050c9526eaeea241f9b0e",
                 "shasum": ""
             },
             "require": {
@@ -67,7 +67,7 @@
                 "translation",
                 "validate"
             ],
-            "time": "2017-01-19T07:57:28+00:00"
+            "time": "2017-05-15T09:09:18+00:00"
         },
         {
             "name": "kriswallsmith/assetic",
@@ -148,16 +148,16 @@
         },
         {
             "name": "simplon/component_form",
-            "version": "0.1.1",
+            "version": "0.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fightbulc/simplon_component_form.git",
-                "reference": "2625ad48e113bd657c9e64629b5c7751c4423c3d"
+                "reference": "ae126ec64ec51ea933342740a9de27c4af525e10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fightbulc/simplon_component_form/zipball/2625ad48e113bd657c9e64629b5c7751c4423c3d",
-                "reference": "2625ad48e113bd657c9e64629b5c7751c4423c3d",
+                "url": "https://api.github.com/repos/fightbulc/simplon_component_form/zipball/ae126ec64ec51ea933342740a9de27c4af525e10",
+                "reference": "ae126ec64ec51ea933342740a9de27c4af525e10",
                 "shasum": ""
             },
             "require": {
@@ -173,7 +173,10 @@
                         "momentjs/2.17.x/timezone.min.js",
                         "image-upload/bundle.min.css",
                         "image-upload/bundle.min.js",
-                        "handlebars/4.0.x/handlebars.min.js"
+                        "handlebars/4.0.x/handlebars.min.js",
+                        "uikit/3.0.x/css/uikit.min.css",
+                        "uikit/3.0.x/js/uikit.min.js",
+                        "uikit/3.0.x/js/uikit-icons.min.js"
                     ]
                 }
             },
@@ -186,7 +189,7 @@
                 }
             ],
             "description": "Assets required for simplon/form",
-            "time": "2017-04-11T12:36:27+00:00"
+            "time": "2017-06-20T09:14:33+00:00"
         },
         {
             "name": "simplon/component_semanticui",
@@ -438,6 +441,49 @@
             "time": "2015-10-19T15:57:27+00:00"
         },
         {
+            "name": "simplon/helper",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fightbulc/simplon_helper.git",
+                "reference": "0c0c03e3c59e7e00f995a6857559c1ebf2bfb2d8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fightbulc/simplon_helper/zipball/0c0c03e3c59e7e00f995a6857559c1ebf2bfb2d8",
+                "reference": "0c0c03e3c59e7e00f995a6857559c1ebf2bfb2d8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Simplon\\Helper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tino Ehrich",
+                    "email": "tino@bigpun.me",
+                    "role": "developer"
+                }
+            ],
+            "description": "Helpers for recurring requirements",
+            "homepage": "https://github.com/fightbulc/simplon_helper",
+            "keywords": [
+                "casts",
+                "passwords",
+                "tokens"
+            ],
+            "time": "2017-06-16T09:15:39+00:00"
+        },
+        {
             "name": "simplon/phtml",
             "version": "0.2.0",
             "source": {
@@ -482,16 +528,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v3.2.7",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "57fdaa55827ae14d617550ebe71a820f0a5e2282"
+                "reference": "8e30690c67aafb6c7992d6d8eb0d707807dd3eaf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/57fdaa55827ae14d617550ebe71a820f0a5e2282",
-                "reference": "57fdaa55827ae14d617550ebe71a820f0a5e2282",
+                "url": "https://api.github.com/repos/symfony/process/zipball/8e30690c67aafb6c7992d6d8eb0d707807dd3eaf",
+                "reference": "8e30690c67aafb6c7992d6d8eb0d707807dd3eaf",
                 "shasum": ""
             },
             "require": {
@@ -500,7 +546,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -527,7 +573,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2017-03-27T18:07:02+00:00"
+            "time": "2017-05-22T12:32:03+00:00"
         }
     ],
     "packages-dev": [],

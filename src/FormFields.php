@@ -9,10 +9,16 @@ use Simplon\Form\Data\FormField;
  */
 class FormFields
 {
+    const KEY_CLONE_DATA = 'clones';
+
     /**
      * @var FormField[]
      */
     private $fields = [];
+    /**
+     * @var CloneFields[]
+     */
+    private $cloneFields = [];
 
     /**
      * @param FormFields $fields
@@ -43,12 +49,18 @@ class FormFields
 
     /**
      * @param string $id
+     * @param null|string $cloneToken
      *
      * @return FormField
      * @throws FormError
      */
-    public function get(string $id): FormField
+    public function get(string $id, ?string $cloneToken = null): FormField
     {
+        if ($cloneToken)
+        {
+            $id = CloneFields::addToken($id, $cloneToken);
+        }
+
         if ($this->has($id))
         {
             return $this->fields[$id];
@@ -71,6 +83,41 @@ class FormFields
         }
 
         $this->fields[$field->getId()] = $field;
+
+        return $this;
+    }
+
+    /**
+     * @return CloneFields[]|null
+     */
+    public function getCloneFields(): ?array
+    {
+        return $this->cloneFields;
+    }
+
+    /**
+     * @param CloneFields $cloneFields
+     *
+     * @return FormFields
+     * @throws FormError
+     */
+    public function addCloneFields(CloneFields $cloneFields): self
+    {
+        $this->cloneFields[$cloneFields->getId()] = $cloneFields;
+
+        $cloneFields->detectNewFields();
+
+        foreach ($cloneFields->getBlocks() as $block)
+        {
+            /** @var FormField[] $block */
+            foreach ($block as $field)
+            {
+                $this->add($field);
+            }
+        }
+
+        // add hidden clone field
+        $this->add(new FormField($cloneFields->getChecksum()));
 
         return $this;
     }
@@ -123,10 +170,32 @@ class FormFields
     public function getAllData(): array
     {
         $result = [];
+        $cloneFields = [];
 
         foreach ($this->getAll() as $field)
         {
-            $result[$field->getId()] = $field->getValue();
+            if (CloneFields::hasToken($field->getId()))
+            {
+                $token = CloneFields::findToken($field->getId());
+                $idWithoutToken = CloneFields::removeToken($field->getId());
+                $cloneFields[$token]['ids'][] = $idWithoutToken;
+                $cloneFields[$token]['fields'][$idWithoutToken] = $field->getValue();
+            }
+            else
+            {
+                $result[$field->getId()] = $field->getValue();
+            }
+        }
+
+        if (!empty($cloneFields))
+        {
+            foreach ($cloneFields as $token => $data)
+            {
+                if ($id = $this->findCloneFieldsIdByChecksum(md5(json_encode($data['ids']))))
+                {
+                    $result[self::KEY_CLONE_DATA][$id][] = $data['fields'];
+                }
+            }
         }
 
         return $result;
@@ -139,14 +208,56 @@ class FormFields
      */
     public function applyInitialData(array $data): self
     {
+        $cloneFieldIndex = [];
+
         foreach ($this->getAll() as $field)
         {
-            if (isset($data[$field->getId()]))
+            $id = $field->getId();
+
+            if (CloneFields::hasToken($id) && !empty($data[self::KEY_CLONE_DATA]))
             {
-                $field->setInitialValue($data[$field->getId()]);
+                $idWithoutToken = CloneFields::removeToken($id);
+
+                if (!isset($cloneFieldIndex[$idWithoutToken]))
+                {
+                    $cloneFieldIndex[$idWithoutToken] = 0;
+                }
+
+                $currentFieldIndex = $cloneFieldIndex[$idWithoutToken];
+
+                if (isset($data[self::KEY_CLONE_DATA][$currentFieldIndex][$idWithoutToken]))
+                {
+                    $field->setInitialValue($data[self::KEY_CLONE_DATA][$currentFieldIndex][$idWithoutToken]);
+                    $cloneFieldIndex[$idWithoutToken]++;
+                }
+            }
+            else
+            {
+                if (isset($data[$id]))
+                {
+                    $field->setInitialValue($data[$id]);
+                }
             }
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $checksum
+     *
+     * @return null|string
+     */
+    private function findCloneFieldsIdByChecksum(string $checksum): ?string
+    {
+        foreach ($this->cloneFields as $fields)
+        {
+            if ($fields->getChecksum() === $checksum)
+            {
+                return $fields->getId();
+            }
+        }
+
+        return null;
     }
 }

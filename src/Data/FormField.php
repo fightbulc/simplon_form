@@ -73,6 +73,24 @@ class FormField
     }
 
     /**
+     * @param string $id
+     *
+     * @return FormField
+     * @throws FormError
+     */
+    public function setId(string $id): self
+    {
+        if (preg_match('/^[0-9a-zA-Z_-]+$/u', $id) === 0)
+        {
+            throw new FormError('ID "' . $id . '" has invalid characters. Please use only [a-zA-Z_-]');
+        }
+
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     public function getInitialValue()
@@ -296,24 +314,6 @@ class FormField
     public function setErrors(array $errors): self
     {
         $this->errors = $errors;
-
-        return $this;
-    }
-
-    /**
-     * @param string $id
-     *
-     * @return FormField
-     * @throws FormError
-     */
-    protected function setId(string $id): self
-    {
-        if (preg_match('/^[0-9a-zA-Z_-]+$/u', $id) === 0)
-        {
-            throw new FormError('ID "' . $id . '" has invalid characters. Please use only [a-zA-Z_-]');
-        }
-
-        $this->id = $id;
 
         return $this;
     }
