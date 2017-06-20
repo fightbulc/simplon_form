@@ -26,7 +26,10 @@
 3.1 [Simple example](#31-simple-example)  
 3.2 [Blocks & Rows](#32-blocks--rows)  
 3.3 [Elements](#33-elements)  
-4. [__Cloning field blocks__](#5-cloning-field-blocks)  
+4. [__Block fields cloning__](#4-block-fields-cloning)  
+4.1 [Building fields](#41-building-fields)  
+4.2 [Building view](#41-building-view)  
+4.3 [Building templates](#41-building-templates)  
 5. [__Examples__](#5-examples)  
 
 -------------------------------------------------
@@ -1002,7 +1005,9 @@ $file->getStream()->getContents();
 
 -------------------------------------------------
 
-# 4. Cloning field blocks
+# 4. Block fields cloning
+
+This feature gives the user the possibility to clone respectively remove field blocks dynamically. For instance, imagine you have to enter an unknown set of people addresses. In that case you have a set of `core` fields which can be cloned by a simple click so that you can enter a new address straight away until you are done entering all addresses.
 
 ## 4.1. Building fields
 
@@ -1112,7 +1117,9 @@ $view = (new FormView())
 echo (new Phtml())->render(__DIR__ . '/page.phtml', ['formView' => $view]);
 ```
 
-## 4.3 Page template
+## 4.3 Building templates
+
+### Page template
 
 ```php
 <?php
@@ -1148,7 +1155,7 @@ use Simplon\Form\View\FormView;
 </html>
 ```
 
-## 4.3 Form template
+### Form template
 
 ```php
 /**
