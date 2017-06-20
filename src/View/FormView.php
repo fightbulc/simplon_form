@@ -618,7 +618,6 @@ class FormView
         {
             $this->pageWideAssets[] = '/uikit/3.0.x/css/uikit.min.css';
             $this->pageWideAssets[] = '/uikit/3.0.x/js/uikit.min.js';
-            $this->pageWideAssets[] = '/uikit/3.0.x/js/uikit-icons.min.js';
         }
 
         if ($excludePageWide)
