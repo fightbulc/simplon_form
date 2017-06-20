@@ -2,7 +2,10 @@
 /**
  * @var FormView $formView
  */
+
+use Simplon\Form\View\CloneFormViewBlock;
 use Simplon\Form\View\FormView;
+use Simplon\Form\View\FormViewBlock;
 
 ?>
 
@@ -14,12 +17,16 @@ use Simplon\Form\View\FormView;
 
 <div class="ui basic segment">
     <h3>Default</h3>
-    <?= $formView->getBlock('default')->render() ?>
+    <?= CloneFormViewBlock::render($formView->getCloneBlocks('defaults'), function(FormViewBlock $block) {
+        return $block->render();
+    })?>
 </div>
 
 <div class="ui basic segment">
     <h3>Dates</h3>
-    <?= $formView->getBlock('dates')->render() ?>
+    <?= CloneFormViewBlock::render($formView->getCloneBlocks('dates'), function(FormViewBlock $block) {
+        return $block->render();
+    })?>
 </div>
 
 <div class="ui basic segment">

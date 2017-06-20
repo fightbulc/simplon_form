@@ -26,7 +26,11 @@
 3.1 [Simple example](#31-simple-example)  
 3.2 [Blocks & Rows](#32-blocks--rows)  
 3.3 [Elements](#33-elements)  
-4. [__Examples__](#4-examples)  
+4. [__Block fields cloning__](#4-block-fields-cloning)  
+4.1 [Building fields](#41-building-fields)  
+4.2 [Building view](#41-building-view)  
+4.3 [Building templates](#41-building-templates)  
+5. [__Examples__](#5-examples)  
 
 -------------------------------------------------
 
@@ -225,9 +229,6 @@ use Simplon\Form\View\FormView;
 
     <title>simplon/form</title>
 
-    <link href="/assets/vendor/semantic-ui/2.2.x/semantic.min.css" rel="stylesheet">
-    <link href="/assets/vendor/simplon-form/base.min.css" rel="stylesheet">
-
     <style type="text/css">
         body {
             padding: 0;
@@ -239,10 +240,6 @@ use Simplon\Form\View\FormView;
     <div class="ui container">
         <?= $formView->render(__DIR__ . '/form.phtml') ?>
     </div>
-
-    <script src="/assets/vendor/jquery/3.2.x/jquery.min.js"></script>
-    <script src="/assets/vendor/semantic-ui/2.2.x/semantic.min.js"></script>
-    <script src="/assets/vendor/simplon-form/base.min.js"></script>
 
     <?= $formView->renderFieldAssets() ?>
 </body>
@@ -1008,6 +1005,187 @@ $file->getStream()->getContents();
 
 -------------------------------------------------
 
-# 4. Examples
+# 4. Block fields cloning
+
+This feature gives the user the possibility to clone respectively remove field blocks dynamically. For instance, imagine you have to enter an unknown set of people addresses. In that case you have a set of `core` fields which can be cloned by a simple click so that you can enter a new address straight away until you are done entering all addresses.
+
+## 4.1. Building fields
+
+```php
+$requestData = $_POST;
+
+//
+// required structure to apply stored data
+// each block represents a cloned field block
+//
+
+$storedData = [
+    'clones' => [
+        [
+            'address' => 'Mr.',
+            'firstname' => 'Peter',
+            'lastname' => 'Foo',
+            'email' => 'peter.foo@bar.com',
+        ]
+    ]
+];
+
+//
+// define core clone fields
+//
+
+$cloneBlock = (new CloneFields('defaults', $requestData, $storedData))
+    ->add((new FormField('address'))->addMeta((new OptionsMeta())->add('Mr.')->add('Mrs.'))->addRule(new RequiredRule()))
+    ->add((new FormField('firstname'))->addRule(new RequiredRule()))
+    ->add((new FormField('lastname'))->addRule(new RequiredRule()))
+    ->add((new FormField('email'))->addRule(new EmailRule()))
+;
+
+//
+// add clone fields to our form fields
+// and apply stored data if available
+//
+
+$fields = (new FormFields())
+    ->addCloneFields($cloneBlock)
+    ->applyInitialData($storedData)
+;
+
+$validator = (new FormValidator($requestData))->addFields($fields)->validate();
+
+if ($validator->hasBeenSubmitted())
+{
+    if ($validator->isValid())
+    {
+        var_dump($fields->getAllData());
+        
+        // expected result depending on how many blocks you cloned ...
+        // results are wrapped in their clone field block ID
+
+        // [        
+        //     'clones' => [
+        //          'defaults' => [
+        //              [
+        //                  'address' => 'Mr.',
+        //                  'firstname' => 'Peter',
+        //                  'lastname' => 'Foo',
+        //                  'email' => 'peter.foo@bar.com',
+        //              ],
+        //              [
+        //                  ...
+        //              ]
+        //          ]
+        //     ]
+        // ]
+
+    }
+}
+```
+
+## 4.2 Building view
+
+```php
+//
+// build view
+// 
+
+$build = function (FormViewBlock $viewBlock, string $token) use ($fields) {
+    $addressElement = (new DropDownElement($fields->get('address', $token)))->enableMultiple()->setLabel('Address');
+    $firstnameElement = (new InputTextElement($fields->get('firstname', $token)))->setLabel('First name');
+    $lastnameElement = (new InputTextElement($fields->get('lastname', $token)))->setLabel('Last name');
+    $emailElement = (new InputTextElement($fields->get('email', $token)))->setLabel('Email address')->setDescription('Required in order to send you a confirmation');
+
+    return $viewBlock
+        ->addRow((new FormViewRow())->autoColumns($addressElement))
+        ->addRow((new FormViewRow())->autoColumns($firstnameElement)->autoColumns($lastnameElement))
+        ->addRow((new FormViewRow())->autoColumns($emailElement))
+        ;
+};
+
+$defaultBlocks = (new CloneFormViewBlock($cloneBlock))->build($build);
+
+$view = (new FormView())
+    ->setComponentDir('../../assets/vendor')
+    ->addBlocks($defaultBlocks)
+;
+
+//
+// render view
+// https://github.com/fightbulc/simplon_phtml
+//
+
+echo (new Phtml())->render(__DIR__ . '/page.phtml', ['formView' => $view]);
+```
+
+## 4.3 Building templates
+
+### Page template
+
+```php
+<?php
+/**
+ * @var FormView $formView
+ */
+use Simplon\Form\View\FormView;
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>simplon/form</title>
+
+    <style type="text/css">
+        body {
+            padding: 0;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="ui container">
+        <?= $formView->render(__DIR__ . '/form.phtml') ?>
+    </div>
+
+    <?= $formView->renderFieldAssets() ?>
+</body>
+</html>
+```
+
+### Form template
+
+```php
+/**
+ * @var FormView $formView
+ */
+use Simplon\Form\View\FormView;
+
+?>
+
+<?php if ($formView->hasErrors()): ?>
+    <div class="ui basic segment">
+        <?= $formView->renderErrorMessage() ?>
+    </div>
+<?php endif ?>
+
+<div class="ui basic segment">
+    <h3>Default</h3>
+    <?= CloneFormViewBlock::render(
+            $formView->getCloneBlocks('defaults'),
+            function(FormViewBlock $block) { return $block->render(); }
+        )
+    ?>
+</div>
+
+<div class="ui basic segment">
+    <?= $formView->getSubmitElement()->renderElement() ?>
+</div>
+```
+-------------------------------------------------
+
+# 5. Examples
 
 Coming soon

@@ -8,6 +8,10 @@ namespace Simplon\Form\View;
 class FormViewBlock
 {
     /**
+     * @var array
+     */
+    private static $renderedCloneFields = [];
+    /**
      * @var string
      */
     private $id;
@@ -19,6 +23,10 @@ class FormViewBlock
      * @var FormViewRow[]
      */
     private $rows;
+    /**
+     * @var string
+     */
+    private $cloneChecksum;
 
     /**
      * @param string $id
@@ -26,6 +34,26 @@ class FormViewBlock
     public function __construct(string $id)
     {
         $this->id = $id;
+    }
+
+    /**
+     * @param string $cloneChecksum
+     *
+     * @return FormViewBlock
+     */
+    public function setCloneChecksum(string $cloneChecksum): FormViewBlock
+    {
+        $this->cloneChecksum = $cloneChecksum;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCloneable(): bool
+    {
+        return $this->cloneChecksum !== null;
     }
 
     /**
@@ -86,10 +114,11 @@ class FormViewBlock
 
     /**
      * @return string
+     * @throws \Simplon\Form\FormError
      */
     public function render(): string
     {
-        $html = '{header}{rows}';
+        $html = '{clone}{header}{rows}';
 
         $renderedRows = [];
 
@@ -103,8 +132,17 @@ class FormViewBlock
             [
                 'header' => $this->renderHeader(),
                 'rows'   => join('', $renderedRows),
+                'clone'  => $this->getCloneDataFields(),
             ]
         );
+    }
+
+    /**
+     * @return null|string
+     */
+    private function getCloneChecksum(): ?string
+    {
+        return $this->cloneChecksum;
     }
 
     /**
@@ -115,6 +153,43 @@ class FormViewBlock
         if ($this->hasHeader())
         {
             return '<h4 class="ui dividing header">' . $this->getHeader() . '</h4>';
+        }
+
+        return null;
+    }
+
+    /**
+     * @return null|string
+     */
+    private function getCloneDataFields(): ?string
+    {
+        if ($checksum = $this->getCloneChecksum())
+        {
+            $code = [];
+
+            if (!in_array($checksum, self::$renderedCloneFields))
+            {
+                $code[] = '<input type="hidden" id="' . $checksum . '" name="form[' . $checksum . ']" value="">';
+                self::$renderedCloneFields[] = $checksum;
+            }
+
+            $code[] = '
+<div class="uk-sortable-handle custom-nestable-handle">
+    <div class="ui right simple dropdown icon button" style="padding:.3em;margin:0">
+        <i class="setting icon"></i>
+        <div class="menu">
+            <div class="item clone-block" data-block="' . $checksum . '" data-token="' . $this->getId() . '">
+                Clone
+            </div>
+            <div class="item clone-remove" data-block="' . $checksum . '" data-token="' . $this->getId() . '">
+                Remove
+            </div>
+        </div>
+    </div>
+</div>
+';
+
+            return implode("\n", $code);
         }
 
         return null;

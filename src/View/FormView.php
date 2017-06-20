@@ -65,6 +65,16 @@ class FormView
      * @var string
      */
     private $componentDir = '/assets/vendor';
+    /**
+     * @var array
+     */
+    private $pageWideAssets = [
+        '/semantic-ui/2.2.x/semantic.min.css',
+        '/simplon-form/base.min.css',
+        '/jquery/3.2.x/jquery.min.js',
+        '/semantic-ui/2.2.x/semantic.min.js',
+        '/simplon-form/base.min.js',
+    ];
 
     /**
      * @param null|string $scope
@@ -326,7 +336,33 @@ class FormView
             return $this->blocks[$id];
         }
 
-        throw new FormError('Requested FormElement "' . $id . '" does not exist');
+        throw new FormError('Requested Block ID "' . $id . '" does not exist');
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return FormViewBlock[]
+     * @throws FormError
+     */
+    public function getCloneBlocks(string $id): array
+    {
+        $match = [];
+
+        foreach ($this->getBlocks() as $blockId => $block)
+        {
+            if (preg_match('/' . $id . '/i', $blockId))
+            {
+                $match[] = $block;
+            }
+        }
+
+        if (!empty($match))
+        {
+            return $match;
+        }
+
+        throw new FormError('Did not find any blocks via pattern "' . $id . '"');
     }
 
     /**
@@ -363,7 +399,7 @@ class FormView
      * @return FormView
      * @throws FormError
      */
-    public function setBlocks(array $blocks): self
+    public function addBlocks(array $blocks): self
     {
         foreach ($blocks as $block)
         {
@@ -433,12 +469,10 @@ class FormView
                     'attrs' => $formAttrs,
                 ]
             ),
-            'css'   => $this->buildFieldAssetsCss(),
             'error' => $this->shouldAutoRenderErrorMessage() ? $this->renderErrorMessage() : null,
             'scope' => $this->renderScopeElement(),
             'csrf'  => $this->renderCsrfElement(),
             'form'  => $form,
-            'js'    => $this->buildFieldAssetsJs(),
         ];
 
         return RenderHelper::placeholders($html, $placeholders);
@@ -469,11 +503,30 @@ class FormView
     }
 
     /**
+     * @param bool $preventCaching
+     * @param array|null $excludePageWide
+     *
      * @return string
      */
-    public function renderFieldAssets(): string
+    public function renderFieldAssets(bool $preventCaching = false, ?array $excludePageWide = null): string
     {
-        return $this->buildFieldAssetsCss() . $this->buildFieldAssetsJs() . $this->buildFieldCode();
+        // check if we need to add more assets
+        $this->validatePageWideAssets($excludePageWide);
+
+        $assets = implode("\n\n", [
+            $this->buildPageWideAssetsCss(),
+            $this->buildPageWideAssetsJs(),
+            $this->buildFieldAssetsCss(),
+            $this->buildFieldAssetsJs(),
+            $this->buildFieldCode(),
+        ]);
+
+        if ($preventCaching)
+        {
+            $assets = preg_replace('/(\.css|\.js)/i', '\\1?v=' . time(), $assets);
+        }
+
+        return $assets;
     }
 
     /**
@@ -517,6 +570,20 @@ class FormView
     }
 
     /**
+     * @return bool
+     */
+    private function hasCloneableBlocks(): bool
+    {
+        foreach ($this->blocks as $block)
+        {
+            if ($block->isCloneable())
+            {
+                return true;
+            }
+        }
+    }
+
+    /**
      * @param string $fileType
      *
      * @return array
@@ -543,37 +610,88 @@ class FormView
     }
 
     /**
+     * @param array|null $excludePageWide
+     */
+    private function validatePageWideAssets(?array $excludePageWide = null): void
+    {
+        if ($this->hasCloneableBlocks())
+        {
+            $this->pageWideAssets[] = '/uikit/3.0.x/css/uikit.min.css';
+            $this->pageWideAssets[] = '/uikit/3.0.x/js/uikit.min.js';
+            $this->pageWideAssets[] = '/uikit/3.0.x/js/uikit-icons.min.js';
+        }
+
+        if ($excludePageWide)
+        {
+            $assets = [];
+
+            foreach ($this->pageWideAssets as $file)
+            {
+                $exclude = false;
+
+                foreach ($excludePageWide as $filter)
+                {
+                    if (stripos($file, $filter) !== false)
+                    {
+                        $exclude = true;
+                        break;
+                    }
+                }
+
+                if (!$exclude)
+                {
+                    $assets[] = $file;
+                }
+            }
+
+            $this->pageWideAssets = $assets;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    private function buildPageWideAssetsCss(): string
+    {
+        /** @noinspection HtmlUnknownTarget */
+        return $this->buildPageWideAssets('.css', '<link href="{path}" rel="stylesheet">');
+    }
+
+    /**
+     * @return string
+     */
+    private function buildPageWideAssetsJs(): string
+    {
+        /** @noinspection HtmlUnknownTarget */
+        return $this->buildPageWideAssets('.js', '<script src="{path}"></script>');
+    }
+
+    /**
      * @param string $fileType
      * @param string $html
      *
      * @return string
      */
-    private function buildFieldAssets(string $fileType, string $html): string
+    private function buildPageWideAssets(string $fileType, string $html): string
     {
         $assets = [];
 
-        foreach ($this->getElements() as $element)
+        foreach ($this->pageWideAssets as $file)
         {
-            if ($element->getAssets())
+            if (strpos($file, $fileType) !== false)
             {
-                foreach ($element->getAssets() as $file)
+                $path = $this->getComponentDir() . '/' . trim($file, '/');
+
+                if (preg_match('/^(http|\/\/)/i', $file))
                 {
-                    if (strpos($file, $fileType) !== false)
-                    {
-                        $path = $this->getComponentDir() . '/' . $file;
-
-                        if (preg_match('/^(http|\/\/)/i', $file))
-                        {
-                            $path = $file;
-                        }
-
-                        $assets[] = RenderHelper::placeholders($html, ['path' => $path]);
-                    }
+                    $path = $file;
                 }
+
+                $assets[$path] = RenderHelper::placeholders($html, ['path' => $path]);
             }
         }
 
-        return join('', $assets);
+        return join("\n", $assets);
     }
 
     /**
@@ -592,6 +710,40 @@ class FormView
     {
         /** @noinspection HtmlUnknownTarget */
         return $this->buildFieldAssets('.js', '<script src="{path}"></script>');
+    }
+
+    /**
+     * @param string $fileType
+     * @param string $html
+     *
+     * @return string
+     */
+    private function buildFieldAssets(string $fileType, string $html): string
+    {
+        $assets = [];
+
+        foreach ($this->getElements() as $element)
+        {
+            if ($element->getAssets())
+            {
+                foreach ($element->getAssets() as $file)
+                {
+                    if (strpos($file, $fileType) !== false)
+                    {
+                        $path = $this->getComponentDir() . '/' . trim($file, '/');
+
+                        if (preg_match('/^(http|\/\/)/i', $file))
+                        {
+                            $path = $file;
+                        }
+
+                        $assets[$path] = RenderHelper::placeholders($html, ['path' => $path]);
+                    }
+                }
+            }
+        }
+
+        return join("\n", $assets);
     }
 
     /**

@@ -25,6 +25,7 @@
   "require": {
     "php": ">=7.1",
     "simplon/phtml": "^0.2",
+    "simplon/helper": "^1.0",
     "fightbulc/moment": "^1.26",
     "simplon/component_form": "^0.1",
     "simplon/component_semanticui": "^0.0"

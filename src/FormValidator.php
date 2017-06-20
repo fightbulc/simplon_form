@@ -24,6 +24,10 @@ class FormValidator
      */
     private $fields = [];
     /**
+     * @var array
+     */
+    private $cloneFieldBlocks = [];
+    /**
      * @var FormField[]
      */
     private $errorFields = [];
@@ -38,15 +42,25 @@ class FormValidator
 
     /**
      * @param array $requestData
+     *
+     * @return array
      */
-    public function __construct(array $requestData = [])
+    public static function normaliseRequestData(array $requestData = []): array
     {
         if (empty($requestData['form']) === false)
         {
             $requestData = $requestData['form'];
         }
 
-        $this->requestData = $requestData;
+        return $requestData;
+    }
+
+    /**
+     * @param array $requestData
+     */
+    public function __construct(array $requestData = [])
+    {
+        $this->requestData = self::normaliseRequestData($requestData);
     }
 
     /**
@@ -98,6 +112,8 @@ class FormValidator
     {
         $this->fields[] = $this->applyRequestData($fields);
 
+        $this->cloneFieldBlocks[] = $fields->getCloneFields();
+
         return $this;
     }
 
@@ -106,7 +122,7 @@ class FormValidator
      *
      * @return FormValidator
      */
-    public function setFields(array $fields): self
+    public function addMultipleFields(array $fields): self
     {
         foreach ($fields as $item)
         {
@@ -121,6 +137,12 @@ class FormValidator
      */
     public function hasBeenSubmitted(): bool
     {
+        // if requested to change clone fields
+        if ($this->hasChangedCloneFields())
+        {
+            return false;
+        }
+
         // nothing to check against
         if ($this->hasRequestData() === false)
         {
@@ -227,6 +249,29 @@ class FormValidator
         }
 
         return $errors;
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasChangedCloneFields(): bool
+    {
+        if (!empty($this->cloneFieldBlocks))
+        {
+            foreach ($this->cloneFieldBlocks as $blocks)
+            {
+                /** @var CloneFields[] $blocks */
+                foreach ($blocks as $fields)
+                {
+                    if ($fields->hasChangedFields())
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
