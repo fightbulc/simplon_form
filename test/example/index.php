@@ -79,9 +79,9 @@ if ($validator->hasBeenSubmitted())
         echo '<div style="background:#f00;color:#fff;padding:10px">INVALID</div>';
     }
 
-    echo '<pre>';
-    var_dump($fields->getAllData());
-    echo '</pre>';
+//    echo '<pre>';
+//    var_dump($fields->getAllData());
+//    echo '</pre>';
 }
 
 //
@@ -125,8 +125,7 @@ $citiesBlock = (new FormViewBlock('cities'))
 
 // ====================================
 
-$imageElement = (new ImageUploadElement($fields->get('url_image')))
-    ->setUploadUrl('#');
+$imageElement = (new ImageUploadElement($fields->get('url_image')))->setQuality(.6);
 
 $imageBlock = (new FormViewBlock('image'))
     ->addRow((new FormViewRow())->autoColumns($imageElement));

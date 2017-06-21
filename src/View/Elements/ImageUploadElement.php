@@ -15,56 +15,58 @@ class ImageUploadElement extends Element
      * @var string
      */
     private $attachLabel = 'Attach a photo';
-
     /**
      * @var string
      */
     private $replaceLabel = 'Replace photo';
-
     /**
      * @var string
      */
     private $removeLabel = 'Remove';
-
     /**
      * @var string
      */
     private $downloadLabel = 'Download';
-
     /**
      * @var bool
      */
     private $showNoThumbContainer = false;
-
-    /**
-     * @var null|string
-     */
-    private $uploadUrl;
-
-    /**
-     * @var array
-     */
-    private $uploadMetaData = [];
-
     /**
      * @var int
      */
     private $imageWidth = 1200;
-
     /**
      * @var int
      */
-    private $thumbWidth = 600;
-
+    private $thumbWidth = 800;
+    /**
+     * @var float
+     */
+    private $quality = 1.0;
     /**
      * @var string
      */
     private $thumbContainer = '#thumb';
 
     /**
-     * @var string
+     * @return float
      */
-    private $urlResponseObject = 'response.url';
+    public function getQuality(): float
+    {
+        return $this->quality;
+    }
+
+    /**
+     * @param float $quality
+     *
+     * @return ImageUploadElement
+     */
+    public function setQuality(float $quality): ImageUploadElement
+    {
+        $this->quality = $quality;
+
+        return $this;
+    }
 
     /**
      * @return string
@@ -251,89 +253,12 @@ class ImageUploadElement extends Element
     /**
      * @return array
      */
-    public function getUploadMetaData(): array
-    {
-        return $this->uploadMetaData;
-    }
-
-    /**
-     * @param array $uploadMetaData
-     *
-     * @return ImageUploadElement
-     */
-    public function setUploadMetaData(array $uploadMetaData): self
-    {
-        $this->uploadMetaData = $uploadMetaData;
-
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     * @throws FormError
-     */
-    public function getUploadUrl(): ?string
-    {
-        $value = $this->uploadUrl;
-
-        if ($value)
-        {
-            return $value;
-        }
-
-        throw new FormError('Missing upload-url');
-    }
-
-    /**
-     * @param string $uploadUrl
-     *
-     * @return ImageUploadElement
-     */
-    public function setUploadUrl(string $uploadUrl): self
-    {
-        $this->uploadUrl = $uploadUrl;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     * @throws FormError
-     */
-    public function getUrlResponseObject(): string
-    {
-        $value = $this->urlResponseObject;
-
-        if ($value)
-        {
-            return $value;
-        }
-
-        throw new FormError('Missing url-response-object definition');
-    }
-
-    /**
-     * @param string $urlResponseObject
-     *
-     * @return ImageUploadElement
-     */
-    public function setUrlResponseObject(string $urlResponseObject): self
-    {
-        $this->urlResponseObject = $urlResponseObject;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
     public function getWidgetAttributes(): array
     {
         $base = [
-            'type'  => 'hidden',
             'id'    => $this->renderElementId(),
             'name'  => $this->renderElementName(),
-            'value' => $this->getField()->getValue(),
+            'style' => 'display:none',
         ];
 
         if (empty($this->attrs) === false)
@@ -389,7 +314,7 @@ class ImageUploadElement extends Element
     public function getWidgetHtml(): string
     {
         /** @noinspection HtmlUnknownAttribute */
-        return '<div {attrs-wrapper}><input {attrs-file}><input {attrs-field}><div {attrs-button-wrapper}><i class="icon photo"></i>&nbsp;<span>{label}</span></div></div>';
+        return '<div {attrs-wrapper}><input {attrs-file}><textarea {attrs-field}>{image-source}</textarea><div {attrs-button-wrapper}><i class="icon photo"></i>&nbsp;<span>{label}</span></div></div>';
     }
 
     /**
@@ -401,8 +326,7 @@ class ImageUploadElement extends Element
         $attrs = [
             'attrs-wrapper'        => [
                 'class'                   => ['form-image-upload'],
-                'data-upload-url'         => $this->getUploadUrl(),
-                'data-upload-meta-data'   => urlencode(RenderHelper::jsonEncode($this->getUploadMetaData())),
+                'data-image-quality'      => $this->getQuality(),
                 'data-image-width'        => $this->getImageWidth(),
                 'data-thumb-width'        => $this->getThumbWidth(),
                 'data-thumb-container'    => $this->getThumbContainer(),
@@ -431,7 +355,10 @@ class ImageUploadElement extends Element
 
         return RenderHelper::placeholders(
             RenderHelper::attributes($this->getWidgetHtml(), $attrs),
-            ['label' => $label]
+            [
+                'label'        => $label,
+                'image-source' => $this->getField()->getValue(),
+            ]
         );
     }
 
@@ -452,6 +379,6 @@ class ImageUploadElement extends Element
      */
     public function getCode(): string
     {
-        return '$(\'#' . $this->renderElementId() . '\').imageUpload({getUrlResponseObject: function(response) { return ' . $this->getUrlResponseObject() . '; }})';
+        return '$(\'#' . $this->renderElementId() . '\').imageUpload()';
     }
 }
