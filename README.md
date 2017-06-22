@@ -974,34 +974,18 @@ This element handles the client side of an image upload for you.
 
 ```php
 $imageElement = new ImageUploadElement(new FormField('urlImage'));
-
-$imageElement
-    ->setUploadUrl('/upload/images') // URL which will receive a POST file upload request
-    ->setThumbContainer('#thumb')	 // thumb container in your template
-    ;
 ```
 
-Following a snippet which shows an example of an implementation of an ImageUploadElement. Notice the `thumb container`: you have total freedom in how you want to design your forms hence you need to place your thumb container manually within your template.
+Following a snippet which shows an example of an implementation of an ImageUploadElement.
 
 ```php
 <div class="ui basic segment">
     <h3>Image</h3>
     <?= $formView->getBlock('image')->render() ?>
-    <div id="thumb"></div>
 </div>
 ```
 
-The POST request which sends the image data to the defined `upload url` is send as `photo` and can be read for instance via [ServerRequestInterface::getUploadFiles()](https://github.com/php-fig/http-message/blob/master/src/ServerRequestInterface.php). See the following example:
-
-```php
-$request = ServerRequestFactory::fromGlobals();
-
-/** @var UploadedFile $file */
-$file = $request->getUploadedFiles()['photo'];
-
-// read image data via ...
-$file->getStream()->getContents();
-```
+The uploaded image will be provided as `dataURI` so it's up to you how you will process these data after the form has been successfully validated.
 
 -------------------------------------------------
 
