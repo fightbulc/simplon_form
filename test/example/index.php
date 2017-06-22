@@ -118,14 +118,17 @@ $datesBlocks = (new CloneFormViewBlock($cloneBlockTwo))->build($build);
 
 // ====================================
 
-$cityElement = (new DropDownApiElement($fields->get('city'), (new AlgoliaPlacesApiJs())->setType(AlgoliaPlacesApiJs::TYPE_CITY)))->enableMultiple()->setLabel('City')->setDescription('Search for a city');
+$cityElement = (new DropDownApiElement($fields->get('city'), (new AlgoliaPlacesApiJs())->setType(AlgoliaPlacesApiJs::TYPE_CITY)))
+    ->enableMultiple()
+    ->setLabel('City')
+    ->setDescription('Search for a city');
 
 $citiesBlock = (new FormViewBlock('cities'))
     ->addRow((new FormViewRow())->autoColumns($cityElement));
 
 // ====================================
 
-$imageElement = (new ImageUploadElement($fields->get('url_image')))->setQuality(.6);
+$imageElement = (new ImageUploadElement($fields->get('url_image')))->setQuality(.75);
 
 $imageBlock = (new FormViewBlock('image'))
     ->addRow((new FormViewRow())->autoColumns($imageElement));
