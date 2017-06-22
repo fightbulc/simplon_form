@@ -44,9 +44,19 @@ class ImageUploadElement extends Element
      */
     private $quality = 1.0;
     /**
-     * @var string
+     * @var bool
      */
-    private $thumbContainer = '#thumb';
+    private $renderThumbContainer = true;
+
+    /**
+     * @return ImageUploadElement
+     */
+    public function disableRenderThumbContainer(): ImageUploadElement
+    {
+        $this->renderThumbContainer = false;
+
+        return $this;
+    }
 
     /**
      * @return float
@@ -196,30 +206,10 @@ class ImageUploadElement extends Element
 
     /**
      * @return string
-     * @throws FormError
      */
-    public function getThumbContainer(): string
+    public function getThumbContainerId(): string
     {
-        $value = $this->thumbContainer;
-
-        if ($value)
-        {
-            return $value;
-        }
-
-        throw new FormError('Missing thumb container reference');
-    }
-
-    /**
-     * @param string $thumbContainer
-     *
-     * @return ImageUploadElement
-     */
-    public function setThumbContainer(string $thumbContainer): self
-    {
-        $this->thumbContainer = $thumbContainer;
-
-        return $this;
+        return $this->getField()->getId() . '-thumb';
     }
 
     /**
@@ -314,7 +304,14 @@ class ImageUploadElement extends Element
     public function getWidgetHtml(): string
     {
         /** @noinspection HtmlUnknownAttribute */
-        return '<div {attrs-wrapper}><input {attrs-file}><textarea {attrs-field}>{image-source}</textarea><div {attrs-button-wrapper}><i class="icon photo"></i>&nbsp;<span>{label}</span></div></div>';
+        $html = '<div {attrs-wrapper}><input {attrs-file}><textarea {attrs-field}>{image-source}</textarea><div {attrs-button-wrapper}><i class="icon photo"></i>&nbsp;<span>{label}</span></div></div>';
+
+        if ($this->renderThumbContainer === true)
+        {
+            $html .= '<div id="' . $this->getThumbContainerId() . '" class="auto-image-thumb-container"></div>';
+        }
+
+        return $html;
     }
 
     /**
@@ -329,7 +326,7 @@ class ImageUploadElement extends Element
                 'data-image-quality'      => $this->getQuality(),
                 'data-image-width'        => $this->getImageWidth(),
                 'data-thumb-width'        => $this->getThumbWidth(),
-                'data-thumb-container'    => $this->getThumbContainer(),
+                'data-thumb-container'    => $this->getThumbContainerId(),
                 'data-attach-label'       => $this->getAttachLabel(),
                 'data-replace-label'      => $this->getReplaceLabel(),
                 'data-remove-label'       => $this->getRemoveLabel(),
