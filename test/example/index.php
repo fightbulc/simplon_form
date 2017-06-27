@@ -3,7 +3,9 @@
 use Simplon\Form\CloneFields;
 use Simplon\Form\Data\FormField;
 use Simplon\Form\Data\Rules\EmailRule;
+use Simplon\Form\Data\Rules\IfFilledRule;
 use Simplon\Form\Data\Rules\RequiredRule;
+use Simplon\Form\Data\Rules\UrlRule;
 use Simplon\Form\FormFields;
 use Simplon\Form\FormValidator;
 use Simplon\Form\View\CloneFormViewBlock;
@@ -51,6 +53,7 @@ $cloneBlockOne = (new CloneFields('defaults', $requestData, $storedData))
     ->add((new FormField('firstname'))->addRule(new RequiredRule()))
     ->add((new FormField('lastname'))->addRule(new RequiredRule()))
     ->add((new FormField('email'))->addRule(new EmailRule()))
+    ->add((new FormField('website'))->addRule(new IfFilledRule([(new UrlRule('ftp'))->setAdditionalRegex('/^http:\/\//i')])))
 ;
 
 $cloneBlockTwo = (new CloneFields('dates', $requestData, $storedData))
@@ -93,11 +96,13 @@ $build = function (FormViewBlock $viewBlock, string $token) use ($fields) {
     $firstnameElement = (new InputTextElement($fields->get('firstname', $token)))->setLabel('First name');
     $lastnameElement = (new InputTextElement($fields->get('lastname', $token)))->setLabel('Last name');
     $emailElement = (new InputTextElement($fields->get('email', $token)))->setLabel('Email address')->setDescription('Required in order to send you a confirmation');
+    $websiteElement = (new InputTextElement($fields->get('website', $token)))->setLabel('Homepage URL')->setDescription('In case you have a homepage');
 
     return $viewBlock
         ->addRow((new FormViewRow())->autoColumns($addressElement))
         ->addRow((new FormViewRow())->autoColumns($firstnameElement)->autoColumns($lastnameElement))
         ->addRow((new FormViewRow())->autoColumns($emailElement))
+        ->addRow((new FormViewRow())->autoColumns($websiteElement))
         ;
 };
 
@@ -121,7 +126,8 @@ $datesBlocks = (new CloneFormViewBlock($cloneBlockTwo))->build($build);
 $cityElement = (new DropDownApiElement($fields->get('city'), (new AlgoliaPlacesApiJs())->setType(AlgoliaPlacesApiJs::TYPE_CITY)))
     ->enableMultiple()
     ->setLabel('City')
-    ->setDescription('Search for a city');
+    ->setDescription('Search for a city')
+;
 
 $citiesBlock = (new FormViewBlock('cities'))
     ->addRow((new FormViewRow())->autoColumns($cityElement));
