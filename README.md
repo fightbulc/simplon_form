@@ -322,6 +322,20 @@ Make sure that the field's value validates against a URL format.
 
 ```php
 (new FormField('website'))->addRule(new UrlRule())
+
+//
+// set protocol if missing
+//
+
+(new FormField('website'))->addRule(new UrlRule('http'))
+
+//
+// allow only urls which hold foo.com
+//
+
+(new FormField('website'))->addRule(
+    (new UrlRule())->setAdditionalRegex('/foo.com/')
+)
 ```
 
 ### EmailRule
