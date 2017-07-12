@@ -581,6 +581,8 @@ class FormView
                 return true;
             }
         }
+
+        return false;
     }
 
     /**
