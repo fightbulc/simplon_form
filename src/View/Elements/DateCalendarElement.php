@@ -3,6 +3,7 @@
 namespace Simplon\Form\View\Elements;
 
 use Moment\Moment;
+use Moment\MomentException;
 use Simplon\Form\Data\FormField;
 use Simplon\Form\View\Element;
 use Simplon\Form\View\RenderHelper;
@@ -390,6 +391,7 @@ class DateCalendarElement extends Element
 
     /**
      * @return string
+     * @throws MomentException
      */
     public function getCode(): string
     {
