@@ -21,23 +21,6 @@ class FormFields
     private $cloneFields = [];
 
     /**
-     * @param FormFields $fields
-     * @param string $id
-     *
-     * @return mixed|null
-     * @throws FormError
-     */
-    public static function getVal(FormFields $fields, string $id)
-    {
-        if ($value = $fields->get($id)->getValue())
-        {
-            return $value;
-        }
-
-        return null;
-    }
-
-    /**
      * @param string $id
      *
      * @return bool
