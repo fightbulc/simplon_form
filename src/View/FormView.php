@@ -46,6 +46,10 @@ class FormView
      */
     private $csrf;
     /**
+     * @var string
+     */
+    private $size = 'large';
+    /**
      * @var bool
      */
     private $autoRenderErrorMessage = false;
@@ -221,6 +225,26 @@ class FormView
     public function setErrorMessage(string $errorMessage): self
     {
         $this->errorMessage = $errorMessage;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSize(): string
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param string $size
+     *
+     * @return FormView
+     */
+    public function setSize(string $size): FormView
+    {
+        $this->size = $size;
 
         return $this;
     }
@@ -443,7 +467,7 @@ class FormView
         /** @noinspection HtmlUnknownAttribute */
         $html = '<form {attrs}>{error}{scope}{csrf}{form}</form>';
 
-        $class = ['ui', 'form', 'large'];
+        $class = ['ui', 'form', $this->getSize()];
 
         if ($this->hasErrors())
         {
