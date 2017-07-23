@@ -13,6 +13,10 @@ use Simplon\Phtml\PhtmlException;
  */
 class FormView
 {
+    const ASSET_TYPE_ALL = 'all';
+    const ASSET_TYPE_CSS = '.css';
+    const ASSET_TYPE_JS = '.js';
+
     /**
      * @var null|string
      */
@@ -69,6 +73,10 @@ class FormView
      * @var string
      */
     private $componentDir = '/assets/vendor';
+    /**
+     * @var bool
+     */
+    private $preventAssetsCaching = true;
     /**
      * @var array
      */
@@ -503,19 +511,55 @@ class FormView
     }
 
     /**
+     * @param array|null $ignoreAssets
+     *
      * @return array
      */
-    public function getCssAssets(): array
+    public function getCssAssets(?array $ignoreAssets = null): array
     {
-        return $this->buildFieldAssetPaths('.css');
+        if ($ignoreAssets)
+        {
+            $this->pageWideAssets = $this->ignorePageWideAssets($ignoreAssets);
+        }
+
+        $assets = $this->buildFieldAssetPaths(self::ASSET_TYPE_CSS);
+        $pageWideAssets = $this->filterPageWideAssets(self::ASSET_TYPE_CSS);
+
+        if (!empty($pageWideAssets))
+        {
+            foreach (array_reverse($pageWideAssets) as $file)
+            {
+                array_unshift($assets, $file);
+            }
+        }
+
+        return $assets;
     }
 
     /**
+     * @param array|null $ignorePageWide
+     *
      * @return array
      */
-    public function getJsAssets(): array
+    public function getJsAssets(?array $ignorePageWide = null): array
     {
-        return $this->buildFieldAssetPaths('.js');
+        if ($ignorePageWide)
+        {
+            $this->pageWideAssets = $this->ignorePageWideAssets($ignorePageWide);
+        }
+
+        $assets = $this->buildFieldAssetPaths(self::ASSET_TYPE_JS);
+        $pageWideAssets = $this->filterPageWideAssets(self::ASSET_TYPE_JS);
+
+        if (!empty($pageWideAssets))
+        {
+            foreach (array_reverse($pageWideAssets) as $file)
+            {
+                array_unshift($assets, $file);
+            }
+        }
+
+        return $assets;
     }
 
     /**
@@ -527,27 +571,63 @@ class FormView
     }
 
     /**
-     * @param bool $preventCaching
-     * @param array|null $excludePageWide
+     * @param bool $preventAssetsCaching
+     *
+     * @return FormView
+     */
+    public function setPreventAssetsCaching(bool $preventAssetsCaching): FormView
+    {
+        $this->preventAssetsCaching = $preventAssetsCaching;
+
+        return $this;
+    }
+
+    /**
+     * @param string $type
+     * @param array|null $ignoreAssets
      *
      * @return string
      */
-    public function renderFieldAssets(bool $preventCaching = false, ?array $excludePageWide = null): string
+    public function renderAssets(string $type = self::ASSET_TYPE_ALL, ?array $ignoreAssets = null): string
     {
         // check if we need to add more assets
-        $this->validatePageWideAssets($excludePageWide);
-
-        $assets = implode("\n\n", [
-            $this->buildPageWideAssetsCss(),
-            $this->buildPageWideAssetsJs(),
-            $this->buildFieldAssetsCss(),
-            $this->buildFieldAssetsJs(),
-            $this->buildFieldCode(),
-        ]);
-
-        if ($preventCaching)
+        if ($ignoreAssets)
         {
-            $assets = preg_replace('/(\.css|\.js)/i', '\\1?v=' . time(), $assets);
+            $this->pageWideAssets = $this->ignorePageWideAssets($ignoreAssets);
+        }
+
+        switch ($type)
+        {
+            case self::ASSET_TYPE_CSS:
+                $assets = [
+                    $this->renderPageWideAssetsCss(),
+                    $this->buildFieldAssetsCss(),
+                ];
+                break;
+            case self::ASSET_TYPE_JS:
+                $assets = [
+                    $this->renderPageWideAssetsJs(),
+                    $this->buildFieldAssetsJs(),
+                    $this->buildFieldCode(),
+                ];
+                break;
+            default:
+                $assets = [
+                    $this->renderPageWideAssetsCss(),
+                    $this->buildFieldAssetsCss(),
+                    $this->renderPageWideAssetsJs(),
+                    $this->buildFieldAssetsJs(),
+                    $this->buildFieldCode(),
+                ];
+                break;
+
+        }
+
+        $assets = implode("\n\n", $assets);
+
+        if ($this->preventAssetsCaching)
+        {
+            $assets = preg_replace('/(\\' . self::ASSET_TYPE_CSS . '|\\' . self::ASSET_TYPE_JS . ')/i', '\\1?v=' . time(), $assets);
         }
 
         return $assets;
@@ -636,59 +716,21 @@ class FormView
     }
 
     /**
-     * @param array|null $excludePageWide
+     * @return string
      */
-    private function validatePageWideAssets(?array $excludePageWide = null): void
+    private function renderPageWideAssetsCss(): string
     {
-        if ($this->hasCloneableBlocks())
-        {
-            $this->pageWideAssets[] = '/uikit/3.0.x/css/uikit.min.css';
-            $this->pageWideAssets[] = '/uikit/3.0.x/js/uikit.min.js';
-        }
-
-        if ($excludePageWide)
-        {
-            $assets = [];
-
-            foreach ($this->pageWideAssets as $file)
-            {
-                $exclude = false;
-
-                foreach ($excludePageWide as $filter)
-                {
-                    if (stripos($file, $filter) !== false)
-                    {
-                        $exclude = true;
-                        break;
-                    }
-                }
-
-                if (!$exclude)
-                {
-                    $assets[] = $file;
-                }
-            }
-
-            $this->pageWideAssets = $assets;
-        }
+        /** @noinspection HtmlUnknownTarget */
+        return $this->renderPageWideAssets(self::ASSET_TYPE_CSS, '<link href="{path}" rel="stylesheet">');
     }
 
     /**
      * @return string
      */
-    private function buildPageWideAssetsCss(): string
+    private function renderPageWideAssetsJs(): string
     {
         /** @noinspection HtmlUnknownTarget */
-        return $this->buildPageWideAssets('.css', '<link href="{path}" rel="stylesheet">');
-    }
-
-    /**
-     * @return string
-     */
-    private function buildPageWideAssetsJs(): string
-    {
-        /** @noinspection HtmlUnknownTarget */
-        return $this->buildPageWideAssets('.js', '<script src="{path}"></script>');
+        return $this->renderPageWideAssets(self::ASSET_TYPE_JS, '<script src="{path}"></script>');
     }
 
     /**
@@ -697,26 +739,96 @@ class FormView
      *
      * @return string
      */
-    private function buildPageWideAssets(string $fileType, string $html): string
+    private function renderPageWideAssets(string $fileType, string $html): string
     {
         $assets = [];
 
-        foreach ($this->pageWideAssets as $file)
+        foreach ($this->filterPageWideAssets($fileType) as $path)
         {
-            if (strpos($file, $fileType) !== false)
-            {
-                $path = $this->getComponentDir() . '/' . trim($file, '/');
-
-                if (preg_match('/^(http|\/\/)/i', $file))
-                {
-                    $path = $file;
-                }
-
-                $assets[$path] = RenderHelper::placeholders($html, ['path' => $path]);
-            }
+            $assets[] = RenderHelper::placeholders($html, ['path' => $path]);
         }
 
         return join("\n", $assets);
+    }
+
+    /**
+     * @param array $ignoreAssets
+     *
+     * @return array
+     */
+    private function ignorePageWideAssets(array $ignoreAssets): array
+    {
+        $assets = [];
+
+        foreach ($this->getPageWideAssets() as $file)
+        {
+            $exclude = false;
+
+            foreach ($ignoreAssets as $filter)
+            {
+                if (stripos($file, $filter) !== false)
+                {
+                    $exclude = true;
+                    break;
+                }
+            }
+
+            if (!$exclude)
+            {
+                $assets[] = $file;
+            }
+        }
+
+        return $assets;
+    }
+
+    /**
+     * @param string $fileType
+     *
+     * @return array
+     */
+    private function filterPageWideAssets(string $fileType): array
+    {
+        $assets = [];
+
+        foreach ($this->getPageWideAssets() as $path)
+        {
+            if (strpos($path, $fileType) !== false)
+            {
+                $assets[] = $path;
+            }
+        }
+
+        return $assets;
+    }
+
+    /**
+     * @return array
+     */
+    private function getPageWideAssets(): array
+    {
+        $assets = [];
+        $pageWide = $this->pageWideAssets;
+
+        if ($this->hasCloneableBlocks())
+        {
+            $pageWide['uikit-css'] = '/uikit/3.0.x/css/uikit.min.css';
+            $pageWide['uikit-js'] = '/uikit/3.0.x/js/uikit.min.js';
+        }
+
+        foreach ($pageWide as $file)
+        {
+            $path = $this->getComponentDir() . '/' . trim($file, '/');
+
+            if (preg_match('/^(http|\/\/)/i', $file))
+            {
+                $path = $file;
+            }
+
+            $assets[$path] = $path;
+        }
+
+        return $assets;
     }
 
     /**
@@ -725,7 +837,7 @@ class FormView
     private function buildFieldAssetsCss(): string
     {
         /** @noinspection HtmlUnknownTarget */
-        return $this->buildFieldAssets('.css', '<link href="{path}" rel="stylesheet">');
+        return $this->buildFieldAssets(self::ASSET_TYPE_CSS, '<link href="{path}" rel="stylesheet">');
     }
 
     /**
@@ -734,7 +846,7 @@ class FormView
     private function buildFieldAssetsJs(): string
     {
         /** @noinspection HtmlUnknownTarget */
-        return $this->buildFieldAssets('.js', '<script src="{path}"></script>');
+        return $this->buildFieldAssets(self::ASSET_TYPE_JS, '<script src="{path}"></script>');
     }
 
     /**
