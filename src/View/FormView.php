@@ -760,7 +760,7 @@ class FormView
     {
         $assets = [];
 
-        foreach ($this->getPageWideAssets() as $file)
+        foreach ($this->getPageWideAssets(false) as $file)
         {
             $exclude = false;
 
@@ -803,9 +803,11 @@ class FormView
     }
 
     /**
+     * @param bool $withCompletePath
+     *
      * @return array
      */
-    private function getPageWideAssets(): array
+    private function getPageWideAssets(bool $withCompletePath = true): array
     {
         $assets = [];
         $pageWide = $this->pageWideAssets;
@@ -818,7 +820,12 @@ class FormView
 
         foreach ($pageWide as $file)
         {
-            $path = $this->getComponentDir() . '/' . trim($file, '/');
+            $path = '/' . trim($file, '/');
+
+            if ($withCompletePath)
+            {
+                $path = $this->getComponentDir() . $path;
+            }
 
             if (preg_match('/^(http|\/\/)/i', $file))
             {

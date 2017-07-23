@@ -241,7 +241,7 @@ use Simplon\Form\View\FormView;
         <?= $formView->render(__DIR__ . '/form.phtml') ?>
     </div>
 
-    <?= $formView->renderFieldAssets() ?>
+    <?= $formView->renderAssets() ?>
 </body>
 </html>
 ```
@@ -585,7 +585,7 @@ use Simplon\Form\View\FormView;
     <script src="/assets/vendor/semantic-ui/2.2.x/semantic.min.js"></script>
     <script src="/assets/vendor/simplon-form/base.min.js"></script>
 
-    <?= $formView->renderFieldAssets() ?>
+    <?= $formView->renderAssets() ?>
 </body>
 </html>
 ```
@@ -1148,7 +1148,7 @@ use Simplon\Form\View\FormView;
         <?= $formView->render(__DIR__ . '/form.phtml') ?>
     </div>
 
-    <?= $formView->renderFieldAssets() ?>
+    <?= $formView->renderAssets() ?>
 </body>
 </html>
 ```
