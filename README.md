@@ -31,7 +31,7 @@
 4.2 [Building view](#41-building-view)  
 4.3 [Building templates](#41-building-templates)  
 5. [__Settings__](#5-settings)  
-5.1 [Field required/optinal label](51-field-required-optional-label)    
+5.1 [Field required/optinal label](#51-field-requiredoptional-label)    
 6. [__Examples__](#6-examples)  
 
 -------------------------------------------------
