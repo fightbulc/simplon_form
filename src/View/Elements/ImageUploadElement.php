@@ -4,6 +4,7 @@ namespace Simplon\Form\View\Elements;
 
 use Simplon\Form\FormError;
 use Simplon\Form\View\Element;
+use Simplon\Form\View\FormView;
 use Simplon\Form\View\RenderHelper;
 
 /**
@@ -288,7 +289,9 @@ class ImageUploadElement extends Element
 
             $attrs = [
                 'attrs' => [
-                    'for' => $this->renderElementId(),
+                    'for'                 => $this->renderElementId(),
+                    'data-label-optional' => FormView::getOptionalLabel(),
+                    'data-label-required' => FormView::getRequiredLabel(),
                 ],
             ];
 
@@ -304,7 +307,7 @@ class ImageUploadElement extends Element
     public function getWidgetHtml(): string
     {
         /** @noinspection HtmlUnknownAttribute */
-        $html = '<div {attrs-wrapper}><input {attrs-file}><textarea {attrs-field}>{image-source}</textarea><div {attrs-button-wrapper}><i class="icon photo"></i>&nbsp;<span>{label}</span></div></div>';
+        $html = '<div {attrs-wrapper}><input {attrs-file}><textarea {attrs-field}>{image-source}</textarea><div {attrs-button-wrapper}><i class="icon photo"></i>&nbsp;<span {attrs-button}>{label}</span></div></div>';
 
         if ($this->renderThumbContainer === true)
         {
@@ -343,6 +346,10 @@ class ImageUploadElement extends Element
                 'multiple' => '',
                 'style'    => 'display:none',
             ],
+            'attrs-button'         => [
+                'data-label-optional' => FormView::getOptionalLabel(),
+                'data-label-required' => FormView::getRequiredLabel(),
+            ],
             'attrs-field'          => $this->getWidgetAttributes(),
         ];
 
@@ -372,7 +379,6 @@ class ImageUploadElement extends Element
 
     /**
      * @return string
-     * @throws FormError
      */
     public function getCode(): string
     {

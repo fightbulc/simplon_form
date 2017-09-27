@@ -50,8 +50,8 @@ $storedData = [
 
 $cloneBlockOne = (new CloneFields('defaults', $requestData, $storedData))
     ->add((new FormField('address'))->addMeta((new OptionsMeta())->add('Mr.')->add('Mrs.'))->addRule(new RequiredRule()))
-    ->add((new FormField('firstname'))->addRule(new RequiredRule()))
-    ->add((new FormField('lastname'))->addRule(new RequiredRule()))
+    ->add((new FormField('firstname'))->addRule(new EmailRule()))
+    ->add((new FormField('lastname'))->addRule(new EmailRule()))
     ->add((new FormField('email'))->addRule(new EmailRule()))
     ->add((new FormField('website'))->addRule(new IfFilledRule([(new UrlRule('ftp'))->setAdditionalRegex('/^http:\/\//i')])))
 ;
@@ -140,6 +140,8 @@ $imageBlock = (new FormViewBlock('image'))
     ->addRow((new FormViewRow())->autoColumns($imageElement));
 
 // ====================================
+
+//FormView::useOptionalLabel(true);
 
 $view = (new FormView())
     ->setComponentDir('../../assets/vendor')

@@ -3,6 +3,7 @@
 namespace Simplon\Form\View\Elements;
 
 use Simplon\Form\View\Element;
+use Simplon\Form\View\FormView;
 use Simplon\Form\View\RenderHelper;
 
 /**
@@ -85,7 +86,9 @@ class InputTextElement extends Element
 
             $attrs = [
                 'attrs' => [
-                    'for' => $this->renderElementId(),
+                    'for'                 => $this->renderElementId(),
+                    'data-label-optional' => FormView::getOptionalLabel(),
+                    'data-label-required' => FormView::getRequiredLabel(),
                 ],
             ];
 

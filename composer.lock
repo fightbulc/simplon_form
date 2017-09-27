@@ -7,17 +7,75 @@
     "content-hash": "b83ab3d9edf37f0395b61f0a25fad0be",
     "packages": [
         {
-            "name": "fightbulc/moment",
-            "version": "1.26.5",
+            "name": "dusank/knapsack",
+            "version": "10.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fightbulc/moment.php.git",
-                "reference": "cdd7e35a03d2fe13e8d050c9526eaeea241f9b0e"
+                "url": "https://github.com/DusanKasan/Knapsack.git",
+                "reference": "cc29a0bbaadbfcb958b98aa4fd69a4ad7d173bba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fightbulc/moment.php/zipball/cdd7e35a03d2fe13e8d050c9526eaeea241f9b0e",
-                "reference": "cdd7e35a03d2fe13e8d050c9526eaeea241f9b0e",
+                "url": "https://api.github.com/repos/DusanKasan/Knapsack/zipball/cc29a0bbaadbfcb958b98aa4fd69a4ad7d173bba",
+                "reference": "cc29a0bbaadbfcb958b98aa4fd69a4ad7d173bba",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "ciaranmcnulty/phpspec-typehintedmethods": "^1.0",
+                "henrikbjorn/phpspec-code-coverage": "^2.0",
+                "phpmd/phpmd": "^2.0",
+                "phpspec/phpspec": "^2.0",
+                "phpunit/phpunit": "^5.0",
+                "squizlabs/php_codesniffer": "^2.0",
+                "symfony/console": "^2.7"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/collection_functions.php",
+                    "src/utility_functions.php"
+                ],
+                "psr-4": {
+                    "DusanKasan\\Knapsack\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dusan Kasan",
+                    "email": "dusan@kasan.sk",
+                    "homepage": "http://kasan.sk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Collection library for PHP",
+            "homepage": "https://github.com/DusanKasan/Knapsack",
+            "keywords": [
+                "collections",
+                "map",
+                "reduce",
+                "sequences"
+            ],
+            "time": "2017-04-24T22:52:29+00:00"
+        },
+        {
+            "name": "fightbulc/moment",
+            "version": "1.26.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fightbulc/moment.php.git",
+                "reference": "2fe6607fdbbd45b48708f539c70fde89ca9d10e6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fightbulc/moment.php/zipball/2fe6607fdbbd45b48708f539c70fde89ca9d10e6",
+                "reference": "2fe6607fdbbd45b48708f539c70fde89ca9d10e6",
                 "shasum": ""
             },
             "require": {
@@ -67,7 +125,7 @@
                 "translation",
                 "validate"
             ],
-            "time": "2017-05-15T09:09:18+00:00"
+            "time": "2017-08-14T05:06:04+00:00"
         },
         {
             "name": "kriswallsmith/assetic",
@@ -148,16 +206,16 @@
         },
         {
             "name": "simplon/component_form",
-            "version": "0.1.9",
+            "version": "0.1.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fightbulc/simplon_component_form.git",
-                "reference": "cc618a3938012e67b293db99656d7081d654603c"
+                "reference": "5a54ebcf1c90c38569ea547581aeaaa83d734fe8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fightbulc/simplon_component_form/zipball/cc618a3938012e67b293db99656d7081d654603c",
-                "reference": "cc618a3938012e67b293db99656d7081d654603c",
+                "url": "https://api.github.com/repos/fightbulc/simplon_component_form/zipball/5a54ebcf1c90c38569ea547581aeaaa83d734fe8",
+                "reference": "5a54ebcf1c90c38569ea547581aeaaa83d734fe8",
                 "shasum": ""
             },
             "require": {
@@ -189,20 +247,20 @@
                 }
             ],
             "description": "Assets required for simplon/form",
-            "time": "2017-06-22T08:40:52+00:00"
+            "time": "2017-09-27T12:53:05+00:00"
         },
         {
             "name": "simplon/component_semanticui",
-            "version": "0.0.20",
+            "version": "0.0.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fightbulc/simplon_component_semanticui.git",
-                "reference": "f035e8350f2c2fe68b3c523fda7375df768f49db"
+                "reference": "7b479a1f02af492d5700f8f77dc9953c816370d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fightbulc/simplon_component_semanticui/zipball/f035e8350f2c2fe68b3c523fda7375df768f49db",
-                "reference": "f035e8350f2c2fe68b3c523fda7375df768f49db",
+                "url": "https://api.github.com/repos/fightbulc/simplon_component_semanticui/zipball/7b479a1f02af492d5700f8f77dc9953c816370d3",
+                "reference": "7b479a1f02af492d5700f8f77dc9953c816370d3",
                 "shasum": ""
             },
             "require": {
@@ -224,10 +282,15 @@
                         "semantic-ui/2.2.x/themes/default/assets/fonts/icons.woff",
                         "semantic-ui/2.2.x/themes/default/assets/fonts/icons.woff2",
                         "semantic-ui/2.2.x/themes/default/assets/images/flags.png",
-                        "semantic-ui/2.2.x/themes/github/assets/fonts/icons.eot",
-                        "semantic-ui/2.2.x/themes/github/assets/fonts/icons.svg",
-                        "semantic-ui/2.2.x/themes/github/assets/fonts/icons.ttf",
-                        "semantic-ui/2.2.x/themes/github/assets/fonts/icons.woff",
+                        "semantic-ui/2.2.x/themes/github/assets/fonts/octicons-local.ttf",
+                        "semantic-ui/2.2.x/themes/github/assets/fonts/octicons.svg",
+                        "semantic-ui/2.2.x/themes/github/assets/fonts/octicons.ttf",
+                        "semantic-ui/2.2.x/themes/github/assets/fonts/octicons.woff",
+                        "semantic-ui/2.2.x/themes/material/assets/fonts/icons.eot",
+                        "semantic-ui/2.2.x/themes/material/assets/fonts/icons.svg",
+                        "semantic-ui/2.2.x/themes/material/assets/fonts/icons.ttf",
+                        "semantic-ui/2.2.x/themes/material/assets/fonts/icons.woff",
+                        "semantic-ui/2.2.x/themes/material/assets/fonts/icons.woff2",
                         "semantic-ui/2.2.x/components/accordion.css",
                         "semantic-ui/2.2.x/components/accordion.js",
                         "semantic-ui/2.2.x/components/accordion.min.css",
@@ -390,7 +453,7 @@
             ],
             "description": "Semantic empowers designers and developers by creating a shared vocabulary for UI.",
             "homepage": "http://www.semantic-ui.com",
-            "time": "2017-04-19T12:21:58+00:00"
+            "time": "2017-09-27T08:51:32+00:00"
         },
         {
             "name": "simplon/components",
@@ -442,19 +505,20 @@
         },
         {
             "name": "simplon/helper",
-            "version": "1.0.4",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fightbulc/simplon_helper.git",
-                "reference": "c541bd499e42a60c2c8aebfc1ecbd82d461b7360"
+                "reference": "50b9078a5c2fb35a57e9cdcf48bf60142a8964ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fightbulc/simplon_helper/zipball/c541bd499e42a60c2c8aebfc1ecbd82d461b7360",
-                "reference": "c541bd499e42a60c2c8aebfc1ecbd82d461b7360",
+                "url": "https://api.github.com/repos/fightbulc/simplon_helper/zipball/50b9078a5c2fb35a57e9cdcf48bf60142a8964ee",
+                "reference": "50b9078a5c2fb35a57e9cdcf48bf60142a8964ee",
                 "shasum": ""
             },
             "require": {
+                "dusank/knapsack": "^10.0",
                 "php": ">=7.1"
             },
             "type": "library",
@@ -481,7 +545,7 @@
                 "passwords",
                 "tokens"
             ],
-            "time": "2017-06-22T06:48:05+00:00"
+            "time": "2017-08-16T11:03:50+00:00"
         },
         {
             "name": "simplon/phtml",
@@ -528,20 +592,20 @@
         },
         {
             "name": "symfony/process",
-            "version": "v3.3.2",
+            "version": "v3.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "8e30690c67aafb6c7992d6d8eb0d707807dd3eaf"
+                "reference": "b7666e9b438027a1ea0e1ee813ec5042d5d7f6f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/8e30690c67aafb6c7992d6d8eb0d707807dd3eaf",
-                "reference": "8e30690c67aafb6c7992d6d8eb0d707807dd3eaf",
+                "url": "https://api.github.com/repos/symfony/process/zipball/b7666e9b438027a1ea0e1ee813ec5042d5d7f6f0",
+                "reference": "b7666e9b438027a1ea0e1ee813ec5042d5d7f6f0",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9"
+                "php": "^5.5.9|>=7.0.8"
             },
             "type": "library",
             "extra": {
@@ -573,7 +637,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-22T12:32:03+00:00"
+            "time": "2017-07-29T21:54:42+00:00"
         }
     ],
     "packages-dev": [],

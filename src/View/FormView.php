@@ -18,6 +18,18 @@ class FormView
     const ASSET_TYPE_JS = '.js';
 
     /**
+     * @var bool
+     */
+    private static $fieldUseOptionalLabel = false;
+    /**
+     * @var bool
+     */
+    private static $fieldLabelOptional = 'optional';
+    /**
+     * @var bool
+     */
+    private static $fieldLabelRequired = 'required';
+    /**
      * @var null|string
      */
     private $scope;
@@ -87,6 +99,54 @@ class FormView
         '/semantic-ui/2.2.x/semantic.min.js',
         '/simplon-form/base.min.js',
     ];
+
+    /**
+     * @return bool
+     */
+    public static function shouldUseOptionalLabel(): bool
+    {
+        return self::$fieldUseOptionalLabel;
+    }
+
+    /**
+     * @param bool $flag
+     */
+    public static function useOptionalLabel(bool $flag)
+    {
+        self::$fieldUseOptionalLabel = $flag === true;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getOptionalLabel(): string
+    {
+        return self::$fieldLabelOptional;
+    }
+
+    /**
+     * @param string $label
+     */
+    public static function setOptionalLabel(string $label)
+    {
+        self::$fieldLabelOptional = $label;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getRequiredLabel(): string
+    {
+        return self::$fieldLabelRequired;
+    }
+
+    /**
+     * @param string $label
+     */
+    public static function setRequiredLabel(string $label)
+    {
+        self::$fieldLabelRequired = $label;
+    }
 
     /**
      * @param null|string $scope

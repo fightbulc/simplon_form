@@ -202,7 +202,7 @@ abstract class Element implements ElementInterface
         if ($this->hasDescription())
         {
             /** @noinspection HtmlUnknownAttribute */
-            $html = $spacer . '<i {attrs}></i>';
+            $html = $spacer . '<i {attrs} style="margin:0"></i>';
 
             $attrs = [
                 'attrs' => [
@@ -227,9 +227,14 @@ abstract class Element implements ElementInterface
 
         $class = ['field'];
 
-        if ($this->getField()->hasDirectRules())
+        if ($this->getField()->hasDirectRules() && !FormView::shouldUseOptionalLabel())
         {
             $class[] = 'required';
+        }
+
+        if (!$this->getField()->hasDirectRules() && FormView::shouldUseOptionalLabel())
+        {
+            $class[] = 'optional';
         }
 
         if ($this->getWide())

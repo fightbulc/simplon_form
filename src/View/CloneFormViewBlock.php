@@ -3,6 +3,7 @@
 namespace Simplon\Form\View;
 
 use Simplon\Form\CloneFields;
+use Simplon\Form\FormError;
 
 /**
  * @package Simplon\Form\View
@@ -43,7 +44,7 @@ class CloneFormViewBlock
      * @param callable $builder
      *
      * @return FormViewBlock[]
-     * @throws \Simplon\Form\FormError
+     * @throws FormError
      */
     public function build(callable $builder): array
     {
