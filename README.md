@@ -30,7 +30,9 @@
 4.1 [Building fields](#41-building-fields)  
 4.2 [Building view](#41-building-view)  
 4.3 [Building templates](#41-building-templates)  
-5. [__Examples__](#5-examples)  
+5. [__Settings__](#5-settings)  
+5.1 [Field required/optinal label](51-field-required-optional-label)    
+6. [__Examples__](#6-examples)  
 
 -------------------------------------------------
 
@@ -1184,6 +1186,47 @@ use Simplon\Form\View\FormView;
 ```
 -------------------------------------------------
 
-# 5. Examples
+# 5. Settings
+
+## 5.1 Field required/optional label
+
+Fields can be marked being `required` or `optional` - so either one of the both states depending on your preference.
+You will also have the possibility to override the default displayed words/characters e.g. to localise your form.  
+
+### Toggle between required/optional
+
+```php
+//
+// mark only optional fields
+//
+
+FormView::useOptionalLabel(true);
+
+//
+// mark only required fields
+//
+
+FormView::useOptionalLabel(false); // default value
+```
+
+### Override label texts
+
+```php
+//
+// override optional text
+//
+
+FormView::setOptionalLabel('opcional'); // translated to Spanish
+
+//
+// override required text
+//
+
+FormView::setRequiredLabel('*');
+```
+
+-------------------------------------------------
+
+# 6. Examples
 
 Coming soon

@@ -141,7 +141,7 @@ $imageBlock = (new FormViewBlock('image'))
 
 // ====================================
 
-//FormView::useOptionalLabel(true);
+FormView::useOptionalLabel(true);
 
 $view = (new FormView())
     ->setComponentDir('../../assets/vendor')
