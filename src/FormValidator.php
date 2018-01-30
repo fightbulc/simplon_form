@@ -6,9 +6,6 @@ use Simplon\Form\Data\FormField;
 use Simplon\Form\Data\RuleException;
 use Simplon\Form\Security\Csrf;
 
-/**
- * @package Simplon\Form
- */
 class FormValidator
 {
     /**
@@ -112,7 +109,7 @@ class FormValidator
     {
         $this->fields[] = $this->applyRequestData($fields);
 
-        $this->cloneFieldBlocks[] = $fields->getCloneFields();
+        $this->cloneFieldBlocks[] = $fields->fetchCloneFields();
 
         return $this;
     }

@@ -2,10 +2,6 @@
 
 namespace Simplon\Form\Security;
 
-/**
- * Class Csrf
- * @package Simplon\Form\Security
- */
 class Csrf
 {
     /**

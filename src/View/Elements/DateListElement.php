@@ -5,9 +5,6 @@ namespace Simplon\Form\View\Elements;
 use Moment\Moment;
 use Moment\MomentException;
 
-/**
- * @package Simplon\Form\View\Elements
- */
 class DateListElement extends DropDownElement
 {
     /**

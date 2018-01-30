@@ -2,10 +2,6 @@
 
 namespace Simplon\Form\Security;
 
-/**
- * Class CsrfSessionStorage
- * @package Simplon\Form\Security
- */
 class CsrfSessionStorage implements CsrfStorageInterface
 {
     public function __construct()
@@ -19,8 +15,10 @@ class CsrfSessionStorage implements CsrfStorageInterface
     /**
      * @param string $key
      * @param array $data
+     *
+     * @return void
      */
-    public function write($key, array $data)
+    public function write(string $key, array $data): void
     {
         $_SESSION[$key] = $data;
     }
@@ -30,7 +28,7 @@ class CsrfSessionStorage implements CsrfStorageInterface
      *
      * @return array|null
      */
-    public function read($key)
+    public function read(string $key): ?array
     {
         if (empty($_SESSION[$key]))
         {

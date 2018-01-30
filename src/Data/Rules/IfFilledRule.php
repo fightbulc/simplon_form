@@ -7,9 +7,6 @@ use Simplon\Form\Data\Rule;
 use Simplon\Form\Data\RuleException;
 use Simplon\Form\Data\RuleInterface;
 
-/**
- * @package Simplon\Form\Data\Rules
- */
 class IfFilledRule extends Rule
 {
     /**

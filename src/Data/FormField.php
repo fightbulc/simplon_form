@@ -8,9 +8,6 @@ use Simplon\Form\Data\Rules\IfFilledRule;
 use Simplon\Form\FormError;
 use Simplon\Form\View\Elements\Support\Meta\MetaInterface;
 
-/**
- * @package Simplon\Form\Data
- */
 class FormField
 {
     /**

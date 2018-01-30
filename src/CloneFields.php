@@ -5,13 +5,14 @@ namespace Simplon\Form;
 use Simplon\Form\Data\FormField;
 use Simplon\Helper\SecurityUtil;
 
-/**
- * @package Simplon\Form
- */
 class CloneFields
 {
     const CLONE_PATTERN = '_CLB';
 
+    /**
+     * @var array
+     */
+    private static $cloneFieldIds = [];
     /**
      * @var string
      */
@@ -23,7 +24,7 @@ class CloneFields
     /**
      * @var array
      */
-    private $storedData;
+    private $initialData;
     /**
      * @var string
      */
@@ -98,15 +99,21 @@ class CloneFields
     }
 
     /**
-     * @param string $id
-     * @param array $requestData
-     * @param array $storedData
+     * @param string $fieldIdWithToken
+     *
+     * @return null|string
      */
-    public function __construct(string $id, array $requestData = [], array $storedData = [])
+    public static function fetchCloneFieldId(string $fieldIdWithToken): ?string
+    {
+        return self::$cloneFieldIds[$fieldIdWithToken] ?? null;
+    }
+
+    /**
+     * @param string $id
+     */
+    public function __construct(string $id)
     {
         $this->id = $id;
-        $this->requestData = FormValidator::normaliseRequestData($requestData);
-        $this->storedData = $storedData;
     }
 
     /**
@@ -123,6 +130,46 @@ class CloneFields
     public function getChecksum(): ?string
     {
         return $this->checksum;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRequestData(): array
+    {
+        return $this->requestData;
+    }
+
+    /**
+     * @param array $requestData
+     *
+     * @return CloneFields
+     */
+    public function setRequestData(array $requestData): CloneFields
+    {
+        $this->requestData = $requestData;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getInitialData(): array
+    {
+        return $this->initialData;
+    }
+
+    /**
+     * @param array $initialData
+     *
+     * @return CloneFields
+     */
+    public function setInitialData(array $initialData): CloneFields
+    {
+        $this->initialData = $initialData;
+
+        return $this;
     }
 
     /**
@@ -285,11 +332,11 @@ class CloneFields
      */
     private function getInitialBlocksCount(): int
     {
-        if (!empty($this->storedData[FormFields::KEY_CLONE_DATA]))
+        if (!empty($this->initialData[FormFields::KEY_CLONE_DATA][$this->getId()]))
         {
             $count = 0;
 
-            foreach ($this->storedData[FormFields::KEY_CLONE_DATA] as $sets)
+            foreach ($this->initialData[FormFields::KEY_CLONE_DATA][$this->getId()] as $sets)
             {
                 foreach ($sets as $id => $value)
                 {
@@ -376,6 +423,9 @@ class CloneFields
                 $field = clone $coreField;
                 $field->setId(self::addToken($field->getId(), $token));
                 $fields[$token][$field->getId()] = $field;
+
+                // cache field2clone reference
+                self::$cloneFieldIds[$field->getId()] = $this->getId();
             }
         }
 

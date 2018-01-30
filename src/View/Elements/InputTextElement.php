@@ -6,9 +6,6 @@ use Simplon\Form\View\Element;
 use Simplon\Form\View\FormView;
 use Simplon\Form\View\RenderHelper;
 
-/**
- * @package Simplon\Form\View\Elements
- */
 class InputTextElement extends Element
 {
     /**

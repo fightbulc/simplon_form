@@ -2,9 +2,6 @@
 
 namespace Simplon\Form\View\Elements;
 
-/**
- * @package Simplon\Form\View\Elements
- */
 class InputPasswordElement extends InputTextElement
 {
     /**

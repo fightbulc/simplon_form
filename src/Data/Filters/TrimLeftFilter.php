@@ -2,18 +2,14 @@
 
 namespace Simplon\Form\Data\Filters;
 
-/**
- * Class TrimLeftFilter
- * @package Simplon\Form\Data\Filters
- */
 class TrimLeftFilter extends TrimFilter
 {
     /**
-     * @param string $value
+     * @param null|string $value
      *
      * @return string
      */
-    protected function convert($value)
+    protected function convert(?string $value): string
     {
         return ltrim($value, $this->trimChars);
     }

@@ -4,15 +4,12 @@ namespace Simplon\Form\Data\Filters;
 
 use Simplon\Form\Data\FilterInterface;
 
-/**
- * @package Simplon\Form\Data\Filters
- */
 class CaseLowerFilter implements FilterInterface
 {
     /**
      * @param string $value
      *
-     * @return string
+     * @return mixed
      */
     public function apply($value)
     {
@@ -39,7 +36,7 @@ class CaseLowerFilter implements FilterInterface
      *
      * @return string
      */
-    private function convert($value)
+    private function convert(string $value): string
     {
         return mb_convert_case($value, MB_CASE_LOWER, 'UTF-8');
     }

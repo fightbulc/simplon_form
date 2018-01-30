@@ -4,9 +4,6 @@ namespace Simplon\Form\View\Elements\Support\DropDownApi\Algolia;
 
 use Simplon\Form\View\Elements\Support\DropDownApi\DropDownApiResponseDataInterface;
 
-/**
- * @package Simplon\Form\View\Elements\Support\DropDownApi\Algolia
- */
 class AlgoliaPlacesApiResponseData implements DropDownApiResponseDataInterface
 {
     /**

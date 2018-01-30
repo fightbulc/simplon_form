@@ -2,9 +2,6 @@
 
 namespace Simplon\Form\View\Elements\Support\Meta;
 
-/**
- * @package Simplon\Form\View\Elements\Support\Meta
- */
 interface MetaInterface
 {
     /**

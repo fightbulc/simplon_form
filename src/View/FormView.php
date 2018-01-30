@@ -8,9 +8,6 @@ use Simplon\Form\View\Elements\SubmitElement;
 use Simplon\Phtml\Phtml;
 use Simplon\Phtml\PhtmlException;
 
-/**
- * @package Simplon\Form\View
- */
 class FormView
 {
     const ASSET_TYPE_ALL = 'all';

@@ -2,9 +2,6 @@
 
 namespace Simplon\Form\View\Elements\Support\DropDownApi;
 
-/**
- * @package Simplon\Form\View\Elements\Support\DropDownApi
- */
 interface DropDownApiJsInterface
 {
     /**

@@ -2,22 +2,20 @@
 
 namespace Simplon\Form\Security;
 
-/**
- * Interface CsrfStorageInterface
- * @package Simplon\Form\Security
- */
 interface CsrfStorageInterface
 {
     /**
      * @param string $key
      * @param array $data
+     *
+     * @return void
      */
-    public function write($key, array $data);
+    public function write(string $key, array $data): void;
 
     /**
      * @param string $key
      *
      * @return array|null
      */
-    public function read($key);
+    public function read(string $key): ?array;
 }

@@ -4,11 +4,6 @@ namespace Simplon\Form\Data\Filters;
 
 use Simplon\Form\Data\FilterInterface;
 
-/**
- * TrimFilter
- * @package Simplon\Form\Filters
- * @author Tino Ehrich (tino@bigpun.me)
- */
 class TrimFilter implements FilterInterface
 {
     /**
@@ -19,7 +14,7 @@ class TrimFilter implements FilterInterface
     /**
      * @param string $trimChars
      */
-    public function __construct($trimChars = " \t\n\r\0\x0B")
+    public function __construct(string $trimChars = " \t\n\r\0\x0B")
     {
         $this->trimChars = $trimChars;
     }
@@ -39,7 +34,7 @@ class TrimFilter implements FilterInterface
     /**
      * @param string $value
      *
-     * @return string
+     * @return mixed
      */
     public function apply($value)
     {
@@ -57,11 +52,11 @@ class TrimFilter implements FilterInterface
     }
 
     /**
-     * @param string $value
+     * @param null|string $value
      *
      * @return string
      */
-    protected function convert($value)
+    private function convert(?string $value): string
     {
         return trim($value, $this->trimChars);
     }

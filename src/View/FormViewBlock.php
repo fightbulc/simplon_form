@@ -174,16 +174,11 @@ class FormViewBlock
 
             $code[] = '
             <div class="uk-sortable-handle custom-nestable-handle">
-                <div class="ui right simple dropdown icon button" style="padding:.3em;margin:0">
-                    <i class="setting icon"></i>
-                    <div class="menu">
-                        <div class="item clone-block" data-block="' . $checksum . '" data-token="' . $this->getId() . '">
-                            Clone
-                        </div>
-                        <div class="item clone-remove" data-block="' . $checksum . '" data-token="' . $this->getId() . '">
-                            Remove
-                        </div>
-                    </div>
+                <div data-block="' . $checksum . '" data-token="' . $this->getId() . '" class="ui right icon button clone-block" style="padding:.3em;margin:0">
+                    <i class="plus small icon" style="line-height:1.6em!important"></i>
+                </div>
+                <div data-block="' . $checksum . '" data-token="' . $this->getId() . '" class="ui right icon red button clone-remove" style="padding:.3em;margin:0;background:#bb4344">
+                    <i class="minus small icon" style="line-height:1.6em!important;"></i>
                 </div>
             </div>
             ';

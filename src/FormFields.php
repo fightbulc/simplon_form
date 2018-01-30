@@ -4,9 +4,6 @@ namespace Simplon\Form;
 
 use Simplon\Form\Data\FormField;
 
-/**
- * @package Simplon\Form
- */
 class FormFields
 {
     const KEY_CLONE_DATA = 'clones';
@@ -53,13 +50,20 @@ class FormFields
     }
 
     /**
-     * @param FormField $field
+     * @param FormField|CloneFields $field
      *
      * @return FormFields
      * @throws FormError
      */
-    public function add(FormField $field): self
+    public function add($field): self
     {
+        if ($field instanceof CloneFields)
+        {
+            $this->addCloneFields($field);
+
+            return $this;
+        }
+
         if (isset($this->fields[$field->getId()]))
         {
             throw new FormError('FormField ID "' . $field->getId() . '" exists already');
@@ -71,38 +75,21 @@ class FormFields
     }
 
     /**
-     * @return CloneFields[]|null
+     * @param string $id
+     *
+     * @return CloneFields|null
      */
-    public function getCloneFields(): ?array
+    public function fetchCloneField(string $id): ?CloneFields
     {
-        return $this->cloneFields;
+        return $this->cloneFields[$id] ?? null;
     }
 
     /**
-     * @param CloneFields $cloneFields
-     *
-     * @return FormFields
-     * @throws FormError
+     * @return CloneFields[]|null
      */
-    public function addCloneFields(CloneFields $cloneFields): self
+    public function fetchCloneFields(): ?array
     {
-        $this->cloneFields[$cloneFields->getId()] = $cloneFields;
-
-        $cloneFields->detectNewFields();
-
-        foreach ($cloneFields->getBlocks() as $block)
-        {
-            /** @var FormField[] $block */
-            foreach ($block as $field)
-            {
-                $this->add($field);
-            }
-        }
-
-        // add hidden clone field
-        $this->add(new FormField($cloneFields->getChecksum()));
-
-        return $this;
+        return $this->cloneFields;
     }
 
     /**
@@ -185,19 +172,70 @@ class FormFields
     }
 
     /**
+     * @param array $initialData
+     * @param array $requestData
+     *
+     * @return FormFields
+     * @throws FormError
+     */
+    public function applyBuildData(array $initialData = [], array $requestData = []): self
+    {
+        $this->applyCloneFieldBuildData($initialData, $requestData)->applyInitialData($initialData);
+
+        return $this;
+    }
+
+    /**
+     * @param array $initialData
+     * @param array $requestData
+     *
+     * @return FormFields
+     * @throws FormError
+     */
+    private function applyCloneFieldBuildData(array $initialData = [], array $requestData = []): self
+    {
+        $requestData = FormValidator::normaliseRequestData($requestData);
+
+        foreach ($this->cloneFields as $id => $fields)
+        {
+            $fields
+                ->setInitialData($initialData)
+                ->setRequestData($requestData)
+            ;
+
+            $fields->detectNewFields();
+
+            foreach ($fields->getBlocks() as $block)
+            {
+                /** @var FormField[] $block */
+                foreach ($block as $field)
+                {
+                    $this->add($field);
+                }
+            }
+
+            // add hidden clone field
+            $this->add(new FormField($fields->getChecksum()));
+        }
+
+        return $this;
+    }
+
+    /**
      * @param array $data
      *
      * @return FormFields
      */
-    public function applyInitialData(array $data): self
+    private function applyInitialData(array $data): self
     {
         $cloneFieldIndex = [];
 
         foreach ($this->getAll() as $field)
         {
             $id = $field->getId();
+            $cloneFieldId = CloneFields::fetchCloneFieldId($field->getId());
 
-            if (CloneFields::hasToken($id) && !empty($data[self::KEY_CLONE_DATA]))
+            if (CloneFields::hasToken($id) && !empty($data[self::KEY_CLONE_DATA][$cloneFieldId]))
             {
                 $idWithoutToken = CloneFields::removeToken($id);
 
@@ -207,10 +245,11 @@ class FormFields
                 }
 
                 $currentFieldIndex = $cloneFieldIndex[$idWithoutToken];
+                $fieldValue = $data[self::KEY_CLONE_DATA][$cloneFieldId][$currentFieldIndex][$idWithoutToken] ?? null;
 
-                if (isset($data[self::KEY_CLONE_DATA][$currentFieldIndex][$idWithoutToken]))
+                if (isset($fieldValue))
                 {
-                    $field->setInitialValue($data[self::KEY_CLONE_DATA][$currentFieldIndex][$idWithoutToken]);
+                    $field->setInitialValue($fieldValue);
                     $cloneFieldIndex[$idWithoutToken]++;
                 }
             }
@@ -222,6 +261,18 @@ class FormFields
                 }
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @param CloneFields $cloneFields
+     *
+     * @return FormFields
+     */
+    private function addCloneFields(CloneFields $cloneFields): self
+    {
+        $this->cloneFields[$cloneFields->getId()] = $cloneFields;
 
         return $this;
     }

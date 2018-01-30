@@ -5,9 +5,6 @@ namespace Simplon\Form\View;
 use Simplon\Form\CloneFields;
 use Simplon\Form\FormError;
 
-/**
- * @package Simplon\Form\View
- */
 class CloneFormViewBlock
 {
     /**
@@ -15,6 +12,12 @@ class CloneFormViewBlock
      */
     private $cloneFields;
 
+    /**
+     * @param array $formViewBlocks
+     * @param callable $template
+     *
+     * @return string
+     */
     public static function render(array $formViewBlocks, callable $template): string
     {
         /** @noinspection HtmlUnknownAttribute */

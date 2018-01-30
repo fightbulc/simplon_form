@@ -4,9 +4,6 @@ namespace Simplon\Form\View\Elements;
 
 use Simplon\Form\View\RenderHelper;
 
-/**
- * @package Simplon\Form\View\Elements
- */
 class SubmitElement
 {
     /**

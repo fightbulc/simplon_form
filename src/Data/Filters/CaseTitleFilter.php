@@ -4,17 +4,12 @@ namespace Simplon\Form\Data\Filters;
 
 use Simplon\Form\Data\FilterInterface;
 
-/**
- * CaseTitleFilter
- * @package Simplon\Form\Filters
- * @author Tino Ehrich (tino@bigpun.me)
- */
 class CaseTitleFilter implements FilterInterface
 {
     /**
      * @param string $value
      *
-     * @return string
+     * @return mixed
      */
     public function apply($value)
     {
@@ -41,7 +36,7 @@ class CaseTitleFilter implements FilterInterface
      *
      * @return string
      */
-    private function convert($value)
+    private function convert(string $value): string
     {
         return mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
     }

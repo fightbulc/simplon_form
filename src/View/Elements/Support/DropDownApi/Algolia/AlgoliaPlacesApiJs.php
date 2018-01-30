@@ -7,7 +7,6 @@ use Simplon\Form\View\Elements\Support\DropDownApi\DropDownApiResponseDataInterf
 use Simplon\Form\View\RenderHelper;
 
 /**
- * @package Simplon\Form\View\Elements\Support\DropDownApi\Algolia
  * @see https://community.algolia.com/places/rest.html
  */
 class AlgoliaPlacesApiJs implements DropDownApiJsInterface

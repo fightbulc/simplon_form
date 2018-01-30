@@ -4,9 +4,6 @@ namespace Simplon\Form\View\Elements\Support\DropDownApi\Semantic;
 
 use Simplon\Form\View\Elements\Support\DropDownApi\DropDownApiResponseDataInterface;
 
-/**
- * @package Simplon\Form\View\Elements\Support\DropDownApi\Semantic
- */
 class SemanticApiResponseData implements DropDownApiResponseDataInterface
 {
     /**

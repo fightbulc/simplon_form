@@ -2,9 +2,6 @@
 
 namespace Simplon\Form\Data;
 
-/**
- * @package Simplon\Form\Data
- */
 abstract class Rule implements RuleInterface
 {
     /**

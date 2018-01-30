@@ -4,16 +4,12 @@ namespace Simplon\Form\Data\Filters;
 
 use Simplon\Form\Data\FilterInterface;
 
-/**
- * Class XssFilter
- * @package Simplon\Form\Data\Filters
- */
 class XssFilter implements FilterInterface
 {
     /**
      * @param string $value
      *
-     * @return string
+     * @return mixed
      */
     public function apply($value)
     {

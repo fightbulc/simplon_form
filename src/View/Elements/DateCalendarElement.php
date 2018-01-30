@@ -9,9 +9,6 @@ use Simplon\Form\View\Element;
 use Simplon\Form\View\FormView;
 use Simplon\Form\View\RenderHelper;
 
-/**
- * @package Simplon\Form\View\Elements
- */
 class DateCalendarElement extends Element
 {
     const TYPE_MONTH = 'month';
@@ -276,7 +273,7 @@ class DateCalendarElement extends Element
     /**
      * @return null|string
      */
-    public function renderLabel():?string
+    public function renderLabel(): ?string
     {
         if ($this->hasLabel())
         {

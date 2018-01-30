@@ -6,10 +6,6 @@ use Simplon\Form\Data\FormField;
 use Simplon\Form\Data\Rule;
 use Simplon\Form\Data\RuleException;
 
-/**
- * Class RequiredRule
- * @package Simplon\Form\Data\Rules
- */
 class RequiredRule extends Rule
 {
     /**

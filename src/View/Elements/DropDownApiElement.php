@@ -8,9 +8,6 @@ use Simplon\Form\View\Elements\Support\DropDownApi\DropDownApiData;
 use Simplon\Form\View\Elements\Support\DropDownApi\DropDownApiJsInterface;
 use Simplon\Form\View\RenderHelper;
 
-/**
- * @package Simplon\Form\View\Elements
- */
 class DropDownApiElement extends DropDownElement
 {
     /**
