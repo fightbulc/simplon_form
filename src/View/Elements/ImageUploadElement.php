@@ -369,6 +369,7 @@ class ImageUploadElement extends Element
     public function getAssets(): array
     {
         return [
+            'downloadjs/downloadjs.min.js',
             'image-upload/bundle.min.css',
             'image-upload/bundle.min.js',
         ];
