@@ -1,43 +1,45 @@
-<pre>
-     _                 _                __                          
- ___(_)_ __ ___  _ __ | | ___  _ __    / _| ___  _ __ _ __ ___  ___ 
-/ __| | '_ ` _ \| '_ \| |/ _ \| '_ \  | |_ / _ \| '__| '_ ` _ \/ __|
-\__ \ | | | | | | |_) | | (_) | | | | |  _| (_) | |  | | | | | \__ \
-|___/_|_| |_| |_| .__/|_|\___/|_| |_| |_|  \___/|_|  |_| |_| |_|___/
-                |_|                                                 
-</pre>
+```
+     _                 _                __                      
+ ___(_)_ __ ___  _ __ | | ___  _ __    / _| ___  _ __ _ __ ___  
+/ __| | '_ ` _ \| '_ \| |/ _ \| '_ \  | |_ / _ \| '__| '_ ` _ \ 
+\__ \ | | | | | | |_) | | (_) | | | | |  _| (_) | |  | | | | | |
+|___/_|_| |_| |_| .__/|_|\___/|_| |_| |_|  \___/|_|  |_| |_| |_|
+                |_|                                             
+```
+
+
 
 # Simplon/Forms
-                
+
 `Simplon/Forms` helps to validate data and, if needed, to build a form view with a couple of widgets by leveraging `Semantic-UI` library.
 
 -------------------------------------------------
 
 1. [__Quick example__](#1-quick-example)  
-1.1 [Fields](#11-fields)  
-1.2 [Validation](#12-validation)  
-1.3 [View](#13-view)  
+  1.1 [Fields](#11-fields)  
+  1.2 [Validation](#12-validation)  
+  1.3 [View](#13-view)  
 2. [__Fields__](#2-fields)  
-2.1 [General fields](#21-general-fields)  
-2.2 [Fields with options](#22-fields-with-options)  
-2.3 [Rules](#23-rules)  
-2.4 [Filters](#24-filters)  
+  2.1 [General fields](#21-general-fields)  
+  2.2 [Fields with options](#22-fields-with-options)  
+  2.3 [Rules](#23-rules)  
+  2.4 [Filters](#24-filters)  
 3. [__View__](#3-view)  
-3.1 [Simple example](#31-simple-example)  
-3.2 [Blocks & Rows](#32-blocks--rows)  
-3.3 [Elements](#33-elements)  
+  3.1 [Simple example](#31-simple-example)  
+  3.2 [Blocks & Rows](#32-blocks--rows)  
+  3.3 [Elements](#33-elements)  
 4. [__Block fields cloning__](#4-block-fields-cloning)  
-4.1 [Building fields](#41-building-fields)  
-4.2 [Building view](#41-building-view)  
-4.3 [Building templates](#41-building-templates)  
+  4.1 [Building fields](#41-building-fields)  
+  4.2 [Building view](#41-building-view)  
+  4.3 [Building templates](#41-building-templates)  
 5. [__Settings__](#5-settings)  
-5.1 [Field required/optinal label](#51-field-requiredoptional-label)    
+  5.1 [Field required/optinal label](#51-field-requiredoptional-label)    
 6. [__Examples__](#6-examples)  
 
 -------------------------------------------------
 
 # 1. Quick example
- 
+
 ## 1.1 Fields
 
 In order to validate data we need to create at least one field which can hold any number of rules to define its validity. A field can also hold any number of filters which will be applied to the field value.
@@ -118,7 +120,7 @@ $fields->get('email')->getValue(); // hello@bar.com
 ```
 
 ## 1.2 Validation
- 
+
 `FormValidation` is expecting at least one set of `FormFields`. Let's pick up the example from above with an additional `name` field. We set an empty array for our `request data`. You can take the value from any source as long as its organised as an array.
 
 ```php
@@ -309,7 +311,7 @@ $field = (new FormField('shipping-to'))
 ## 2.3. Rules
 
 There are a couple of common rules which we used so for all our form requirements. You can find them below. However, if you are in need to have some more rules it's very easy to add/extend rules. Just take a look at one of the existing rules to see how to do that.
- 
+
 ### RequiredRule
 
 Mark a field to be required.
@@ -1021,7 +1023,7 @@ $requestData = $_POST;
 
 $storedData = [
     'clones' => [
-        [
+        'address' => [
             'address' => 'Mr.',
             'firstname' => 'Peter',
             'lastname' => 'Foo',
@@ -1034,7 +1036,7 @@ $storedData = [
 // define core clone fields
 //
 
-$cloneBlock = (new CloneFields('defaults', $requestData, $storedData))
+$cloneBlock = (new CloneFields('address'))
     ->add((new FormField('address'))->addMeta((new OptionsMeta())->add('Mr.')->add('Mrs.'))->addRule(new RequiredRule()))
     ->add((new FormField('firstname'))->addRule(new RequiredRule()))
     ->add((new FormField('lastname'))->addRule(new RequiredRule()))
@@ -1047,8 +1049,8 @@ $cloneBlock = (new CloneFields('defaults', $requestData, $storedData))
 //
 
 $fields = (new FormFields())
-    ->addCloneFields($cloneBlock)
-    ->applyInitialData($storedData)
+    ->add($cloneBlock)
+    ->applyBuildData($storedData, $requestData)
 ;
 
 $validator = (new FormValidator($requestData))->addFields($fields)->validate();
@@ -1064,7 +1066,7 @@ if ($validator->hasBeenSubmitted())
 
         // [        
         //     'clones' => [
-        //          'defaults' => [
+        //          'address' => [
         //              [
         //                  'address' => 'Mr.',
         //                  'firstname' => 'Peter',
@@ -1102,11 +1104,11 @@ $build = function (FormViewBlock $viewBlock, string $token) use ($fields) {
         ;
 };
 
-$defaultBlocks = (new CloneFormViewBlock($cloneBlock))->build($build);
+$addressBlocks = (new CloneFormViewBlock($cloneBlock))->build($build);
 
 $view = (new FormView())
     ->setComponentDir('../../assets/vendor')
-    ->addBlocks($defaultBlocks)
+    ->addBlocks($addressBlocks)
 ;
 
 //
@@ -1144,13 +1146,15 @@ use Simplon\Form\View\FormView;
             background: #fff;
         }
     </style>
+
+    <?= $formView->renderAssets(FormView::ASSET_TYPE_CSS) ?>
 </head>
 <body>
     <div class="ui container">
         <?= $formView->render(__DIR__ . '/form.phtml') ?>
     </div>
 
-    <?= $formView->renderAssets() ?>
+    <?= $formView->renderAssets(FormView::ASSET_TYPE_JS) ?>
 </body>
 </html>
 ```
@@ -1174,7 +1178,7 @@ use Simplon\Form\View\FormView;
 <div class="ui basic segment">
     <h3>Default</h3>
     <?= CloneFormViewBlock::render(
-            $formView->getCloneBlocks('defaults'),
+            $formView->getCloneBlocks('address'),
             function(FormViewBlock $block) { return $block->render(); }
         )
     ?>
