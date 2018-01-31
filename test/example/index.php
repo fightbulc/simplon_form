@@ -34,21 +34,28 @@ try
 // define fields
 //
 
-    $cloneDefaultsId = 'defaults';
+    $cloneAddressId = 'address';
     $cloneDatesId = 'dates';
 
     $initialData = [
+        'bikes'     => 'Specialized',
         'url_image' => 'test.jpg',
         'clones'    => [
-            $cloneDefaultsId => [
+            $cloneAddressId => [
                 [
-                    'address'   => ['Mr.', 'Mrs.'],
+                    'address'   => 'Mr.',
                     'firstname' => 'Foo',
                     'lastname'  => 'Bar',
                     'email'     => 'foo@bar.me',
                 ],
+                [
+                    'address'   => 'Mrs.',
+                    'firstname' => 'Joe',
+                    'lastname'  => 'Black',
+                    'email'     => 'joe@black.me',
+                ],
             ],
-            $cloneDatesId    => [
+            $cloneDatesId   => [
                 [
                     'startDate' => '2017-06-17',
                     'endDate'   => '2017-06-20',
@@ -61,7 +68,7 @@ try
         ],
     ];
 
-    $cloneBlockOne = (new CloneFields($cloneDefaultsId))
+    $cloneBlockOne = (new CloneFields($cloneAddressId))
         ->add((new FormField('address'))->addMeta((new OptionsMeta())->add('Mr.')->add('Mrs.'))->addRule(new RequiredRule()))
         ->add((new FormField('firstname'))->addRule(new RequiredRule()))
         ->add((new FormField('lastname'))->addRule(new RequiredRule()))
@@ -75,6 +82,7 @@ try
     ;
 
     $fields = (new FormFields())
+        ->add((new FormField('bikes'))->addMeta((new OptionsMeta())->add('Canyon')->add('Specialized'))->addRule(new RequiredRule()))
         ->add((new FormField('city'))->addRule(new RequiredRule()))
         ->add((new FormField('url_image'))->addRule(new RequiredRule()))
         ->add($cloneBlockOne)
@@ -92,11 +100,11 @@ try
     {
         if (!$validator->isValid())
         {
-            echo '<div style="background:#f00;color:#fff;padding:10px">INVALID</div>';
+//            echo '<div style="background:#f00;color:#fff;padding:10px">INVALID</div>';
         }
         else
         {
-            echo '<div style="background:#0F0;color:#fff;padding:10px">ALL VALID</div>';
+//            echo '<div style="background:#0F0;color:#fff;padding:10px">ALL VALID</div>';
 
 //            echo '<pre>';
 //            var_dump([
@@ -111,7 +119,7 @@ try
 // render view
 //
 
-    $defaultBlocks = (new CloneFormViewBlock($fields->fetchCloneField($cloneDefaultsId)))->build(
+    $defaultBlocks = (new CloneFormViewBlock($fields->fetchCloneField($cloneAddressId)))->build(
         function (FormViewBlock $viewBlock, string $token) use ($fields) {
             $addressElement = (new DropDownElement($fields->get('address', $token)))->enableMultiple()->setLabel('Address');
             $firstnameElement = (new InputTextElement($fields->get('firstname', $token)))->setLabel('First name');
@@ -143,12 +151,22 @@ try
 
 // ====================================
 
+    $bikesBlock = (new FormViewBlock('bikes'))
+        ->addRow((new FormViewRow())->autoColumns(
+            (new DropDownElement($fields->get('bikes')))
+                ->enableMultiple()
+                ->enableSearchable()
+        ));
+
+// ====================================
+
     $citiesBlock = (new FormViewBlock('cities'))
         ->addRow((new FormViewRow())->autoColumns(
             (new DropDownApiElement($fields->get('city'), (new AlgoliaPlacesApiJs())->setType(AlgoliaPlacesApiJs::TYPE_CITY)))
                 ->enableMultiple()
                 ->setLabel('City')
                 ->setDescription('Search for a city')
+                ->setPlaceholder('Search by city ...')
         ));
 
 // ====================================
@@ -166,6 +184,7 @@ try
         ->setComponentDir('../../assets/vendor')
         ->addBlocks($defaultBlocks)
         ->addBlocks($datesBlocks)
+        ->addBlock($bikesBlock)
         ->addBlock($citiesBlock)
         ->addBlock($imageBlock)
     ;

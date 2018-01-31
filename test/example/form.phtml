@@ -16,8 +16,13 @@ use Simplon\Form\View\FormViewBlock;
 <?php endif ?>
 
 <div class="ui basic segment">
-    <h3>Default</h3>
-    <?= CloneFormViewBlock::render($formView->getCloneBlocks('defaults'), function(FormViewBlock $block) {
+    <h3>Bikes</h3>
+    <?= $formView->getBlock('bikes')->render() ?>
+</div>
+
+<div class="ui basic segment">
+    <h3>Address</h3>
+    <?= CloneFormViewBlock::render($formView->getCloneBlocks('address'), function(FormViewBlock $block) {
         return $block->render();
     })?>
 </div>

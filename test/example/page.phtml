@@ -20,12 +20,14 @@ use Simplon\Form\View\FormView;
             background: #fff;
         }
     </style>
+
+    <?= $formView->renderAssets(FormView::ASSET_TYPE_CSS) ?>
 </head>
 <body>
     <div class="ui container">
         <?= $formView->render(__DIR__ . '/form.phtml') ?>
     </div>
 
-    <?= $formView->renderAssets(true) ?>
+    <?= $formView->renderAssets(FormView::ASSET_TYPE_JS) ?>
 </body>
 </html>
