@@ -2,7 +2,6 @@
 
 namespace Simplon\Form\View\Elements;
 
-use Simplon\Form\FormError;
 use Simplon\Form\View\Element;
 use Simplon\Form\View\FormView;
 use Simplon\Form\View\RenderHelper;
@@ -148,7 +147,6 @@ class DropDownElement extends Element
 
     /**
      * @return string
-     * @throws FormError
      */
     public function renderWidget(): string
     {
@@ -258,7 +256,6 @@ class DropDownElement extends Element
 
     /**
      * @return null|string
-     * @throws FormError
      */
     private function renderOptions(): ?string
     {

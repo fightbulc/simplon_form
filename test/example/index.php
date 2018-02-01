@@ -16,6 +16,8 @@ use Simplon\Form\View\Elements\DropDownElement;
 use Simplon\Form\View\Elements\ImageUploadElement;
 use Simplon\Form\View\Elements\InputTextElement;
 use Simplon\Form\View\Elements\Support\DropDownApi\Algolia\AlgoliaPlacesApiJs;
+use Simplon\Form\View\Elements\Support\DropDownApi\DropDownApiResponseDataInterface;
+use Simplon\Form\View\Elements\Support\DropDownApi\Semantic\SemanticApiJs;
 use Simplon\Form\View\Elements\Support\Meta\OptionsMeta;
 use Simplon\Form\View\FormView;
 use Simplon\Form\View\FormViewBlock;
@@ -84,6 +86,8 @@ try
     $fields = (new FormFields())
         ->add((new FormField('bikes'))->addMeta((new OptionsMeta())->add('Canyon')->add('Specialized'))->addRule(new RequiredRule()))
         ->add((new FormField('city'))->addRule(new RequiredRule()))
+        ->add((new FormField('language'))->addMeta((new OptionsMeta())->add('en', 'English')->add('de', 'German'))->addRule(new RequiredRule())->setInitialValue('de'))
+        ->add((new FormField('tests'))->addRule(new RequiredRule()))
         ->add((new FormField('url_image'))->addRule(new RequiredRule()))
         ->add($cloneBlockOne)
         ->add($cloneBlockTwo)
@@ -171,6 +175,74 @@ try
 
 // ====================================
 
+    $semanticApiJs = new SemanticApiJs('http://local-api.gimmenetwork.com/1.0/blocks/test/listing', 'POST');
+
+    $semanticApiJs
+        ->setData(['hostname' => 'gimmemore.com'])
+        ->setSignals(['locale' => 'language'])
+        ->setOnResponseHandler(
+            new class implements DropDownApiResponseDataInterface
+            {
+                /**
+                 * @return string
+                 */
+                public function renderResultObjectJsString(): string
+                {
+                    return 'data.listing_items.items';
+                }
+
+                /**
+                 * @return string
+                 */
+                public function renderLabelJsString(): string
+                {
+                    return 'item.block_data.name';
+                }
+
+                /**
+                 * @return string
+                 */
+                public function renderNameJsString(): string
+                {
+                    return 'item.block_data.name';
+                }
+
+                /**
+                 * @return string
+                 */
+                public function renderRemoteIdJsString(): string
+                {
+                    return 'item.block_data.pub_token';
+                }
+
+                /**
+                 * @return null|string
+                 */
+                public function renderMetaJsString(): ?string
+                {
+                    return null;
+                }
+            }
+        )
+    ;
+
+    $testsBlock = (new FormViewBlock('tests'))
+        ->addRow(
+            (new FormViewRow())
+                ->autoColumns(
+                    (new DropDownElement($fields->get('language')))
+                        ->setLabel('Language')
+                )
+                ->autoColumns(
+                    (new DropDownApiElement($fields->get('tests'), $semanticApiJs))
+                        ->setLabel('Tests')
+                        ->setDescription('Search a test')
+                        ->setPlaceholder('Search by name ...')
+                )
+        );
+
+// ====================================
+
     $imageBlock = (new FormViewBlock('image'))
         ->addRow((new FormViewRow())->autoColumns(
             (new ImageUploadElement($fields->get('url_image')))->setQuality(1)
@@ -186,6 +258,7 @@ try
         ->addBlocks($datesBlocks)
         ->addBlock($bikesBlock)
         ->addBlock($citiesBlock)
+        ->addBlock($testsBlock)
         ->addBlock($imageBlock)
     ;
 

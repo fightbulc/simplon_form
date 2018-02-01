@@ -4,9 +4,6 @@ namespace Simplon\Form\View;
 
 use Simplon\Form\FormError;
 
-/**
- * @package Simplon\Form\View
- */
 class FormViewRow
 {
     /**
@@ -54,7 +51,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function autoColumns(ElementInterface $element): self
     {
@@ -68,7 +64,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function oneColumn(ElementInterface $element)
     {
@@ -82,7 +77,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function twoColumns(ElementInterface $element)
     {
@@ -96,7 +90,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function threeColumns(ElementInterface $element)
     {
@@ -110,7 +103,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function fourColumns(ElementInterface $element)
     {
@@ -124,7 +116,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function fiveColumns(ElementInterface $element)
     {
@@ -138,7 +129,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function sixColumns(ElementInterface $element)
     {
@@ -152,7 +142,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function sevenColumns(ElementInterface $element)
     {
@@ -166,7 +155,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function eightColumns(ElementInterface $element)
     {
@@ -180,7 +168,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function nineColumns(ElementInterface $element)
     {
@@ -194,7 +181,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function tenColumns(ElementInterface $element)
     {
@@ -208,7 +194,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function elevenColumns(ElementInterface $element)
     {
@@ -222,7 +207,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function twelveColumns(ElementInterface $element)
     {
@@ -236,7 +220,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function thirteenColumns(ElementInterface $element)
     {
@@ -250,7 +233,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function fourteenColumns(ElementInterface $element)
     {
@@ -264,7 +246,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function fifthteenColumns(ElementInterface $element)
     {
@@ -278,7 +259,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     public function sixthteenColumns(ElementInterface $element)
     {
@@ -359,7 +339,6 @@ class FormViewRow
      * @param ElementInterface $element
      *
      * @return FormViewRow
-     * @throws FormError
      */
     protected function addElement(ElementInterface $element): self
     {

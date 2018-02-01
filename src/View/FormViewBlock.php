@@ -2,9 +2,6 @@
 
 namespace Simplon\Form\View;
 
-/**
- * @package Simplon\Form\View
- */
 class FormViewBlock
 {
     /**

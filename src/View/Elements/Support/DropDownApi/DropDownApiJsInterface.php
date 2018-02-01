@@ -15,6 +15,16 @@ interface DropDownApiJsInterface
     public function getUrl(): string;
 
     /**
+     * @return array|null
+     */
+    public function getData(): ?array;
+
+    /**
+     * @return array|null
+     */
+    public function getSignals(): ?array;
+
+    /**
      * @return null|string
      */
     public function renderBeforeXHRJsString(): ?string;

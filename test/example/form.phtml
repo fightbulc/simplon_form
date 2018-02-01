@@ -40,6 +40,19 @@ use Simplon\Form\View\FormViewBlock;
 </div>
 
 <div class="ui basic segment">
+    <h3>Tests</h3>
+    <?= $formView->getBlock('tests')->render() ?>
+    <div class="ui modal">
+        <div class="header">Header</div>
+        <div class="content">
+            <p></p>
+            <p></p>
+            <p></p>
+        </div>
+    </div>
+</div>
+
+<div class="ui basic segment">
     <h3>Image</h3>
     <?= $formView->getBlock('image')->render() ?>
 </div>

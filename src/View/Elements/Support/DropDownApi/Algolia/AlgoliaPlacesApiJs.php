@@ -159,6 +159,26 @@ class AlgoliaPlacesApiJs implements DropDownApiJsInterface
     }
 
     /**
+     * @return array|null
+     */
+    public function getData(): ?array
+    {
+        return [
+            'language'  => $this->getLanguage(),
+            'type'      => $this->getType(),
+            'countries' => RenderHelper::jsonEncode($this->getCountries()),
+        ];
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getSignals(): ?array
+    {
+        return null;
+    }
+
+    /**
      * @return null|string
      */
     public function renderBeforeXHRJsString(): ?string
@@ -176,13 +196,7 @@ class AlgoliaPlacesApiJs implements DropDownApiJsInterface
      */
     public function renderBeforeSendJsString(): ?string
     {
-        return
-            'settings.data = JSON.stringify({'
-            . 'query: settings.urlData.query.replace(/str\./, "straße"),' // updated for German address handling
-            . 'language: "' . $this->getLanguage() . '",'
-            . 'type: "' . $this->getType() . '",'
-            . 'countries: ' . RenderHelper::jsonEncode($this->getCountries())
-            . '})';
+        return 'var data = ' . RenderHelper::jsonEncode($this->getData()) . '; data.query = settings.urlData.query.replace(/str\./, "straße"); settings.data = JSON.stringify(data)';
     }
 
     /**

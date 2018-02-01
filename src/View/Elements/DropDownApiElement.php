@@ -3,7 +3,6 @@
 namespace Simplon\Form\View\Elements;
 
 use Simplon\Form\Data\FormField;
-use Simplon\Form\FormError;
 use Simplon\Form\View\Elements\Support\DropDownApi\DropDownApiData;
 use Simplon\Form\View\Elements\Support\DropDownApi\DropDownApiJsInterface;
 use Simplon\Form\View\RenderHelper;
@@ -14,6 +13,10 @@ class DropDownApiElement extends DropDownElement
      * @var DropDownApiJsInterface
      */
     private $interface;
+    /**
+     * @var bool
+     */
+    private $filterRemoteData = false;
 
     /**
      * @param FormField $field
@@ -23,6 +26,24 @@ class DropDownApiElement extends DropDownElement
     {
         parent::__construct($field);
         $this->interface = $interface;
+    }
+
+    /**
+     * @return DropDownApiElement
+     */
+    public function enableFilterRemoteData(): self
+    {
+        $this->filterRemoteData = true;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFilterRemoteData(): bool
+    {
+        return $this->filterRemoteData;
     }
 
     /**
@@ -44,7 +65,6 @@ class DropDownApiElement extends DropDownElement
 
     /**
      * @return string
-     * @throws FormError
      */
     public function renderWidget(): string
     {
@@ -83,8 +103,8 @@ class DropDownApiElement extends DropDownElement
 
         $options = [
             'forceSelection'   => false,
-            'filterRemoteData' => false,
             'saveRemoteData'   => false,
+            'filterRemoteData' => $this->isFilterRemoteData(),
             'allowAdditions'   => $this->isAllowedAdditions(),
         ];
 
@@ -100,11 +120,25 @@ class DropDownApiElement extends DropDownElement
             $this->renderOnResponse(),
         ];
 
-        return
+        $build = [
             $selector
             . '.dropdown({' . RenderHelper::jsonEncode($options, true) . ', '
             . '"apiSettings": { ' . RenderHelper::jsonEncode($apiSettings, true) . ', ' . implode(",", $functions) . '}'
-            . '})';
+            . '});',
+        ];
+
+        if ($signals = $this->interface->getSignals())
+        {
+            foreach ($signals as $fieldId)
+            {
+                // hook-in change if signal field is a dropdown
+                $build[] = 'if($("#form-' . $fieldId . '").parent().dropdown().length) {';
+                $build[] = '$("#form-' . $fieldId . '").parent().dropdown({ onChange: function(value) { ' . $selector . '.dropdown("clear"); }});';
+                $build[] = '}';
+            }
+        }
+
+        return implode("\n", $build);
     }
 
     /**
