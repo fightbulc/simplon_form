@@ -23,11 +23,12 @@
     }
   ],
   "require": {
-    "php": ">=5.4",
+    "php": ">=7.1",
     "simplon/phtml": "0.1.*",
     "fightbulc/moment": "1.25.*",
     "simplon/component_form": "0.0.*",
-    "simplon/component_semanticui": "0.0.*"
+    "simplon/component_semanticui": "0.0.*",
+    "ext-json": "*"
   },
   "config": {
     "component-dir": "assets/vendor"

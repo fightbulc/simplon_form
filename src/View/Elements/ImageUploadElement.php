@@ -39,7 +39,7 @@ class ImageUploadElement extends Element
     /**
      * @var int
      */
-    private $imageWidth = 1200;
+    private $imageWidth;
 
     /**
      * @var int
@@ -117,19 +117,11 @@ class ImageUploadElement extends Element
     }
 
     /**
-     * @return int
-     * @throws FormException
+     * @return int|null
      */
     public function getImageWidth()
     {
-        $value = $this->imageWidth;
-
-        if ($value)
-        {
-            return $value;
-        }
-
-        throw new FormException('Missing image width');
+        return $this->imageWidth;
     }
 
     /**
@@ -346,6 +338,7 @@ class ImageUploadElement extends Element
 
     /**
      * @return string
+     * @throws FormException
      */
     public function renderWidget()
     {
@@ -397,6 +390,7 @@ class ImageUploadElement extends Element
 
     /**
      * @return string
+     * @throws FormException
      */
     public function getCode()
     {
