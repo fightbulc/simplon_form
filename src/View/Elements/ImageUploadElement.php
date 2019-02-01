@@ -44,7 +44,7 @@ class ImageUploadElement extends Element
     /**
      * @var int
      */
-    private $thumbWidth = 600;
+    private $thumbWidth = 800;
 
     /**
      * @var string
